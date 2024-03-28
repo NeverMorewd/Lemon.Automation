@@ -9,7 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <AdditionalFiles Remove="NativeMethods.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ApplicationDefinition Remove="App.xaml" />
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.49-beta">
+      <PrivateAssets>all</PrivateAssets>
+      <!--<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>-->
+    </PackageReference>
 	<Page Include="App.xaml" />
   </ItemGroup>
 
@@ -18,6 +26,12 @@
     <ProjectReference Include="..\Lemon.Automation.Studio\Lemon.Automation.Studio.csproj" />
     <ProjectReference Include="..\Lemon.Automation.UITracker\Lemon.Automation.UITracker.csproj" />
     <ProjectReference Include="..\Lemon.Automation\Lemon.Automation.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="NativeMethods.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -3,15 +3,21 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <UseWindowsForms>True</UseWindowsForms>
-    <UseWPF>True</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GrpcDotNetNamedPipes" Version="3.0.0" />
-    <PackageReference Include="R3Extensions.WPF" Version="1.1.11" />
+    <ApplicationDefinition Remove="App.xaml" />
+	<Page Include="App.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lemon.Automation.Framework\Lemon.Automation.Framework.csproj" />
+    <ProjectReference Include="..\Lemon.Automation.Studio\Lemon.Automation.Studio.csproj" />
+    <ProjectReference Include="..\Lemon.Automation.UITracker\Lemon.Automation.UITracker.csproj" />
+    <ProjectReference Include="..\Lemon.Automation\Lemon.Automation.csproj" />
   </ItemGroup>
 
 </Project>

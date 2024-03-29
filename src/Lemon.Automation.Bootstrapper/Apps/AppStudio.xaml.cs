@@ -1,7 +1,9 @@
 ﻿using Lemon.Automation.Domains;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,27 +15,38 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Application = System.Windows.Application;
 
 namespace Lemon.Automation.Bootstrapper
 {
     /// <summary>
     /// Interaction logic for AppStudio.xaml
     /// </summary>
-    public partial class AppStudio : Application, IApplication
+    public partial class AppStudio : Application, IWpfApplication
     {
         public AppStudio()
         {
             InitializeComponent();
         }
-
+        public SynchronizationContext AppSynchronizationContext { get; }
+        public AssemblyName AssemblyName { get; private set; }
         public string AppName => nameof(AppStudio);
-
+        public T ResolveHostService<T>(IServiceProvider serviceProvider) where T : IHostedService
+        {
+            throw new NotImplementedException();
+        }
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            MainWindow window = new();
-            window.Title = AppName;
+            MainWindow window = new()
+            {
+                Title = AppName
+            };
             window.Show();
+        }
+        public void Run(string[] runArgs)
+        {
+            Run();
         }
     }
 }

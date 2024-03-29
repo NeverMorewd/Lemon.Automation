@@ -1,0 +1,11 @@
+﻿
+syntax = "proto3"; 
+
+option csharp_namespace = "Lemon.Automation.Protos";
+import "google/protobuf/timestamp.proto"; 
+
+message RequestContext
+{
+    string client_id = 1;
+    google.protobuf.Timestamp start = 2;
+}

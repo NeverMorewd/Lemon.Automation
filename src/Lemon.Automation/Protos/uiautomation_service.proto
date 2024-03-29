@@ -1,0 +1,71 @@
+﻿
+syntax = "proto3"; 
+option csharp_namespace = "Lemon.Automation.Protos";
+
+import "google/protobuf/duration.proto";  
+import "google/protobuf/timestamp.proto"; 
+import "element.proto";
+import "element_type.proto";
+import "request_context.proto";
+import "response_context.proto";
+import "google/protobuf/wrappers.proto";
+
+message TrackRequest
+{
+	RequestContext context = 1;
+	google.protobuf.Int32Value cursor_x = 2;
+	google.protobuf.Int32Value cursor_y = 3;
+}
+
+message TrackResponse
+{
+	ResponseContext context = 1;
+	Element element = 2;
+}
+
+message IndicateRequest
+{
+	
+}
+
+message IndicateResponse
+{
+
+}
+
+message CaptureRequest
+{
+
+}
+
+message CaptureResponse
+{
+
+}
+
+message RetrievalRequest
+{
+	RequestContext context = 1;
+	Element element = 2;
+    google.protobuf.Int32Value max_level = 3;
+}
+
+message RetrievalResponse
+{
+	ResponseContext context = 1;
+	repeated Element element = 2;
+}
+
+service UIAutomationService
+{
+	// TrackOnce
+	rpc Track(TrackRequest) returns (TrackResponse);
+    // Tracking
+	rpc Tracking(TrackRequest) returns (stream TrackResponse);
+	// Retrieval
+	rpc Retrieval(RetrievalRequest) returns (RetrievalResponse);
+	// Capture
+	rpc Capture(CaptureRequest) returns (CaptureResponse);
+	// Indicate
+	rpc Indicate(IndicateRequest) returns (IndicateResponse);
+}

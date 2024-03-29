@@ -15,7 +15,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lemon.Automation.Studio", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lemon.Automation.ChildDesktop", "Lemon.Automation.ChildDesktop\Lemon.Automation.ChildDesktop.csproj", "{5BA747FF-B6F5-4BA7-B109-C08F0B09C3DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lemon.Automation.Bootstrapper", "Lemon.Automation.Bootstrapper\Lemon.Automation.Bootstrapper.csproj", "{4672528A-0851-44F3-BCDA-4A927A4BE8E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lemon.Automation.Bootstrapper", "Lemon.Automation.Bootstrapper\Lemon.Automation.Bootstrapper.csproj", "{4672528A-0851-44F3-BCDA-4A927A4BE8E9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lemon.Automation.UIProvider", "Lemon.Automation.UIProvider\Lemon.Automation.UIProvider.csproj", "{5A8FB8E3-8E1E-40B3-B6E3-966E0417E637}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lemon.Automation.GrpcWorkShop", "Lemon.Automation.ServiceProvider\Lemon.Automation.GrpcWorkShop.csproj", "{353E5669-D6FE-4F80-AE3E-E71B54E86B37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +55,14 @@ Global
 		{4672528A-0851-44F3-BCDA-4A927A4BE8E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4672528A-0851-44F3-BCDA-4A927A4BE8E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4672528A-0851-44F3-BCDA-4A927A4BE8E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A8FB8E3-8E1E-40B3-B6E3-966E0417E637}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A8FB8E3-8E1E-40B3-B6E3-966E0417E637}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A8FB8E3-8E1E-40B3-B6E3-966E0417E637}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A8FB8E3-8E1E-40B3-B6E3-966E0417E637}.Release|Any CPU.Build.0 = Release|Any CPU
+		{353E5669-D6FE-4F80-AE3E-E71B54E86B37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{353E5669-D6FE-4F80-AE3E-E71B54E86B37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{353E5669-D6FE-4F80-AE3E-E71B54E86B37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{353E5669-D6FE-4F80-AE3E-E71B54E86B37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

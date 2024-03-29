@@ -1,0 +1,11 @@
+﻿
+syntax = "proto3";
+
+option csharp_namespace = "Lemon.Automation.Protos";
+
+enum ElementTypeEnum 
+{
+  windows = 0;
+  web = 1;
+  ai = 3;
+}

@@ -1,6 +1,2 @@
-﻿CreateFile
-IUIRibbon
-S_OK
-NTSTATUS
-IsPwrHibernateAllowed
-ISpellChecker
+﻿AttachConsole
+ATTACH_PARENT_PROCESS

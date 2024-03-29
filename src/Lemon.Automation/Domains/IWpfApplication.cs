@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Lemon.Automation.Domains
 {
-    public interface IApplication
+    public interface IWpfApplication : IApplication
     {
-        string AppName { get; }
-        void Run(string[] runArgs);
+
     }
 }

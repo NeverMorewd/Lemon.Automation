@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lemon.Automation.Domains
 {
-    public interface IApplication
+    public interface INamedPipeServer
     {
-        string AppName { get; }
-        void Run(string[] runArgs);
     }
 }

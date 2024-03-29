@@ -13,25 +13,34 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Application = System.Windows.Application;
 
 namespace Lemon.Automation.Bootstrapper
 {
     /// <summary>
-    /// Interaction logic for AppUITracker.xaml
+    /// Interaction logic for AppStudio.xaml
     /// </summary>
-    public partial class AppUITracker : Application, IApplication
+    public partial class AppStudio : Application, IWpfApplication
     {
-        public AppUITracker()
+        public AppStudio()
         {
             InitializeComponent();
         }
-        public string AppName => nameof(AppUITracker);
+
+        public string AppName => nameof(AppStudio);
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            MainWindow window = new();
-            window.Title = AppName;
+            MainWindow window = new()
+            {
+                Title = AppName
+            };
             window.Show();
+        }
+        public void Run(string[] runArgs)
+        {
+            Run();
         }
     }
 }

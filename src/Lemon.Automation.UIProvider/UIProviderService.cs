@@ -2,6 +2,7 @@
 using Lemon.Automation.GrpcWorkShop;
 using Lemon.Automation.GrpcWorkShop.GrpcDomains;
 using Lemon.Automation.GrpcWorkShop.GrpcServices;
+using System.Windows.Threading;
 
 namespace Lemon.Automation.UIProvider
 {
@@ -23,7 +24,9 @@ namespace Lemon.Automation.UIProvider
             };
             _serverWorkShop = new GrpcServerWorkShop(_grpcServices, _server);
             var app = _serviceProvider.GetService(typeof(IApplication)) as IApplication;
-            _synchronizationContext = app.AppSynchronizationContext;
+            //SynchronizationContext.
+            Dispatcher.FromThread(Thread.CurrentThread);
+            var newContext = new DispatcherSynchronizationContext(Dispatcher.CurrentDispatcher);
             Console.WriteLine($"CurrentThread:{Thread.CurrentThread.ManagedThreadId}");
         }
 

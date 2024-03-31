@@ -17,4 +17,8 @@
     <PackageReference Include="WPF-UI" Version="3.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Lemon.Automation\Lemon.Automation.csproj" />
+  </ItemGroup>
+
 </Project>

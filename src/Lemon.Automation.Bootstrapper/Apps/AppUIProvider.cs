@@ -13,7 +13,7 @@ namespace Lemon.Automation.Bootstrapper.Apps
 {
     public class AppUIProvider : ApplicationContext, IBackgroundApplication
     {
-        private IUIProviderService? _service;
+        private IAppHostedService? _service;
         private Assembly _entryPointAssembly;
         private SynchronizationContext _context;
         private readonly ManualResetEventSlim _loadResetEvent;
@@ -45,13 +45,13 @@ namespace Lemon.Automation.Bootstrapper.Apps
                 args: [serviceProvider], 
                 culture: null, 
                 activationAttributes: null);
-            if (instance is IUIProviderService service)
+            if (instance is IAppHostedService service)
             {
                 _service = service;
             }
             if (_service == null)
             {
-                throw new TypeLoadException(nameof(IUIProviderService));
+                throw new TypeLoadException(nameof(IAppHostedService));
             }
             return (T)_service;
         }

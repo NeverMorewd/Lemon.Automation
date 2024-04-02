@@ -2,7 +2,7 @@
   "profiles": {
     "Lemon.Automation.Bootstrapper": {
       "commandName": "Project",
-      "commandLineArgs": "11111\r\n222\r\n111"
+      "commandLineArgs": "-a AppUITracker\r\n-b false"
     }
   }
 }

@@ -5,12 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace Lemon.Automation.UITracker
 {
-    public class UITrackerService : IUITrackerService
+    public class UITrackerService : IAppHostedService
     {
         private readonly IServiceProvider _serviceProvider;
+        private SynchronizationContext _synchronizationContext;
         public UITrackerService(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
@@ -20,12 +22,12 @@ namespace Lemon.Automation.UITracker
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return HandleActivationAsync();
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         private Task HandleActivationAsync()
@@ -34,12 +36,19 @@ namespace Lemon.Automation.UITracker
             {
                 return Task.CompletedTask;
             }
-
+            MainWindow mainWindow = new();
+            mainWindow.Loaded += MainWindow_Loaded;
+            mainWindow.Show();
             //Window mainWindow = _serviceProvider.GetRequiredService<IWindow>();
             //mainWindow.Loaded += OnMainWindowLoaded;
             //mainWindow?.Show();
 
             return Task.CompletedTask;
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            _synchronizationContext = new DispatcherSynchronizationContext(((Window)sender).Dispatcher);
         }
     }
 }

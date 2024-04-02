@@ -11,38 +11,64 @@ namespace Lemon.Automation.Bootstrapper.Apps
     internal static class AppFactory
     {
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
-        internal static IApplication ResolveDefaultApplication()
+        internal static IApplication ResolveApplication(string? appName)
         {
-            return ResolveAppUIProvider();
+            return appName switch
+            {
+                "AppStudio" => ResolveAppStudio(),
+                "AppUITracker" => ResolveAppUITracker(),
+                "AppUIProvider" => ResolveAppUIProvider(),
+                "AppExecutor" => ResolveAppExecutor(),
+                "AppDefault" => ResolveAppDefault(),
+                _ => ResolveAppDefault(),
+            };
         }
+        /// <summary>
+        /// ResolveAppStudio
+        /// </summary>
+        /// <returns></returns>
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
-        static IWpfApplication ResolveAppStudio()
+        private static IWpfApplication ResolveAppStudio()
         {
             Console.WriteLine("ResolveAppStudio");
             return new AppStudio();
         }
-
+        /// <summary>
+        /// ResolveAppUITracker
+        /// </summary>
+        /// <returns></returns>
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
-        static IWpfApplication ResolveAppUITracker()
+        private static IWpfApplication ResolveAppUITracker()
         {
             Console.WriteLine("ResolveAppUITracker");
             return new AppUITracker();
         }
-
+        /// <summary>
+        /// ResolveAppDefault
+        /// </summary>
+        /// <returns></returns>
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
-        static IWpfApplication ResolveAppDefault()
+        private static IWpfApplication ResolveAppDefault()
         {
             Console.WriteLine("ResolveAppDefault");
             return new App();
         }
+        /// <summary>
+        /// ResolveAppUIProvider
+        /// </summary>
+        /// <returns></returns>
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
-        static IApplication ResolveAppUIProvider()
+        private static IApplication ResolveAppUIProvider()
         {
             Console.WriteLine("ResolveAppUIProvider");
             return new AppUIProvider();
         }
+        /// <summary>
+        /// ResolveAppExecutor
+        /// </summary>
+        /// <returns></returns>
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
-        static IApplication ResolveAppExecutor()
+        private static IApplication ResolveAppExecutor()
         {
             Console.WriteLine("ResolveAppExecutor");
             return new AppExecutor();

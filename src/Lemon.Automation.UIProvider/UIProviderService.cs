@@ -6,7 +6,7 @@ using System.Windows.Threading;
 
 namespace Lemon.Automation.UIProvider
 {
-    public class UIProviderHostService : IUIProviderService
+    public class UIProviderHostService : IAppHostedService
     {
         private readonly GrpcNamedPipeServer _server;
         private readonly GrpcServerWorkShop _serverWorkShop;

@@ -18,7 +18,7 @@ namespace Lemon.Automation.UITracker
             _serviceProvider = serviceProvider;
             var app = _serviceProvider.GetService(typeof(IApplication)) as IApplication;
             //SynchronizationContext.
-            Console.WriteLine($"CurrentThread:{Thread.CurrentThread.ManagedThreadId}");
+            Console.WriteLine($"CurrentThread:{Environment.CurrentManagedThreadId}");
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {
@@ -32,18 +32,22 @@ namespace Lemon.Automation.UITracker
 
         private Task HandleActivationAsync()
         {
+            Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
             if (Application.Current.Windows.OfType<MainWindow>().Any())
             {
                 return Task.CompletedTask;
             }
             MainWindow mainWindow = new();
             mainWindow.Loaded += MainWindow_Loaded;
+            mainWindow.Closed += MainWindow_Closed;
             mainWindow.Show();
-            //Window mainWindow = _serviceProvider.GetRequiredService<IWindow>();
-            //mainWindow.Loaded += OnMainWindowLoaded;
-            //mainWindow?.Show();
 
             return Task.CompletedTask;
+        }
+
+        private void MainWindow_Closed(object? sender, EventArgs e)
+        {
+            StopAsync(CancellationToken.None);
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)

@@ -1,21 +1,14 @@
 ﻿using Lemon.Automation.Domains;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Threading;
 
 namespace Lemon.Automation.Bootstrapper.Apps
 {
     public class AppUIProvider : ApplicationContext, IBackgroundApplication
     {
         private IAppHostedService? _service;
-        private Assembly _entryPointAssembly;
-        private SynchronizationContext _context;
+        private Assembly? _entryPointAssembly;
         private readonly ManualResetEventSlim _loadResetEvent;
         public AppUIProvider()
         {
@@ -28,11 +21,7 @@ namespace Lemon.Automation.Bootstrapper.Apps
         { 
             get 
             {
-                if (_loadResetEvent.Wait(2000))
-                {
-                    return _context;
-                }
-                return null;
+                return SynchronizationContext.Current;
             } 
         }
         public T ResolveHostService<T>(IServiceProvider serviceProvider) where T:IHostedService

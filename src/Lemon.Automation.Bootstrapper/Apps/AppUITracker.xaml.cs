@@ -45,10 +45,5 @@ namespace Lemon.Automation.Bootstrapper
         {
             Run();
         }
-
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            base.OnStartup(e);
-        }
     }
 }

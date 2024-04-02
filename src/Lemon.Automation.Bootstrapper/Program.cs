@@ -73,7 +73,6 @@ namespace Lemon.Automation.Bootstrapper
                                 log.Services.AddLogging(b => b.AddConsole());
                             })
                             .Build();
-
                             host.Start();
                             app?.Run(args);
                       }

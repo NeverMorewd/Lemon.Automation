@@ -29,10 +29,15 @@ namespace Lemon.Automation.UIProvider
         public Task StartAsync(CancellationToken cancellationToken)
         {
             Form form = new();
+            form.FormClosed += (sender, args) => 
+            {
+                StopAsync(cancellationToken);
+                Environment.Exit(0);
+            };
             form.Show();
             _serverWorkShop.Process();
             _server.Start();
-            Console.WriteLine("UIProviderHostService started");
+            Console.WriteLine($"{nameof(UIProviderService)} started");
             return Task.CompletedTask;
         }
 

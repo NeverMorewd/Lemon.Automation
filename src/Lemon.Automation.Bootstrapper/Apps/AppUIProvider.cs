@@ -57,9 +57,6 @@ namespace Lemon.Automation.Bootstrapper.Apps
         }
         public void Run(string[] runArgs)
         {
-            SynchronizationContext.SetSynchronizationContext(new WindowsFormsSynchronizationContext());
-            _context = SynchronizationContext.Current;
-            _loadResetEvent.Set();
             Application.Run(this);
         }
     }

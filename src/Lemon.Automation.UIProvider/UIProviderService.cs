@@ -26,20 +26,20 @@ namespace Lemon.Automation.UIProvider
             Console.WriteLine($"CurrentThread:{Thread.CurrentThread.ManagedThreadId}");
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
-            await Task.Run(() =>
-            {
-                _serverWorkShop.Process();
-                _server.Start();
-                Console.WriteLine("UIProviderHostService started");
-            }, cancellationToken);
+            Form form = new();
+            form.Show();
+            _serverWorkShop.Process();
+            _server.Start();
+            Console.WriteLine("UIProviderHostService started");
+            return Task.CompletedTask;
         }
 
-        public async Task StopAsync(CancellationToken cancellationToken)
+        public Task StopAsync(CancellationToken cancellationToken)
         {
             _server.Stop();
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
     }
 }

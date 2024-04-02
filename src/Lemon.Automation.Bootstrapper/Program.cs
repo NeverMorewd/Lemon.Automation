@@ -18,7 +18,7 @@ namespace Lemon.Automation.Bootstrapper
         [STAThread]
         static void Main(string[] args)
         {
-            //PInvoke.AttachConsole(PInvoke.ATTACH_PARENT_PROCESS);
+            PInvoke.AttachConsole(PInvoke.ATTACH_PARENT_PROCESS);
             string? appName = null;
             Parser.Default
                   .ParseArguments<Options>(args)
@@ -38,6 +38,14 @@ namespace Lemon.Automation.Bootstrapper
                                       Arguments = $"-a {app} -b {false}"
                                   };
                                   Process? process = Process.Start(startInfo);
+                                  if (process != null)
+                                  {
+                                      Console.WriteLine($"Start successfully:{process.Id}");
+                                  }
+                                  else
+                                  {
+                                      Console.WriteLine($"Start failed!");
+                                  }
                               }
                           }
                           Environment.Exit(0);
@@ -45,7 +53,8 @@ namespace Lemon.Automation.Bootstrapper
                       else
                       {
                           appName = o.Apps.First();
-                          var _host = Host.CreateDefaultBuilder(args)
+                          var app = AppFactory.ResolveApplication(appName);
+                          var host = Host.CreateDefaultBuilder(args)
                             .ConfigureAppConfiguration(config =>
                             {
                                 config.SetBasePath(AppContext.BaseDirectory)
@@ -55,10 +64,6 @@ namespace Lemon.Automation.Bootstrapper
                             })
                             .ConfigureServices((context, services) =>
                             {
-                                //services.AddHostedService<LongRunningTaskService>();
-                                //services.AddHostedService<IHostedService>(o => new LongRunningTaskService());
-                                //var configs = context.Configuration.GetChildren();
-                                var app = AppFactory.ResolveApplication(appName);
                                 services.AddSingleton<IConnection, ConnectionService>()
                                         .AddHostedService(sp => app.ResolveHostService<IAppHostedService>(sp))
                                         .AddSingleton(app);
@@ -69,14 +74,11 @@ namespace Lemon.Automation.Bootstrapper
                             })
                             .Build();
 
-                            _host.Start();
-                            var app = _host.Services.GetService<IApplication>();
+                            host.Start();
                             app?.Run(args);
                       }
                   });
             
         }
-
-
     }
 }

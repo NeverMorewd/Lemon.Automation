@@ -37,7 +37,7 @@ namespace Lemon.Automation.Bootstrapper
                                       UseShellExecute = false,
                                       Arguments = $"-a {app} -b {false}"
                                   };
-                                  //Process? process = Process.Start(startInfo);
+                                  Process? process = Process.Start(startInfo);
                               }
                           }
                           Environment.Exit(0);

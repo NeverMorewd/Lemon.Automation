@@ -38,7 +38,7 @@ namespace Lemon.Automation.Bootstrapper.Apps
         public T ResolveHostService<T>(IServiceProvider serviceProvider) where T:IHostedService
         {
             _entryPointAssembly = Assembly.LoadFrom(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Lemon.Automation.UIProvider.dll"));
-            var instance = _entryPointAssembly.CreateInstance("Lemon.Automation.UIProvider.UIProviderHostService", 
+            var instance = _entryPointAssembly.CreateInstance("Lemon.Automation.UIProvider.UIProviderService", 
                 ignoreCase:false,
                 BindingFlags.Public | BindingFlags.Instance, 
                 binder: null, 

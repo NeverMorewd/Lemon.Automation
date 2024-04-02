@@ -6,7 +6,7 @@ using System.Windows.Threading;
 
 namespace Lemon.Automation.UIProvider
 {
-    public class UIProviderHostService : IAppHostedService
+    public class UIProviderService : IAppHostedService
     {
         private readonly GrpcNamedPipeServer _server;
         private readonly GrpcServerWorkShop _serverWorkShop;
@@ -14,7 +14,7 @@ namespace Lemon.Automation.UIProvider
         private readonly IServiceProvider _serviceProvider;
         //https://github.com/dotnet/runtime/issues/94252
         private readonly SynchronizationContext? _synchronizationContext;
-        public UIProviderHostService(IServiceProvider serviceProvider)
+        public UIProviderService(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             _server = new GrpcNamedPipeServer("1029384756");
@@ -22,11 +22,7 @@ namespace Lemon.Automation.UIProvider
             {
                 new UIAutomationGrpcService()
             };
-            _serverWorkShop = new GrpcServerWorkShop(_grpcServices, _server);
-            var app = _serviceProvider.GetService(typeof(IApplication)) as IApplication;
-            //SynchronizationContext.
-            Dispatcher.FromThread(Thread.CurrentThread);
-            var newContext = new DispatcherSynchronizationContext(Dispatcher.CurrentDispatcher);
+            _serverWorkShop = new GrpcServerWorkShop(_grpcServices, _server);  
             Console.WriteLine($"CurrentThread:{Thread.CurrentThread.ManagedThreadId}");
         }
 
@@ -37,11 +33,6 @@ namespace Lemon.Automation.UIProvider
                 _serverWorkShop.Process();
                 _server.Start();
                 Console.WriteLine("UIProviderHostService started");
-                _synchronizationContext.Send(o => 
-                {
-                    Form form = new Form();
-                    form.Show();
-                },null);
             }, cancellationToken);
         }
 

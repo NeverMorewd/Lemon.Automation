@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Lemon.Automation.Domains
 {
-    public interface IBackgroundApplication : IApplication
+    public interface IWinformApplication : IApplication
     {
 
     }

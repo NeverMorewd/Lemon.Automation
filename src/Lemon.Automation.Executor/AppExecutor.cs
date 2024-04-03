@@ -1,15 +1,9 @@
 ﻿using Lemon.Automation.Domains;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Lemon.Automation.Bootstrapper.Apps
+namespace Lemon.Automation.Executor
 {
-    public class AppExecutor : IBackgroundApplication
+    public class AppExecutor : IWinformApplication
     {
         public string AppName => nameof(AppExecutor);
         public AssemblyName AssemblyName { get; private set; }
@@ -19,7 +13,7 @@ namespace Lemon.Automation.Bootstrapper.Apps
             throw new NotImplementedException();
         }
 
-        public T ResolveHostService<T>(IServiceProvider serviceProvider) where T : IHostedService
+        public IAppHostedService ResolveHostService(IServiceProvider serviceProvider)
         {
             throw new NotImplementedException();
         }

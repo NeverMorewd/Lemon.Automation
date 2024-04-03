@@ -14,6 +14,6 @@ namespace Lemon.Automation.Domains
         string AppName { get; }
         void Run(string[] runArgs);
         SynchronizationContext AppSynchronizationContext { get; }
-        T ResolveHostService<T>(IServiceProvider serviceProvider) where T : IHostedService;
+        IAppHostedService ResolveHostService(IServiceProvider serviceProvider);
     }
 }

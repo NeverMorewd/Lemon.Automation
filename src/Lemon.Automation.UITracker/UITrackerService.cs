@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -12,12 +13,13 @@ namespace Lemon.Automation.UITracker
     public class UITrackerService : IAppHostedService
     {
         private readonly IServiceProvider _serviceProvider;
-        private SynchronizationContext _synchronizationContext;
+        private readonly IApplication _application;
+        private SynchronizationContext? _synchronizationContext;
         public UITrackerService(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-            var app = _serviceProvider.GetService(typeof(IApplication)) as IApplication;
-            //SynchronizationContext.
+            _application = _serviceProvider.GetService(typeof(IApplication)) as IApplication;
+            _synchronizationContext = _application?.AppSynchronizationContext;
             Console.WriteLine($"CurrentThread:{Environment.CurrentManagedThreadId}");
         }
         public Task StartAsync(CancellationToken cancellationToken)
@@ -37,11 +39,18 @@ namespace Lemon.Automation.UITracker
             {
                 return Task.CompletedTask;
             }
+            //_synchronizationContext?.Send(o => 
+            //{
+            //    MainWindow mainWindow = new();
+            //    mainWindow.Loaded += MainWindow_Loaded;
+            //    mainWindow.Closed += MainWindow_Closed;
+            //    mainWindow.Show();
+            //}, null);
             MainWindow mainWindow = new();
             mainWindow.Loaded += MainWindow_Loaded;
             mainWindow.Closed += MainWindow_Closed;
             mainWindow.Show();
-
+            _application.Run(null);
             return Task.CompletedTask;
         }
 

@@ -17,7 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Application = System.Windows.Application;
 
-namespace Lemon.Automation.Bootstrapper
+namespace Lemon.Automation.Studio
 {
     /// <summary>
     /// Interaction logic for AppStudio.xaml
@@ -31,18 +31,13 @@ namespace Lemon.Automation.Bootstrapper
         public SynchronizationContext AppSynchronizationContext { get; }
         public AssemblyName AssemblyName { get; private set; }
         public string AppName => nameof(AppStudio);
-        public T ResolveHostService<T>(IServiceProvider serviceProvider) where T : IHostedService
+        public IAppHostedService ResolveHostService(IServiceProvider serviceProvider)
         {
             throw new NotImplementedException();
         }
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            MainWindow window = new()
-            {
-                Title = AppName
-            };
-            window.Show();
         }
         public void Run(string[] runArgs)
         {

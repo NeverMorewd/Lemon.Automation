@@ -22,4 +22,10 @@
     <ProjectReference Include="..\Lemon.Automation\Lemon.Automation.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="AppUITracker.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

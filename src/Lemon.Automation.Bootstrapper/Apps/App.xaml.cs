@@ -20,7 +20,7 @@ namespace Lemon.Automation.Bootstrapper
         public AssemblyName AssemblyName { get; private set; }
         public string AppName => throw new NotImplementedException();
         public SynchronizationContext AppSynchronizationContext { get; }
-        public T ResolveHostService<T>(IServiceProvider serviceProvider) where T : IHostedService
+        public IAppHostedService ResolveHostService(IServiceProvider serviceProvider)
         {
             throw new NotImplementedException();
         }

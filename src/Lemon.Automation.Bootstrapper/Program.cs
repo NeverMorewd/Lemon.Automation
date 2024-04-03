@@ -1,6 +1,6 @@
 ﻿using CommandLine;
-using Lemon.Automation.Bootstrapper.Apps;
 using Lemon.Automation.Bootstrapper.CommandLines;
+using Lemon.Automation.Commons;
 using Lemon.Automation.Domains;
 using Lemon.Automation.Services;
 using Microsoft.Extensions.Configuration;
@@ -53,7 +53,6 @@ namespace Lemon.Automation.Bootstrapper
                       else
                       {
                           appName = o.Apps.First();
-                          var app = AppFactory.ResolveApplication(appName);
                           var host = Host.CreateDefaultBuilder(args)
                             .ConfigureAppConfiguration(config =>
                             {
@@ -64,8 +63,12 @@ namespace Lemon.Automation.Bootstrapper
                             })
                             .ConfigureServices((context, services) =>
                             {
+                                var appsSection = context.Configuration.GetSection("Apps");
+                                var appSettings = appsSection.Get<Dictionary<string, AppSetting>>();
+
+                                var app = AppFactory.ResolveApplication(appName, appSettings);
                                 services.AddSingleton<IConnection, ConnectionService>()
-                                        .AddHostedService(sp => app.ResolveHostService<IAppHostedService>(sp))
+                                        .AddHostedService(sp => app.ResolveHostService(sp))
                                         .AddSingleton(app);
                             })
                             .ConfigureLogging(log =>
@@ -74,7 +77,6 @@ namespace Lemon.Automation.Bootstrapper
                             })
                             .Build();
                             host.Start();
-                            app?.Run(args);
                       }
                   });
             

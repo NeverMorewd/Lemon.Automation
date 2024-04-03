@@ -12,8 +12,8 @@ namespace Lemon.Automation.Bootstrapper
     /// </summary>
     public partial class AppUITracker : Application, IWpfApplication
     {
-        private Assembly _entryPointAssembly;
-        private IAppHostedService _service;
+        private Assembly? _entryPointAssembly;
+        private IAppHostedService? _service;
         public AppUITracker()
         {
             InitializeComponent();

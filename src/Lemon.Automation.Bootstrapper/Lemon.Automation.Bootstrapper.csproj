@@ -20,8 +20,10 @@
 
   <ItemGroup>
     <ApplicationDefinition Remove="App.xaml" />
+    <Compile Remove="Apps\AppUITracker.xaml.cs" />
     <None Remove="appsettings.json" />
     <None Remove="NativeMethods.txt" />
+    <Page Remove="Apps\AppUITracker.xaml" />
     <Content Include="appsettings.json">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>appsettings.Designer.cs</LastGenOutput>
@@ -48,6 +50,14 @@
     <AdditionalFiles Update="NativeMethods.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AdditionalFiles>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="appsettings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>appsettings.json</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>

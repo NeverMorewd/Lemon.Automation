@@ -89,6 +89,7 @@ namespace Lemon.Automation.Bootstrapper
             throw new NotImplementedException();
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
         private static IApplication BuildApp(string anAssemblyName, string aTypeName)
         {
             var _entryPointAssembly = Assembly.LoadFrom(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, anAssemblyName));

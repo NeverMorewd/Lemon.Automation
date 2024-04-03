@@ -1,19 +1,12 @@
 ﻿using Lemon.Automation.Domains;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace Lemon.Automation.UITracker
 {
     public class UITrackerService : IAppHostedService
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly IApplication _application;
+        private readonly IApplication? _application;
         private SynchronizationContext? _synchronizationContext;
         public UITrackerService(IServiceProvider serviceProvider)
         {
@@ -50,7 +43,7 @@ namespace Lemon.Automation.UITracker
             mainWindow.Loaded += MainWindow_Loaded;
             mainWindow.Closed += MainWindow_Closed;
             mainWindow.Show();
-            _application.Run(null);
+            _application?.Run(null);
             return Task.CompletedTask;
         }
 
@@ -61,7 +54,7 @@ namespace Lemon.Automation.UITracker
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            _synchronizationContext = new DispatcherSynchronizationContext(((Window)sender).Dispatcher);
+
         }
     }
 }

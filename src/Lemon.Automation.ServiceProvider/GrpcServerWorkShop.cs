@@ -2,6 +2,7 @@
 using GrpcDotNetNamedPipes;
 using Lemon.Automation.Domains;
 using Lemon.Automation.GrpcWorkShop.GrpcDomains;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,21 +13,30 @@ namespace Lemon.Automation.GrpcWorkShop
 {
     public class GrpcServerWorkShop
     {
-        private readonly IEnumerable<IGrpcService> services;
-        private readonly IGrpcServer server;
+        private readonly IEnumerable<IGrpcService> _services;
+        private readonly IGrpcServer _server;
+        private readonly ILogger _logger;
 
-        public GrpcServerWorkShop(IEnumerable<IGrpcService> aServices, IGrpcServer aServer) 
+        public GrpcServerWorkShop(IEnumerable<IGrpcService> aServices, IGrpcServer aServer, ILogger<GrpcServerWorkShop> logger) 
         {
-            services = aServices;
-            server = aServer;
-        }
+            _services = aServices;
+            _server = aServer;
+            _logger = logger;
 
-        public void Process()
-        {
-            foreach (var service in services)
+            foreach (var service in _services)
             {
-                service.Bind(server.ServiceBinder);
+                service.Bind(_server.ServiceBinder);
             }
         }
+        public void Start()
+        {
+            _logger.LogInformation($"GrpcServerWorkShop Start");
+            _server.Start();
+        }
+        public void Stop() 
+        {
+            _logger.LogInformation($"GrpcServerWorkShop Stop");
+            _server.Stop(); 
+        }  
     }
 }

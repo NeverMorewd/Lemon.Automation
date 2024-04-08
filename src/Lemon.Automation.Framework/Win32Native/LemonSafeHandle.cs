@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.InteropServices;
 using Windows.Win32;
 
-namespace Lemon.Automation.Framework.Interops
+namespace Lemon.Automation.Framework.Win32Native
 {
     public class LemonSafeHandle : SafeHandle
     {

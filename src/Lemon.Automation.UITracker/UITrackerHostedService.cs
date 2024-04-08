@@ -1,19 +1,21 @@
 ﻿using Lemon.Automation.Domains;
+using Lemon.Automation.UITracker.Views;
+using Microsoft.Extensions.Logging;
 using System.Windows;
 
 namespace Lemon.Automation.UITracker
 {
-    public class UITrackerService : IAppHostedService
+    public class UITrackerHostedService : IAppHostedService
     {
-        private readonly IServiceProvider _serviceProvider;
-        private readonly IApplication? _application;
-        private SynchronizationContext? _synchronizationContext;
-        public UITrackerService(IServiceProvider serviceProvider)
+        private readonly IApplication _application;
+        private readonly SynchronizationContext? _synchronizationContext;
+        private readonly ILogger _logger;
+        public UITrackerHostedService(IApplication application, ILogger<UITrackerHostedService> logger)
         {
-            _serviceProvider = serviceProvider;
-            _application = _serviceProvider.GetService(typeof(IApplication)) as IApplication;
-            _synchronizationContext = _application?.AppSynchronizationContext;
-            Console.WriteLine($"CurrentThread:{Environment.CurrentManagedThreadId}");
+            _application = application;
+            _logger = logger;
+            _synchronizationContext = _application.AppSynchronizationContext;
+            _logger.LogDebug($"CurrentThread:{Environment.CurrentManagedThreadId}:{_synchronizationContext}");
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {
@@ -40,6 +42,7 @@ namespace Lemon.Automation.UITracker
             //    mainWindow.Show();
             //}, null);
             MainWindow mainWindow = new();
+            mainWindow.Title = _application.AppName;
             mainWindow.Loaded += MainWindow_Loaded;
             mainWindow.Closed += MainWindow_Closed;
             mainWindow.Show();

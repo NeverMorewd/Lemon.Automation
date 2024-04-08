@@ -1,6 +1,5 @@
 ﻿using Lemon.Automation.Domains;
-using Microsoft.Extensions.Hosting;
-using System.IO;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
@@ -13,9 +12,13 @@ namespace Lemon.Automation.UITracker
     /// </summary>
     public partial class AppUITracker : Application, IWpfApplication
     {
-        public AppUITracker()
+        private readonly IServiceCollection _serviceCollection;
+        public AppUITracker(IServiceCollection serviceCollection):base()
         {
             InitializeComponent();
+            _serviceCollection = serviceCollection;
+            _serviceCollection
+                .AddSingleton<IAppHostedService, UITrackerHostedService>();
         }
         public AssemblyName AssemblyName => Assembly.GetExecutingAssembly().GetName();
         public string AppName => nameof(AppUITracker);
@@ -23,7 +26,7 @@ namespace Lemon.Automation.UITracker
         
         public IAppHostedService ResolveHostService(IServiceProvider serviceProvider)
         {
-            return new UITrackerService(serviceProvider);
+            return serviceProvider.GetRequiredService<IAppHostedService>();
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -31,7 +34,7 @@ namespace Lemon.Automation.UITracker
             base.OnStartup(e);
         }
 
-        public void Run(string[] runArgs)
+        public void Run(string[]? runArgs)
         {
             Run();
         }

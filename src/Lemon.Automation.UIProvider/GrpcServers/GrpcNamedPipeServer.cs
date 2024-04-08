@@ -1,22 +1,17 @@
 ﻿using Grpc.Core;
-using Lemon.Automation.GrpcWorkShop.GrpcDomains;
-using Lemon.Automation.GrpcWorkShop;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GrpcDotNetNamedPipes;
+using Lemon.Automation.Domains;
+using Lemon.Automation.GrpcWorkShop.GrpcDomains;
 
-namespace Lemon.Automation.UIProvider
+namespace Lemon.Automation.UIProvider.GrpcServers
 {
     public class GrpcNamedPipeServer : IGrpcServer
     {
         private readonly NamedPipeServer _server;
 
-        public GrpcNamedPipeServer(string aPipeName)
+        public GrpcNamedPipeServer(IConnection connection)
         {
-            _server = new NamedPipeServer(aPipeName);
+            _server = new NamedPipeServer(connection.ConnectionKey);
         }
 
         public ServiceBinderBase ServiceBinder => _server.ServiceBinder;

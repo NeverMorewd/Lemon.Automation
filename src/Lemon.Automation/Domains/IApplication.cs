@@ -13,7 +13,7 @@ namespace Lemon.Automation.Domains
         AssemblyName AssemblyName { get; }
         string AppName { get; }
         void Run(string[]? runArgs);
-        SynchronizationContext AppSynchronizationContext { get; }
+        SynchronizationContext? AppSynchronizationContext { get; }
         IAppHostedService ResolveHostService(IServiceProvider serviceProvider);
     }
 }

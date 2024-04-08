@@ -61,19 +61,25 @@ namespace Lemon.Automation.Bootstrapper
                                         .AddJsonFile("appsettings.json")
                                         .Build();
                             })
+                            .ConfigureLogging(logging =>
+                            {
+                                //log.Services.AddLogging(b => b.AddConsole());
+                                logging.ClearProviders();
+                                logging.AddConsole();
+                            })
                             .ConfigureServices((context, services) =>
                             {
                                 var appsSection = context.Configuration.GetSection("Apps");
                                 var appSettings = appsSection.Get<Dictionary<string, AppSetting>>();
 
-                                var app = AppFactory.ResolveApplication(appName, appSettings);
-                                services.AddSingleton<IConnection, ConnectionService>()
-                                        .AddHostedService(sp => app.ResolveHostService(sp))
-                                        .AddSingleton(app);
-                            })
-                            .ConfigureLogging(log =>
-                            {
-                                log.Services.AddLogging(b => b.AddConsole());
+                                if (appSettings != null)
+                                {
+                                    var app = AppFactory.ResolveApplication(appName, appSettings, services);
+                                    services.AddSingleton<IConnection, ConnectionService>()
+                                            .AddSingleton(app)
+                                            .AddHostedService(sp => app.ResolveHostService(sp))
+                                            .AddSingleton(app);
+                                }
                             })
                             .Build();
                             host.Start();

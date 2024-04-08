@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="GrpcNamedPipeServer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.26.1" />
     <PackageReference Include="Grpc.Core.Api" Version="2.61.0" />
     <PackageReference Include="Grpc.Tools" Version="2.62.0">
@@ -21,6 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Protobuf Include="..\Lemon.Automation\Protos\beep_service.proto">
+      <Link>Protos\beep_service.proto</Link>
+    </Protobuf>
     <Protobuf Include="..\Lemon.Automation\Protos\element.proto">
       <Link>Protos\element.proto</Link>
     </Protobuf>

@@ -1,0 +1,13 @@
+﻿
+syntax = "proto3"; 
+option csharp_namespace = "Lemon.Automation.Protos";
+import "google/protobuf/any.proto";
+message HeartBeatPack
+{
+	repeated google.protobuf.Any anyThings = 1;
+}
+service BeepService
+{
+	rpc Beep(HeartBeatPack) returns (HeartBeatPack);
+	rpc Beeping(stream HeartBeatPack) returns (stream HeartBeatPack);
+}

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Lemon.Automation.Bootstrapper {
+namespace Lemon.Automation.App {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

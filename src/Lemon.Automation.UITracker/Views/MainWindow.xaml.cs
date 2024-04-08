@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Wpf.Ui.Controls;
 
-namespace Lemon.Automation.UITracker.Views
+namespace Lemon.Automation.App.UITracker.Views
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑

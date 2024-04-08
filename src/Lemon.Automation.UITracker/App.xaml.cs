@@ -5,23 +5,23 @@ using System.Windows;
 using System.Windows.Threading;
 using Application = System.Windows.Application;
 
-namespace Lemon.Automation.UITracker
+namespace Lemon.Automation.App.UITracker
 {
     /// <summary>
     /// Interaction logic for AppUITracker.xaml
     /// </summary>
-    public partial class AppUITracker : Application, IWpfApplication
+    public partial class App : Application, IWpfApplication
     {
         private readonly IServiceCollection _serviceCollection;
-        public AppUITracker(IServiceCollection serviceCollection):base()
+        public App(IServiceCollection serviceCollection):base()
         {
             InitializeComponent();
             _serviceCollection = serviceCollection;
             _serviceCollection
-                .AddSingleton<IAppHostedService, UITrackerHostedService>();
+                .AddSingleton<IAppHostedService, HostedService>();
         }
         public AssemblyName AssemblyName => Assembly.GetExecutingAssembly().GetName();
-        public string AppName => nameof(AppUITracker);
+        public string AppName => AssemblyName.Name;
         public SynchronizationContext AppSynchronizationContext => new DispatcherSynchronizationContext(Current.Dispatcher);
         
         public IAppHostedService ResolveHostService(IServiceProvider serviceProvider)

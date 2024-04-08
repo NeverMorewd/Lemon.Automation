@@ -1,20 +1,19 @@
-﻿using Lemon.Automation.Domains;
+﻿using Lemon.Automation.App.UIProvider.GrpcServers;
+using Lemon.Automation.Domains;
 using Lemon.Automation.GrpcWorkShop;
 using Lemon.Automation.GrpcWorkShop.GrpcDomains;
 using Lemon.Automation.GrpcWorkShop.GrpcServices;
-using Lemon.Automation.UIProvider.GrpcServers;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace Lemon.Automation.UIProvider
+namespace Lemon.Automation.App.UIProvider
 {
-    public class AppUIProvider : ApplicationContext, IWinformApplication
+    public class App : ApplicationContext, IWinformApplication
     {
         private readonly IAppHostedService? _service;
         private readonly IServiceCollection _serviceCollection;
-        public AppUIProvider(IServiceCollection serviceCollection):base()
+        public App(IServiceCollection serviceCollection):base()
         {
-            AssemblyName = new AssemblyName("Lemon.Automation.UIProvider");
             _serviceCollection = serviceCollection;
             _serviceCollection
                 .AddSingleton<IGrpcServer, GrpcNamedPipeServer>()
@@ -22,14 +21,10 @@ namespace Lemon.Automation.UIProvider
                 .AddKeyedSingleton<IGrpcService,UIAutomationGrpcService>(nameof(IGrpcService))
                 .AddKeyedSingleton<IGrpcService,BeepGrpcService>(nameof(IGrpcService))
                 .AddSingleton(sp => sp.GetKeyedServices<IGrpcService>(nameof(IGrpcService)))
-                .AddSingleton<IAppHostedService, UIProviderHostedService>();
+                .AddSingleton<IAppHostedService, HostedService>();
         }
-        public AssemblyName AssemblyName 
-        { 
-            get; 
-            private set; 
-        }
-        public string AppName => nameof(AppUIProvider);
+        public AssemblyName AssemblyName => Assembly.GetExecutingAssembly().GetName();
+        public string AppName => AssemblyName.Name;
         public SynchronizationContext? AppSynchronizationContext 
         { 
             get; 

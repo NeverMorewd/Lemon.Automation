@@ -1,16 +1,16 @@
 ﻿using Lemon.Automation.Domains;
-using Lemon.Automation.UITracker.Views;
+using Lemon.Automation.App.UITracker.Views;
 using Microsoft.Extensions.Logging;
 using System.Windows;
 
-namespace Lemon.Automation.UITracker
+namespace Lemon.Automation.App.UITracker
 {
-    public class UITrackerHostedService : IAppHostedService
+    public class HostedService : IAppHostedService
     {
         private readonly IApplication _application;
         private readonly SynchronizationContext? _synchronizationContext;
         private readonly ILogger _logger;
-        public UITrackerHostedService(IApplication application, ILogger<UITrackerHostedService> logger)
+        public HostedService(IApplication application, ILogger<HostedService> logger)
         {
             _application = application;
             _logger = logger;

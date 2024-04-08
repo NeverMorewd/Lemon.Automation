@@ -3,7 +3,7 @@ using GrpcDotNetNamedPipes;
 using Lemon.Automation.Domains;
 using Lemon.Automation.GrpcWorkShop.GrpcDomains;
 
-namespace Lemon.Automation.UIProvider.GrpcServers
+namespace Lemon.Automation.App.UIProvider.GrpcServers
 {
     public class GrpcNamedPipeServer : IGrpcServer
     {

@@ -1,13 +1,10 @@
 ﻿using Lemon.Automation.Domains;
 using Lemon.Automation.GrpcWorkShop;
-using Lemon.Automation.GrpcWorkShop.GrpcDomains;
-using Lemon.Automation.GrpcWorkShop.GrpcServices;
-using Lemon.Automation.UIProvider.GrpcServers;
 using Microsoft.Extensions.Logging;
 
-namespace Lemon.Automation.UIProvider
+namespace Lemon.Automation.App.UIProvider
 {
-    public class UIProviderHostedService : IAppHostedService
+    public class HostedService : IAppHostedService
     {
         private readonly GrpcServerWorkShop _serverWorkShop;
         private readonly IApplication _application;
@@ -15,14 +12,14 @@ namespace Lemon.Automation.UIProvider
         //https://github.com/dotnet/runtime/issues/94252
         private readonly SynchronizationContext? _synchronizationContext;
 
-        public UIProviderHostedService(IApplication application,
+        public HostedService(IApplication application,
             GrpcServerWorkShop grpcServerWorkShop,
-            ILogger<UIProviderHostedService> logger)
+            ILogger<HostedService> logger)
         {
             _logger = logger;
             _serverWorkShop = grpcServerWorkShop;
             _application = application;
-            _logger.LogDebug($"{nameof(UIProviderHostedService)} init thread:{Environment.CurrentManagedThreadId}");
+            _logger.LogDebug($"{nameof(HostedService)} init thread:{Environment.CurrentManagedThreadId}");
         }
 
         public Task StartAsync(CancellationToken cancellationToken)

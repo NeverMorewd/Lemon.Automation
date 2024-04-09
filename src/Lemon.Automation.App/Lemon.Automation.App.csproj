@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>True</UseWindowsForms>
 	<BaseOutputPath>..\..\bin</BaseOutputPath>
-	<StartupObject>Lemon.Automation.Bootstrapper.Program</StartupObject>
+	<StartupObject>Lemon.Automation.App.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,10 +20,8 @@
 
   <ItemGroup>
     <ApplicationDefinition Remove="App.xaml" />
-    <Compile Remove="Apps\AppUITracker.xaml.cs" />
     <None Remove="appsettings.json" />
     <None Remove="NativeMethods.txt" />
-    <Page Remove="Apps\AppUITracker.xaml" />
     <Content Include="appsettings.json">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>appsettings.Designer.cs</LastGenOutput>
@@ -41,7 +39,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lemon.Automation.Framework\Lemon.Automation.Framework.csproj" />
-    <ProjectReference Include="..\Lemon.Automation.UITracker\Lemon.Automation.App.UITracker.csproj" />
     <ProjectReference Include="..\Lemon.Automation\Lemon.Automation.csproj" />
   </ItemGroup>
 

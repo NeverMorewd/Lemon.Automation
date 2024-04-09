@@ -1,0 +1,113 @@
+h1, .flows {
+  background: var(--main-color);
+  color: var(--sidebar-text-color);
+  z-index: 2;
+}
+
+h1 {
+  padding: calc(env(titlebar-area-height, 1rem) + 0.3rem) 3rem 0 3rem;
+  z-index: 3;
+}
+
+@media (max-width: 900px) {
+  h1 {
+    padding: 2rem 1rem 0 1rem;
+  }
+}
+
+h1 a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 10rem;
+  margin: 0 auto;
+}
+
+.flows {
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  overflow: hidden;
+  box-shadow: 0 0 1rem 0 #0003;
+}
+
+.flows h2 {
+  display: none;
+}
+
+.flows ul {
+  display: grid;
+  align-content: start;
+  height: 100%;
+  overflow-y: auto;
+  background: linear-gradient(to bottom, #fff3 0 1px, transparent 0);
+  background-repeat: no-repeat;
+  background-size: 80% 1px;
+  background-position: center 0;
+}
+
+.flows .flow-in-list {
+  overflow: hidden;
+  height: min-content;
+}
+
+.flows .flow-in-list.selected {
+  background: var(--clear-background-color);
+  color: var(--text-color);
+}
+
+.flows .flow-in-list a {
+  padding: 1rem;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  box-sizing: border-box;
+}
+
+.flows .flow-in-list a:hover {
+  background-color: #fff4;
+}
+
+.flows .flow-in-list .flow-name {
+  font-weight: bold;
+}
+
+.flows .flow-in-list .flow-nb-of-steps {
+  display: block;
+  font-size: .8rem;
+  color: var(--clear-background-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 900px) {
+  .flows .flow-in-list .flow-nb-of-steps {
+    display: none;
+  }
+}
+
+.flows .flow-in-list.selected .flow-nb-of-steps {
+  color: inherit;
+}
+
+.flows .flow-in-list:last-child {
+  background-image: linear-gradient(to top, #fff3 0 1px, transparent 0);
+  background-repeat: no-repeat;
+  background-size: 80% 1px;
+  background-position: center bottom;
+}
+
+.add-flow {
+  margin: 1rem;
+  place-self: center;
+  background-color: var(--sidebar-text-color);
+  color: var(--text-color);
+}
+
+@media (max-width: 900px) {
+  .add-flow {
+    margin: 1rem 0;
+  }
+}

@@ -1,25 +1,18 @@
-﻿using Lemon.Automation.Domains;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Lemon.Automation.CommandLines;
+using Lemon.Automation.Domains;
 
 namespace Lemon.Automation.Services
 {
     public class ConnectionService : IConnection
     {
-        private readonly Guid _guid;
-        public ConnectionService() 
+        public ConnectionService(CommandOptions options) 
         {
-            _guid = new Guid();
+            ConnectionKey = options.ConnectionKey;
         }
-        public string ConnectionKey
+        public string? ConnectionKey
         {
-            get
-            {
-                return _guid.ToString();
-            }
+            get; 
+            private set;
         }
     }
 }

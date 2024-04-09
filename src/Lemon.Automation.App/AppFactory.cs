@@ -4,9 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Windows.Media;
 
-namespace Lemon.Automation.Bootstrapper
+namespace Lemon.Automation.App
 {
     internal static class AppFactory
     {

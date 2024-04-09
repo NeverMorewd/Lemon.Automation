@@ -17,7 +17,9 @@ namespace Lemon.Automation.GrpcWorkShop
         private readonly IGrpcServer _server;
         private readonly ILogger _logger;
 
-        public GrpcServerWorkShop(IEnumerable<IGrpcService> aServices, IGrpcServer aServer, ILogger<GrpcServerWorkShop> logger) 
+        public GrpcServerWorkShop(IEnumerable<IGrpcService> aServices, 
+            IGrpcServer aServer, 
+            ILogger<GrpcServerWorkShop> logger) 
         {
             _services = aServices;
             _server = aServer;

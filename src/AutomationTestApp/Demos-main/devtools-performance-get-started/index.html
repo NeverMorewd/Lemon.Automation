@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Sluggish Animation</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="https://edgestatic.azureedge.net/welcome/static/favicon.png">
+  <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+  <div class="controls">
+    <p>This demo page is for the <a href="https://learn.microsoft.com/microsoft-edge/devtools-guide-chromium/evaluate-performance/">Introduction to the Performance tool</a> tutorial.</p>
+    <p>The page animates multiple elements and the code that runs this animation is slow on purpose. The linked tutorial explains how to use the Performance tool in DevTools to improve performance.</p>
+    <div class="buttons">
+      <button class="more">Add elements</button>
+      <button class="less">Remove elements</button>
+    </div>
+    <p>
+      Add more elements to make the animation run less smoothly. Remove elements if it's too slow.
+    </p>
+    <div class="buttons">
+      <label><input type="radio" name="code-version" value="slow" checked>Slow</label>
+      <label><input type="radio" name="code-version" value="optimized">Optimized</label>
+    </div>
+    <p>
+      Toggle between the slow and optimized versions of the animation code.
+    </p>
+    <div class="buttons">
+      <button class="stop">Stop</button>
+    </div>
+    <p>
+      Start and stop the animation.
+    </p>
+  </div>
+  <div class="canvas"></div>
+  <script src="app.js" async></script>
+</body>
+
+</html>

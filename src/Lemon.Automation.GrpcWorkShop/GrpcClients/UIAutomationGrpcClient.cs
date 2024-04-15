@@ -1,19 +1,35 @@
-﻿using Grpc.Core;
+﻿using GrpcDotNetNamedPipes;
+using Lemon.Automation.Domains;
 using Lemon.Automation.Protos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Channels;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Lemon.Automation.GrpcProvider.GrpcClients
 {
-    public class UIAutomationGrpcClient : UIAutomationService.UIAutomationServiceClient
+    public class UIAutomationGrpcClientProvider
     {
-        public UIAutomationGrpcClient(ChannelBase aChannel) : base(aChannel)
+        private readonly NamedPipeChannel _channel;
+        private readonly NamedPipeChannelOptions _channelOptions;
+        private readonly UIAutomationService.UIAutomationServiceClient automationServiceClient;
+        private readonly ILogger _logger;
+        public UIAutomationGrpcClientProvider(IConnection connection, ILogger<UIAutomationGrpcClientProvider> logger)
         {
-            
+            _logger = logger;
+            _channelOptions = new NamedPipeChannelOptions
+            {
+                ConnectionTimeout = connection.ConnectTimeout.GetValueOrDefault(),
+            };
+            _channel = new NamedPipeChannel(".", connection.ConnectionKey, _channelOptions);
+            automationServiceClient = new UIAutomationService.UIAutomationServiceClient(_channel); 
         }
+
+        public UIAutomationService.UIAutomationServiceClient UIAutomationGrpcServiceClient 
+        { 
+            get
+            {
+                return automationServiceClient; 
+            } 
+        }
+
+
     }
 }

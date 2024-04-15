@@ -1,5 +1,7 @@
 ﻿using Lemon.Automation.App.UIProvider.GrpcServers;
 using Lemon.Automation.Domains;
+using Lemon.Automation.Framework.AutomationCore.Domains;
+using Lemon.Automation.Framework.AutomationCore.Services;
 using Lemon.Automation.Globals;
 using Lemon.Automation.GrpcWorkShop;
 using Lemon.Automation.GrpcWorkShop.GrpcDomains;
@@ -18,6 +20,11 @@ namespace Lemon.Automation.App.UIProvider
         private readonly SynchronizationContext? _synchronizationContext;
         public App(IServiceCollection serviceCollection):base()
         {
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            Application.ThreadException += Application_ThreadException;
+            Application.ThreadExit += Application_ThreadExit;
+            Application.ApplicationExit += Application_ApplicationExit;
+            Application.Idle += Application_Idle;
             _serviceCollection = serviceCollection;
             if (SynchronizationContext.Current == null)
             {
@@ -34,16 +41,13 @@ namespace Lemon.Automation.App.UIProvider
             _serviceCollection
                 .AddSingleton<IGrpcServer, GrpcNamedPipeServer>()
                 .AddSingleton<GrpcServerWorkShop>()
+                .AddSingleton<IAutomationService, UIAutomation3Service>()
                 .AddKeyedSingleton<IGrpcService,UIAutomationGrpcService>(nameof(IGrpcService))
                 .AddKeyedSingleton<IGrpcService,BeepGrpcService>(nameof(IGrpcService))
                 .AddSingleton(sp => sp.GetKeyedServices<IGrpcService>(nameof(IGrpcService)))
                 .AddSingleton<IAppHostedService, HostedService>();
 
-            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-            Application.ThreadException += Application_ThreadException;
-            Application.ThreadExit += Application_ThreadExit;
-            Application.ApplicationExit += Application_ApplicationExit;
-            Application.Idle += Application_Idle;
+
         }
 
         private void Application_Idle(object? sender, EventArgs e)

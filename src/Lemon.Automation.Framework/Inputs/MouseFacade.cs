@@ -24,11 +24,11 @@ namespace Lemon.Automation.Framework.Inputs
             if (isForced)
             {
                 Point point = default;
-                PInvokes.GetCursorPos(ref point);
+                NativeInvoke.GetCursorPos(ref point);
 
                 if (point.X == aX && point.Y == aY)
                 {
-                    PInvokes.SetCursorPos(0, 0);
+                    NativeInvoke.SetCursorPos(0, 0);
                 }
             }
             inputSimulator.Mouse.MoveMouseTo(aX, aY);
@@ -39,15 +39,15 @@ namespace Lemon.Automation.Framework.Inputs
             if(isForced) 
             {
                 Point point = default;
-                PInvokes.GetCursorPos(ref point);
+                NativeInvoke.GetCursorPos(ref point);
 
                 if (point.X == aX && point.Y == aY)
                 {
-                    PInvokes.SetCursorPos(0, 0);
+                    NativeInvoke.SetCursorPos(0, 0);
                 }
             }
             inputSimulator.Mouse.MoveMouseTo(aX, aY);
-            PInvokes.SetCursorPos(aX, aY);
+            NativeInvoke.SetCursorPos(aX, aY);
         }
 
     }

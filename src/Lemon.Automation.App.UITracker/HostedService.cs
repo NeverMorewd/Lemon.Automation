@@ -10,10 +10,12 @@ namespace Lemon.Automation.App.UITracker
         private readonly IApplication _application;
         private readonly SynchronizationContext? _synchronizationContext;
         private readonly ILogger _logger;
-        public HostedService(IApplication application, ILogger<HostedService> logger)
+        private readonly MainWindow _window;
+        public HostedService(IApplication application, MainWindow window, ILogger<HostedService> logger)
         {
             _application = application;
             _logger = logger;
+            _window = window;
             _synchronizationContext = _application.AppSynchronizationContext;
             _logger.LogDebug($"CurrentThread:{Environment.CurrentManagedThreadId}:{_synchronizationContext}");
         }
@@ -41,11 +43,10 @@ namespace Lemon.Automation.App.UITracker
             //    mainWindow.Closed += MainWindow_Closed;
             //    mainWindow.Show();
             //}, null);
-            MainWindow mainWindow = new();
-            mainWindow.Title = _application.AppName;
-            mainWindow.Loaded += MainWindow_Loaded;
-            mainWindow.Closed += MainWindow_Closed;
-            mainWindow.Show();
+
+            _window.Loaded += MainWindow_Loaded;
+            _window.Closed += MainWindow_Closed;
+            _window.Show();
             _application?.Run(null);
             return Task.CompletedTask;
         }

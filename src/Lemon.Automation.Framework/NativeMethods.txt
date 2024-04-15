@@ -2,3 +2,7 @@
 SendMessage
 SendInput
 mouse_event
+GetWindowLong
+SetWindowLong
+SetWindowLongPtr
+GetWindowLongPtr

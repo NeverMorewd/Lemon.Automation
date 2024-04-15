@@ -14,5 +14,7 @@ namespace Lemon.Automation.Services
             get; 
             private set;
         }
+
+        public int? ConnectTimeout => 3000;
     }
 }

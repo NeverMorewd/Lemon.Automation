@@ -1,4 +1,8 @@
-﻿using Lemon.Automation.Domains;
+﻿using Lemon.Automation.App.UITracker.Track;
+using Lemon.Automation.App.UITracker.ViewModels;
+using Lemon.Automation.App.UITracker.Views;
+using Lemon.Automation.Domains;
+using Lemon.Automation.GrpcProvider.GrpcClients;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using System.Windows;
@@ -17,11 +21,15 @@ namespace Lemon.Automation.App.UITracker
         {
             InitializeComponent();
             _serviceCollection = serviceCollection;
-            _serviceCollection
-                .AddSingleton<IAppHostedService, HostedService>();
+            _serviceCollection.AddSingleton<UIAutomationGrpcClientProvider>()
+                              .AddSingleton<ElementHighlighter>()
+                              .AddSingleton<ElementTrackService>()
+                              .AddSingleton<MainWindowViewModel>()
+                              .AddSingleton<MainWindow>()
+                              .AddSingleton<IAppHostedService, HostedService>();
         }
         public AssemblyName AssemblyName => Assembly.GetExecutingAssembly().GetName();
-        public string AppName => AssemblyName.Name;
+        public string? AppName => AssemblyName.Name;
         public SynchronizationContext AppSynchronizationContext => new DispatcherSynchronizationContext(Current.Dispatcher);
         
         public IAppHostedService ResolveHostService(IServiceProvider serviceProvider)

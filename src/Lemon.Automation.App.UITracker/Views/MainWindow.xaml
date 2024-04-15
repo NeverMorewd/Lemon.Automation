@@ -20,6 +20,6 @@
             Title="{Binding ElementName=RootWindow, Path=Title}"
             Grid.Row="0"
             CloseWindowByDoubleClickOnIcon="True" />
-        <Button Content="111" />
+        <Button Command="{Binding StartTracking}" Content="Tracking" />
     </Grid>
 </ui:FluentWindow>

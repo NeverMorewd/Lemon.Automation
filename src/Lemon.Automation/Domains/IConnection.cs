@@ -3,5 +3,6 @@
     public interface IConnection
     {
         string? ConnectionKey { get; }
+        int? ConnectTimeout { get; }
     }
 }

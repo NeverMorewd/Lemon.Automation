@@ -4,6 +4,7 @@ syntax = "proto3";
 option csharp_namespace = "Lemon.Automation.Protos";
 import "element_type.proto";
 import "google/protobuf/any.proto";
+import "google/protobuf/struct.proto";
 
 message Element
 {
@@ -12,11 +13,12 @@ message Element
 	int32 top = 5;
 	int32 height = 6;
 	int32 with = 7;
-	int32 native_handle = 8;
+	int32 element_handle = 8;
 	int32 process_id = 9;
 	string window_title = 10;
 	string window_handle = 11;
 	ElementTypeEnum element_type = 12;
 	bool enable_native = 13;
-	google.protobuf.Any native_info = 14;
+	google.protobuf.Struct native_info = 14;
+	google.protobuf.Struct selector = 15; 
 }

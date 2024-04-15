@@ -1,2 +1,4 @@
 ﻿QueryFullProcessImageName
 SendMessage
+SendInput
+mouse_event

@@ -30,7 +30,10 @@ namespace Lemon.Automation.App
                   })
                   .WithNotParsed(errors => 
                   {
-                      
+                      foreach (var error in errors)
+                      {
+                          Console.WriteLine($"CommandParam parse failed:{error.Tag},{error.StopsProcessing}");
+                      }
                   });
 
             

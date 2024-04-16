@@ -20,6 +20,11 @@
             Title="{Binding ElementName=RootWindow, Path=Title}"
             Grid.Row="0"
             CloseWindowByDoubleClickOnIcon="True" />
-        <Button Command="{Binding StartTracking}" Content="Tracking" />
+        <ui:ToggleSwitch
+            Command="{Binding SwitchTrackCommand}"
+            CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Mode=Self}}"
+            IsChecked="{Binding IsTracking.Value, Mode=OneWay}"
+            OffContent="Track"
+            OnContent="Tracking" />
     </Grid>
 </ui:FluentWindow>

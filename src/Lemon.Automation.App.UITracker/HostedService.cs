@@ -32,10 +32,13 @@ namespace Lemon.Automation.App.UITracker
         private Task HandleActivationAsync()
         {
             Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
-            if (Application.Current.Windows.OfType<MainWindow>().Any())
-            {
-                return Task.CompletedTask;
-            }
+            _window.Loaded += MainWindow_Loaded;
+            _window.Closed += MainWindow_Closed;
+            _window.Show();
+            //if (Application.Current.Windows.OfType<MainWindow>().Any())
+            //{
+            //    return Task.CompletedTask;
+            //}
             //_synchronizationContext?.Send(o => 
             //{
             //    MainWindow mainWindow = new();
@@ -44,9 +47,7 @@ namespace Lemon.Automation.App.UITracker
             //    mainWindow.Show();
             //}, null);
 
-            _window.Loaded += MainWindow_Loaded;
-            _window.Closed += MainWindow_Closed;
-            _window.Show();
+
             _application?.Run(null);
             return Task.CompletedTask;
         }

@@ -45,26 +45,8 @@ namespace Lemon.Automation.App
             {
                 if (options.Apps.Any())
                 {
-                    string connectionKey = $"{Guid.NewGuid}-{Environment.ProcessId}";
-                    foreach (var app in options.Apps)
-                    {
-                        var exeFilePath = Assembly.GetExecutingAssembly().GetName().Name + ".exe";
-                        ProcessStartInfo startInfo = new()
-                        {
-                            FileName = exeFilePath,
-                            UseShellExecute = false,
-                            Arguments = $"-a {app} -b {false} -c {connectionKey}"
-                        };
-                        Process? process = Process.Start(startInfo);
-                        if (process != null)
-                        {
-                            Console.WriteLine($"Start successfully:{process.Id}");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"Start failed!");
-                        }
-                    }
+                    string connectionKey = $"{Guid.NewGuid()}-{Environment.ProcessId}";
+                    RunApps(options.Apps, connectionKey);
                 }
                 Environment.Exit(0);
             }
@@ -76,6 +58,11 @@ namespace Lemon.Automation.App
                 }
                 else
                 {
+                    if (options.Apps.Count() > 1)
+                    {
+                        var apps = options.Apps.Skip(1);
+                        RunApps(apps, options.ConnectionKey);
+                    }
                     var appName = options.Apps.First();
                     var host = Host.CreateDefaultBuilder()
                         .ConfigureAppConfiguration(config =>
@@ -90,7 +77,6 @@ namespace Lemon.Automation.App
                         })
                         .ConfigureServices((context, services) =>
                         {
-                            string connectionKey = $"{Guid.NewGuid}-{Environment.ProcessId}";
                             var appsSection = context.Configuration.GetSection("Apps");
                             var appSettings = appsSection.Get<Dictionary<string, AppSetting>>();
 
@@ -108,7 +94,37 @@ namespace Lemon.Automation.App
                 }
             }
         }
+        private static void RunApps(IEnumerable<string> apps, string? connectionKey)
+        {
+            var exeFilePath = Assembly.GetExecutingAssembly().GetName().Name + ".exe";
+            foreach (var app in apps)
+            {
 
+                ProcessStartInfo startInfo = new()
+                {
+                    FileName = exeFilePath,
+                    UseShellExecute = false,
+                };
+                if (string.IsNullOrEmpty(connectionKey))
+                {
+                    startInfo.Arguments = $"-a {app} -b {false}";
+                }
+                else
+                {
+                    startInfo.Arguments = $"-a {app} -b {false} -c {connectionKey}";
+                }
+
+                Process? process = Process.Start(startInfo);
+                if (process != null)
+                {
+                    Console.WriteLine($"Start successfully:{process.Id}");
+                }
+                else
+                {
+                    Console.WriteLine($"Start failed!");
+                }
+            }
+        }
         private static void GlobalHandle()
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;

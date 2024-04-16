@@ -1,5 +1,9 @@
-﻿using Grpc.Core;
+﻿
+using Grpc.Core;
+using Lemon.Automation.Globals;
 using Lemon.Automation.GrpcProvider.GrpcClients;
+using Lemon.Automation.Protos;
+using Microsoft.Extensions.Logging;
 using System.Drawing;
 using System.Security.Cryptography.X509Certificates;
 
@@ -9,29 +13,75 @@ namespace Lemon.Automation.App.UITracker.Track
     {
         private readonly UIAutomationGrpcClientProvider _automationGrpcClientProvider;
         private readonly ElementHighlighter _elementHighlighter;
-        public ElementTrackService(UIAutomationGrpcClientProvider automationGrpcClientProvider, ElementHighlighter elementHighlighter) 
+        private CancellationTokenSource? _cancellationSource;
+        private readonly ILogger _logger;
+        private bool _isTracking = false;
+        public ElementTrackService(UIAutomationGrpcClientProvider automationGrpcClientProvider, 
+            ElementHighlighter elementHighlighter,
+            ILogger<ElementTrackService> logger) 
         {
+            _logger = logger;
             _automationGrpcClientProvider = automationGrpcClientProvider;
             _elementHighlighter = elementHighlighter;
         }
-        public async Task Start(CancellationToken cancellation)
+        public async Task<bool> Start()
         {
-            var trackStreaming = _automationGrpcClientProvider.UIAutomationGrpcServiceClient.Tracking(null);
-
-            await Task.Factory.StartNew(async () => 
+            if (_isTracking)
             {
-                while (await trackStreaming.ResponseStream.MoveNext(cancellation))
+                return _isTracking;
+            }
+            _isTracking = true;
+            _cancellationSource = new CancellationTokenSource();
+            _elementHighlighter.Enable();
+            TrackRequest trackRequest = new();
+            var trackStreaming = _automationGrpcClientProvider.UIAutomationGrpcServiceClient.Tracking(trackRequest, cancellationToken: _cancellationSource.Token);
+            try
+            {
+                while (await trackStreaming.ResponseStream.MoveNext(_cancellationSource.Token))
                 {
-                    var current = trackStreaming.ResponseStream.Current;
-                    if (current.Element != null)
+                    try
                     {
-                        var elementRect = new Rectangle(current.Element.Left, current.Element.Top, current.Element.With, current.Element.Height);
-                        _elementHighlighter.Highlight(elementRect);
+                        var current = trackStreaming.ResponseStream.Current;
+                        if (current.Context.Code == 0)
+                        {
+                            if (current.Element != null)
+                            {
+                                if (current.Element.ProcessId == Environment.ProcessId)
+                                {
+                                    continue;
+                                }
+                                var elementRect = new Rectangle(current.Element.Left, current.Element.Top, current.Element.With, current.Element.Height);
+                                _elementHighlighter.Highlight(elementRect);
+                            }
+                        }
+                        else
+                        {
+                            await Stop();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(AppLogEventIds.GrpcClient, ex, ex.Message);
                     }
                 }
-            }, cancellation,TaskCreationOptions.LongRunning, TaskScheduler.Default);
+            }
+            catch (Exception ex)
+            {
+                //ignore
+                _logger.LogWarning(ex,"Tracking over with error");
+            }
+            _isTracking = false;
+            return _isTracking;
+        }
 
-
+        public Task Stop()
+        {
+            if (_isTracking)
+            {
+                _cancellationSource.Cancel();
+                _elementHighlighter.Disable();
+            }
+            return Task.CompletedTask;
         }
     }
 }

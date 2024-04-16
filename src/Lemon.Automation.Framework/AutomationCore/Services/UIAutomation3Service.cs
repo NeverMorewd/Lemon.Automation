@@ -4,8 +4,11 @@ using FlaUI.Core.Input;
 using FlaUI.UIA3;
 using Lemon.Automation.Domains;
 using Lemon.Automation.Framework.AutomationCore.Domains;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using R3;
+using System.Runtime.CompilerServices;
+using System.Threading;
 //using System.Windows.Automation;
 
 namespace Lemon.Automation.Framework.AutomationCore.Services
@@ -13,29 +16,35 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
     public class UIAutomation3Service : IAutomationService
     {
         private readonly AutomationBase _automationBase;
-        public UIAutomation3Service()
+        private readonly ILogger _logger;
+        public UIAutomation3Service(ILogger<UIAutomation3Service> logger)
         {
+            _logger = logger;
             _automationBase = new UIA3Automation();
         }
-        public Observable<JObject> ObserveElementObjectsFromCurrentPoint()
+        public Observable<JObject> ObserveElementObjectsFromCurrentPoint(CancellationToken cancellationToken)
         {
-            return ObserveElementsFromCurrentPoint().Select(JObject.FromObject);
+            return ObserveElementsFromCurrentPoint(cancellationToken).Select(JObject.FromObject);
         }
-        public Observable<AutomationElement> ObserveElementsFromCurrentPoint() 
+        public Observable<AutomationElement> ObserveElementsFromCurrentPoint(CancellationToken cancellationToken) 
         {
             return Observable.CreateFrom(t =>
             {
-                return ElementsFromCurrentPoint();
+                return ElementsFromCurrentPoint(cancellationToken);
             });
         }
 
-        private async IAsyncEnumerable<AutomationElement> ElementsFromCurrentPoint()
+        private async IAsyncEnumerable<AutomationElement> ElementsFromCurrentPoint([EnumeratorCancellation] CancellationToken cancellationToken)
         {
-             while (true)
-             {
-                  await Task.Yield();
-                  yield return ElementFromCurrentPoint();
-             }
+            while (true)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    break;
+                }
+                await Task.Yield();
+                yield return ElementFromCurrentPoint();
+            }
         }
         public AutomationElement ElementFromCurrentPoint()
         {
@@ -62,12 +71,30 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
                 }
             }
             */
-            var element = _automationBase.FromPoint(Mouse.Position);
-            if (element.Properties.ProcessId == Environment.ProcessId)
+
+            try
             {
-                return  _automationBase.GetDesktop();
+                var element = _automationBase.FromPoint(Mouse.Position);
+                if (element.Properties.ProcessId == Environment.ProcessId)
+                {
+                    return _automationBase.GetDesktop();
+                }
+                if (!element.Properties.BoundingRectangle.IsSupported)
+                {
+                    return _automationBase.GetDesktop();
+                }
+                return element;
             }
-            return element;
+            catch (UnauthorizedAccessException)
+            {
+                throw;
+                //return _automationBase.GetDesktop();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Lemon.Automation.App.UITracker.ViewModels
@@ -14,19 +15,30 @@ namespace Lemon.Automation.App.UITracker.ViewModels
         public MainWindowViewModel(ElementTrackService elementTracker) 
         {
             _elementTracker = elementTracker;
-            StartTracking = new ReactiveCommand<Unit>(async (unit) => 
+            IsTracking = new BindableReactiveProperty<bool>(false);
+            SwitchTrackCommand = new ReactiveCommand<bool>(async (ischecked) => 
             {
-               await elementTracker.Start(CancellationToken.None);
+                if (ischecked)
+                {
+                    var isTracking = await _elementTracker.Start();
+                    IsTracking.Value = isTracking;
+                }
+                else
+                {
+                    await elementTracker.Stop();
+                }
+
             });
         }
 
 
 
-        public ReactiveCommand<Unit> StartTracking { get; }
+        public ReactiveCommand<bool> SwitchTrackCommand { get; }
+        public BindableReactiveProperty<bool> IsTracking { get; }
 
         public void Dispose()
         {
-            Disposable.Combine(StartTracking);
+            Disposable.Combine(SwitchTrackCommand, IsTracking);
         }
     }
 }

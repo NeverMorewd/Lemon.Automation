@@ -11,7 +11,7 @@ namespace Lemon.Automation.Framework.AutomationCore.Domains
 {
     public interface IAutomationService
     {
-        Observable<JObject> ObserveElementObjectsFromCurrentPoint();
-        Observable<AutomationElement> ObserveElementsFromCurrentPoint();
+        Observable<JObject> ObserveElementObjectsFromCurrentPoint(CancellationToken cancellationToken);
+        Observable<AutomationElement> ObserveElementsFromCurrentPoint(CancellationToken cancellationToken);
     }
 }

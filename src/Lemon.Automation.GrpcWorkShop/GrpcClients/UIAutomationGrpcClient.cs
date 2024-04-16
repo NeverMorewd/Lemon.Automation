@@ -19,7 +19,9 @@ namespace Lemon.Automation.GrpcProvider.GrpcClients
                 ConnectionTimeout = connection.ConnectTimeout.GetValueOrDefault(),
             };
             _channel = new NamedPipeChannel(".", connection.ConnectionKey, _channelOptions);
-            automationServiceClient = new UIAutomationService.UIAutomationServiceClient(_channel); 
+            automationServiceClient = new UIAutomationService.UIAutomationServiceClient(_channel);
+
+            _logger.LogDebug($"automationServiceClient:{connection.ConnectionKey}");
         }
 
         public UIAutomationService.UIAutomationServiceClient UIAutomationGrpcServiceClient 

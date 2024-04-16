@@ -1,4 +1,6 @@
-﻿using Lemon.Automation.App.UIProvider.GrpcServers;
+﻿using FlaUI.Core;
+using FlaUI.UIA3;
+using Lemon.Automation.App.UIProvider.GrpcServers;
 using Lemon.Automation.Domains;
 using Lemon.Automation.Framework.AutomationCore.Domains;
 using Lemon.Automation.Framework.AutomationCore.Services;
@@ -9,6 +11,7 @@ using Lemon.Automation.GrpcWorkShop.GrpcServices;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
+using Application = System.Windows.Forms.Application;
 
 namespace Lemon.Automation.App.UIProvider
 {
@@ -38,12 +41,15 @@ namespace Lemon.Automation.App.UIProvider
             }
             _logger = _serviceCollection.BuildServiceProvider().GetRequiredService<ILogger<App>>();
 
-            _serviceCollection
+            _ = _serviceCollection
                 .AddSingleton<IGrpcServer, GrpcNamedPipeServer>()
                 .AddSingleton<GrpcServerWorkShop>()
-                .AddSingleton<IAutomationService, UIAutomation3Service>()
-                .AddKeyedSingleton<IGrpcService,UIAutomationGrpcService>(nameof(IGrpcService))
-                .AddKeyedSingleton<IGrpcService,BeepGrpcService>(nameof(IGrpcService))
+                .AddSingleton<AutomationBase, UIA3Automation>()
+                .AddSingleton<Win32AutomationSerivce>()
+                .AddSingleton<MSAAService>()
+                .AddSingleton<IAutomationServiceFacade, UIAutomationServiceFacade>()
+                .AddKeyedSingleton<IGrpcService, UIAutomationGrpcService>(nameof(IGrpcService))
+                .AddKeyedSingleton<IGrpcService, BeepGrpcService>(nameof(IGrpcService))
                 .AddSingleton(sp => sp.GetKeyedServices<IGrpcService>(nameof(IGrpcService)))
                 .AddSingleton<IAppHostedService, HostedService>();
 

@@ -23,7 +23,7 @@
         <ui:ToggleSwitch
             Command="{Binding SwitchTrackCommand}"
             CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Mode=Self}}"
-            IsChecked="{Binding IsTracking.Value, Mode=OneWay}"
+            IsChecked="{Binding IsTracking.Value}"
             OffContent="Track"
             OnContent="Tracking" />
     </Grid>

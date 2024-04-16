@@ -1,32 +1,37 @@
 ﻿using FlaUI.Core;
-using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Input;
 using FlaUI.UIA3;
-using Lemon.Automation.Domains;
 using Lemon.Automation.Framework.AutomationCore.Domains;
+using Lemon.Automation.Framework.AutomationCore.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using R3;
 using System.Runtime.CompilerServices;
-using System.Threading;
 //using System.Windows.Automation;
 
 namespace Lemon.Automation.Framework.AutomationCore.Services
 {
-    public class UIAutomation3Service : IAutomationService
+    public class UIAutomationServiceFacade : IAutomationServiceFacade
     {
         private readonly AutomationBase _automationBase;
+        private readonly Win32AutomationSerivce _win32AutomationService;
+        private readonly MSAAService _msaaService;
         private readonly ILogger _logger;
-        public UIAutomation3Service(ILogger<UIAutomation3Service> logger)
+        public UIAutomationServiceFacade(ILogger<UIAutomationServiceFacade> logger,
+            AutomationBase automationBase,
+            Win32AutomationSerivce win32AutomationSerivce,
+            MSAAService msaaService)
         {
             _logger = logger;
-            _automationBase = new UIA3Automation();
+            _automationBase = automationBase;
+            _win32AutomationService = win32AutomationSerivce;
+            _msaaService = msaaService;
         }
         public Observable<JObject> ObserveElementObjectsFromCurrentPoint(CancellationToken cancellationToken)
         {
             return ObserveElementsFromCurrentPoint(cancellationToken).Select(JObject.FromObject);
         }
-        public Observable<AutomationElement> ObserveElementsFromCurrentPoint(CancellationToken cancellationToken) 
+        public Observable<IUIElement> ObserveElementsFromCurrentPoint(CancellationToken cancellationToken) 
         {
             return Observable.CreateFrom(t =>
             {
@@ -34,7 +39,7 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
             });
         }
 
-        private async IAsyncEnumerable<AutomationElement> ElementsFromCurrentPoint([EnumeratorCancellation] CancellationToken cancellationToken)
+        private async IAsyncEnumerable<IUIElement> ElementsFromCurrentPoint([EnumeratorCancellation] CancellationToken cancellationToken)
         {
             while (true)
             {
@@ -46,7 +51,7 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
                 yield return ElementFromCurrentPoint();
             }
         }
-        public AutomationElement ElementFromCurrentPoint()
+        public IUIElement ElementFromCurrentPoint()
         {
             /* FlaUI Mouse.Position
             {
@@ -77,18 +82,20 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
                 var element = _automationBase.FromPoint(Mouse.Position);
                 if (element.Properties.ProcessId == Environment.ProcessId)
                 {
-                    return _automationBase.GetDesktop();
+                    element = _automationBase.GetDesktop();
                 }
                 if (!element.Properties.BoundingRectangle.IsSupported)
                 {
-                    return _automationBase.GetDesktop();
+                    element = _automationBase.GetDesktop();
                 }
-                return element;
+                return new Fla3UIElement(element);
             }
             catch (UnauthorizedAccessException)
             {
-                throw;
-                //return _automationBase.GetDesktop();
+               var handle = _win32AutomationService.WindowFromPoint(Mouse.Position);
+                return new Win32UIElement(()=>_win32AutomationService, handle, nameof(UnauthorizedAccessException));
+
+
             }
             catch (Exception ex)
             {

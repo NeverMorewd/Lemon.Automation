@@ -4,5 +4,7 @@ SendInput
 mouse_event
 GetWindowLong
 SetWindowLong
-SetWindowLongPtr
-GetWindowLongPtr
+WindowFromPoint
+GetWindowText
+GetClassName
+GetWindowRect

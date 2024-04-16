@@ -1,11 +1,5 @@
 ﻿using Lemon.Automation.App.UITracker.Track;
 using R3;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Lemon.Automation.App.UITracker.ViewModels
 {
@@ -33,8 +27,14 @@ namespace Lemon.Automation.App.UITracker.ViewModels
 
 
 
-        public ReactiveCommand<bool> SwitchTrackCommand { get; }
-        public BindableReactiveProperty<bool> IsTracking { get; }
+        public ReactiveCommand<bool> SwitchTrackCommand 
+        { 
+            get; 
+        }
+        public BindableReactiveProperty<bool> IsTracking 
+        { 
+            get; 
+        }
 
         public void Dispose()
         {

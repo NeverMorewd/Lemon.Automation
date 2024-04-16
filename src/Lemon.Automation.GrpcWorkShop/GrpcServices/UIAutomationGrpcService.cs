@@ -14,9 +14,9 @@ namespace Lemon.Automation.GrpcWorkShop.GrpcServices
 {
     public class UIAutomationGrpcService : UIAutomationService.UIAutomationServiceBase, IGrpcService
     {
-        private readonly IAutomationService _automationService;
+        private readonly IAutomationServiceFacade _automationService;
         private readonly ILogger _logger;
-        public UIAutomationGrpcService(IAutomationService  automationService, 
+        public UIAutomationGrpcService(IAutomationServiceFacade  automationService, 
             ILogger<UIAutomationGrpcService> logger)
         {
             _automationService = automationService;
@@ -41,29 +41,27 @@ namespace Lemon.Automation.GrpcWorkShop.GrpcServices
             _logger.LogDebug($"Tracking start");
            var disposable = _automationService
                               .ObserveElementsFromCurrentPoint(context.CancellationToken)
+                              .Where(x => x != null && x.IsVisible)
                               .Select(ae =>
                               {
-                                  if (!ae.Properties.BoundingRectangle.IsSupported 
-                                      ||!ae.Properties.Name.IsSupported)
-                                  {
-                                      throw new Exception("Invalid Element");
-                                  }
                                   var element = new Element
                                   {
-                                      Height = ae.Properties.BoundingRectangle.ValueOrDefault.Height,
-                                      With = ae.Properties.BoundingRectangle.ValueOrDefault.Width,
-                                      Left = ae.Properties.BoundingRectangle.ValueOrDefault.Left,
-                                      Top = ae.Properties.BoundingRectangle.ValueOrDefault.Top,
-                                      Name = ae.Properties.Name.ValueOrDefault,
-                                      NativeInfo = Struct.Parser.ParseJson(JsonConvert.SerializeObject(ae.ToNative())),
+                                      Height = ae.RegionRectangle.Height,
+                                      With = ae.RegionRectangle.Width,
+                                      Left = ae.RegionRectangle.Left,
+                                      Top = ae.RegionRectangle.Top,
                                   };
-                                  if (ae.Properties.ProcessId.IsSupported)
+                                  if (ae.ProcessId.HasValue)
                                   {
-                                      element.ProcessId = ae.Properties.ProcessId.ValueOrDefault;
+                                      element.ProcessId = ae.ProcessId.Value;
                                   }
-                                  if (ae.Properties.NativeWindowHandle.IsSupported)
+                                  if (ae.ElementHandle.HasValue)
                                   {
-                                      element.ElementHandle = (int)ae.Properties.NativeWindowHandle.ValueOrDefault;
+                                      element.ElementHandle = ae.ElementHandle.Value;
+                                  }
+                                  if (string.IsNullOrEmpty(ae.Name))
+                                  {
+                                      element.Name = "none";
                                   }
                                   return element;
                               })

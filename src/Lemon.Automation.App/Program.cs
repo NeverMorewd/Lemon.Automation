@@ -2,6 +2,7 @@
 using Lemon.Automation.CommandLines;
 using Lemon.Automation.Commons;
 using Lemon.Automation.Domains;
+using Lemon.Automation.Framework.Natives;
 using Lemon.Automation.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +19,7 @@ namespace Lemon.Automation.App
         [STAThread]
         static void Main(string[] args)
         {
-            PInvoke.AttachConsole(PInvoke.ATTACH_PARENT_PROCESS);
+            NativeInvoke.AttachConsole();
             GlobalHandle();
 
             Parser.Default

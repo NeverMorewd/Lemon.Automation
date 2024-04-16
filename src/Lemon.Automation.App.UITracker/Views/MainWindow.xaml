@@ -11,20 +11,36 @@
     Height="450"
     ExtendsContentIntoTitleBar="True"
     WindowBackdropType="Mica"
+    WindowChrome.IsHitTestVisibleInChrome="True"
     WindowCornerPreference="Default"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35" />
+            <RowDefinition x:Name="SecondRow" Height="*" />
+        </Grid.RowDefinitions>
         <ui:TitleBar
             x:Name="TitleBar"
             Title="{Binding ElementName=RootWindow, Path=Title}"
             Grid.Row="0"
             CloseWindowByDoubleClickOnIcon="True" />
-        <ui:ToggleSwitch
-            Command="{Binding SwitchTrackCommand}"
-            CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Mode=Self}}"
-            IsChecked="{Binding IsTracking.Value}"
-            OffContent="Track"
-            OnContent="Tracking" />
+        <TabControl Grid.Row="1" Panel.ZIndex="999">
+            <TabItem Header="Track">
+                <TabItem.Content>
+                    <ui:ToggleSwitch
+                        Command="{Binding SwitchTrackCommand}"
+                        CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Mode=Self}}"
+                        IsChecked="{Binding IsTracking.Value}"
+                        OffContent="Track"
+                        OnContent="Tracking" />
+                </TabItem.Content>
+            </TabItem>
+            <TabItem Header="Test">
+                <TabItem.Content>
+                    <Button Command="{Binding BrowseExeAndRunCommand}" Content="BrowseExeAndRun" />
+                </TabItem.Content>
+            </TabItem>
+        </TabControl>
     </Grid>
 </ui:FluentWindow>

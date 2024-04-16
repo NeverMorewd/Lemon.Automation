@@ -1,5 +1,6 @@
 ﻿using Lemon.Automation.App.UITracker.Track;
 using R3;
+using System.Diagnostics;
 
 namespace Lemon.Automation.App.UITracker.ViewModels
 {
@@ -21,7 +22,21 @@ namespace Lemon.Automation.App.UITracker.ViewModels
                 {
                     await elementTracker.Stop();
                 }
-
+            });
+            BrowseExeAndRunCommand = new ReactiveCommand<Unit>(u => 
+            {
+                Microsoft.Win32.OpenFileDialog dlg = new()
+                {
+                    Filter = "exe files (*.exe)|*.exe"
+                };
+                if (dlg.ShowDialog() == true)
+                {
+                    var filePath = dlg.FileName;
+                    if (filePath.EndsWith(".exe") || filePath.EndsWith(".EXE"))
+                    {
+                        Process.Start(filePath);
+                    }
+                }
             });
         }
 
@@ -30,6 +45,10 @@ namespace Lemon.Automation.App.UITracker.ViewModels
         public ReactiveCommand<bool> SwitchTrackCommand 
         { 
             get; 
+        }
+        public ReactiveCommand<Unit> BrowseExeAndRunCommand
+        {
+            get;
         }
         public BindableReactiveProperty<bool> IsTracking 
         { 

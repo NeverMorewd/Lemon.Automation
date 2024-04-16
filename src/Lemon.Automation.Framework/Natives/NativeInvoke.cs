@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
+﻿using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 
@@ -62,6 +57,11 @@ namespace Lemon.Automation.Framework.Natives
         {
            return PInvoke.GetWindowLong(new HWND(windowHandle), 
                Windows.Win32.UI.WindowsAndMessaging.WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+        }
+
+        public static void AttachConsole()
+        {
+            PInvoke.AttachConsole(PInvoke.ATTACH_PARENT_PROCESS);
         }
     }
 

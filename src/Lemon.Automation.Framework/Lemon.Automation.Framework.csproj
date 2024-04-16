@@ -9,6 +9,12 @@
 
   <ItemGroup>
     <None Remove="Libs\Lemon.Native.Winx64.dll" />
+    <None Remove="NativeMethods.txt" />
+    <None Remove="NatvieMethods.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="NativeMethods.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,7 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoItX.Dotnet" Version="3.3.14.5" />
     <PackageReference Include="FlaUI.UIA3" Version="4.0.0" />
     <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.49-beta">
       <PrivateAssets>all</PrivateAssets>
@@ -31,15 +36,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lemon.Automation\Lemon.Automation.csproj" />
-    <ProjectReference Include="..\Lemon.Native.Winx64\Lemon.Native.Winx64.csproj" />
     <ProjectReference Include="..\WindowsInput\WindowsInput.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="AutoItX3.Assembly">
-      <HintPath>..\..\..\..\..\.nuget\packages\autoitx.dotnet\3.3.14.5\lib\AutoItX3.Assembly.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
 
 </Project>

@@ -8,3 +8,5 @@ WindowFromPoint
 GetWindowText
 GetClassName
 GetWindowRect
+AttachConsole
+ATTACH_PARENT_PROCESS

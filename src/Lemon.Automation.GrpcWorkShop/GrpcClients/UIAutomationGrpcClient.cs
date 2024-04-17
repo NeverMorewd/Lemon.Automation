@@ -11,7 +11,8 @@ namespace Lemon.Automation.GrpcProvider.GrpcClients
         private readonly NamedPipeChannelOptions _channelOptions;
         private readonly UIAutomationService.UIAutomationServiceClient automationServiceClient;
         private readonly ILogger _logger;
-        public UIAutomationGrpcClientProvider(IConnection connection, ILogger<UIAutomationGrpcClientProvider> logger)
+        public UIAutomationGrpcClientProvider(IConnection connection, 
+            ILogger<UIAutomationGrpcClientProvider> logger)
         {
             _logger = logger;
             _channelOptions = new NamedPipeChannelOptions

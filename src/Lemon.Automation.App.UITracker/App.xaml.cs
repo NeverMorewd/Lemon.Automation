@@ -1,4 +1,4 @@
-﻿using Lemon.Automation.App.UITracker.Track;
+﻿using Lemon.Automation.App.UITracker.Services;
 using Lemon.Automation.App.UITracker.ViewModels;
 using Lemon.Automation.App.UITracker.Views;
 using Lemon.Automation.Domains;
@@ -22,12 +22,24 @@ namespace Lemon.Automation.App.UITracker
             InitializeComponent();
             _serviceCollection = serviceCollection;
             _serviceCollection.AddSingleton<UIAutomationGrpcClientProvider>()
-                              .AddSingleton<ElementHighlighter>()
+                              .AddTransient<ElementHighlightService>()
+                              .AddSingleton<TestViewMode>()
+                              .AddSingleton<TrackViewModel>()
+                              .AddSingleton<InspectViewModel>()
+                              .AddSingleton<HomeViewModel>()
                               .AddSingleton<ElementTrackService>()
                               .AddSingleton<MainWindowViewModel>()
                               .AddSingleton<MainWindow>()
                               .AddSingleton<IAppHostedService, HostedService>();
+
+            Services = _serviceCollection.BuildServiceProvider();
         }
+        public new static App Current => (App)Application.Current;
+        public IServiceProvider Services 
+        { 
+            get; 
+        }
+
         public AssemblyName AssemblyName => Assembly.GetExecutingAssembly().GetName();
         public string? AppName => AssemblyName.Name;
         public SynchronizationContext AppSynchronizationContext => new DispatcherSynchronizationContext(Current.Dispatcher);

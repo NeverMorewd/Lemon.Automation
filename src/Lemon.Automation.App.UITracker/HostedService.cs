@@ -11,7 +11,9 @@ namespace Lemon.Automation.App.UITracker
         private readonly SynchronizationContext? _synchronizationContext;
         private readonly ILogger _logger;
         private readonly MainWindow _window;
-        public HostedService(IApplication application, MainWindow window, ILogger<HostedService> logger)
+        public HostedService(IApplication application,
+            MainWindow window,
+            ILogger<HostedService> logger)
         {
             _application = application;
             _logger = logger;
@@ -21,34 +23,16 @@ namespace Lemon.Automation.App.UITracker
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            return HandleActivationAsync();
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
-        }
-
-        private Task HandleActivationAsync()
-        {
             Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
             _window.Loaded += MainWindow_Loaded;
             _window.Closed += MainWindow_Closed;
             _window.Show();
-            //if (Application.Current.Windows.OfType<MainWindow>().Any())
-            //{
-            //    return Task.CompletedTask;
-            //}
-            //_synchronizationContext?.Send(o => 
-            //{
-            //    MainWindow mainWindow = new();
-            //    mainWindow.Loaded += MainWindow_Loaded;
-            //    mainWindow.Closed += MainWindow_Closed;
-            //    mainWindow.Show();
-            //}, null);
-
-
             _application?.Run(null);
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
             return Task.CompletedTask;
         }
 

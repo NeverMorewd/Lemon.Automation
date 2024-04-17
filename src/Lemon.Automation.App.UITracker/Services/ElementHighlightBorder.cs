@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 
-namespace Lemon.Automation.App.UITracker.Track
+namespace Lemon.Automation.App.UITracker.Services
 {
     internal class ElementHighlightBorder : Window
     {
@@ -161,7 +161,6 @@ namespace Lemon.Automation.App.UITracker.Track
         }
         public void SetCurrentElementRectBorder(Rectangle rectangle)
         {
-            ActionOverEvent = null;
             m_OriginalRect = new Rectangle(rectangle.Location, rectangle.Size);
             //logger.LogDebug($"Border m_OriginalRect:{rectangle.Location.Y},{rectangle.Location.X},{rectangle.Size.Height},{rectangle.Size.Width}");
             Topmost = true;

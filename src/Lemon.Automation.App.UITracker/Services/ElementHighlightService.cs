@@ -2,16 +2,16 @@
 using System.Windows.Media;
 using System.Windows.Threading;
 
-namespace Lemon.Automation.App.UITracker.Track
+namespace Lemon.Automation.App.UITracker.Services
 {
-    public class ElementHighlighter
+    public class ElementHighlightService
     {
         private ElementHighlightBorder? elementHighlightBorder;
         private Dispatcher? _uiDispatcher;
         private readonly Thread _uiThread;
         private readonly ManualResetEventSlim _startedEvent = new(false);
         private bool _enable = true;
-        public ElementHighlighter()
+        public ElementHighlightService()
         {
             _uiThread = new Thread(() =>
             {
@@ -71,11 +71,11 @@ namespace Lemon.Automation.App.UITracker.Track
                 elementHighlightBorder = null;
             }));
         }
-        public void Install()
+        private void Install()
         {
             _uiDispatcher?.InvokeAsync(() =>
             {
-                elementHighlightBorder = new ElementHighlightBorder(new Rectangle(1, 1, 1, 1),
+                elementHighlightBorder = new ElementHighlightBorder(new Rectangle(-100, -100, 0, 0),
                     new SolidColorBrush(Colors.Red),
                     true,
                     true,

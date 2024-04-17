@@ -1,23 +1,20 @@
-﻿
-using Grpc.Core;
-using Lemon.Automation.Globals;
+﻿using Lemon.Automation.Globals;
 using Lemon.Automation.GrpcProvider.GrpcClients;
 using Lemon.Automation.Protos;
 using Microsoft.Extensions.Logging;
 using System.Drawing;
-using System.Security.Cryptography.X509Certificates;
 
-namespace Lemon.Automation.App.UITracker.Track
+namespace Lemon.Automation.App.UITracker.Services
 {
     public class ElementTrackService
     {
         private readonly UIAutomationGrpcClientProvider _automationGrpcClientProvider;
-        private readonly ElementHighlighter _elementHighlighter;
+        private readonly ElementHighlightService _elementHighlighter;
         private CancellationTokenSource? _cancellationSource;
         private readonly ILogger _logger;
         private bool _isTracking = false;
-        public ElementTrackService(UIAutomationGrpcClientProvider automationGrpcClientProvider, 
-            ElementHighlighter elementHighlighter,
+        public ElementTrackService(UIAutomationGrpcClientProvider automationGrpcClientProvider,
+            ElementHighlightService elementHighlighter,
             ILogger<ElementTrackService> logger) 
         {
             _logger = logger;

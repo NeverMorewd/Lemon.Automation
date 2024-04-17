@@ -10,7 +10,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Reflection;
-using Windows.Win32;
 
 namespace Lemon.Automation.App
 {
@@ -83,11 +82,12 @@ namespace Lemon.Automation.App
 
                             if (appSettings != null)
                             {
-                                var app = AppFactory.ResolveApplication(appName, appSettings, services);
                                 services.AddSingleton<IConnection, ConnectionService>()
-                                        .AddSingleton(options)
-                                        .AddSingleton(app)
-                                        .AddHostedService(sp => app.ResolveHostService(sp));
+                                        .AddSingleton(options);
+    
+                                var app = AppFactory.ResolveApplication(appName, appSettings, services);
+                                services.AddSingleton(app);
+                                services.AddHostedService(sp => app.ResolveHostService(sp));
                             }
                         })
                         .Build();

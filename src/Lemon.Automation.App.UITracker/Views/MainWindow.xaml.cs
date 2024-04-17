@@ -1,5 +1,7 @@
 ﻿using Lemon.Automation.App.UITracker.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 using Wpf.Ui.Controls;
+using Lemon.Automation.Framework.Rx;
 
 namespace Lemon.Automation.App.UITracker.Views
 {
@@ -8,10 +10,11 @@ namespace Lemon.Automation.App.UITracker.Views
     /// </summary>
     public partial class MainWindow : FluentWindow
     {
-        public MainWindow(MainWindowViewModel viewModel)
+        public MainWindow()
         {
             InitializeComponent();
-            DataContext = viewModel;
+            DataContext = App.Current.Services.GetService<MainWindowViewModel>();
+            this.MakeDisposable();
         }
     }
 }

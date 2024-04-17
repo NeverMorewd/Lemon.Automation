@@ -2,6 +2,7 @@
 using Lemon.Automation.App.UITracker.Views;
 using Microsoft.Extensions.Logging;
 using System.Windows;
+using Application = System.Windows.Application;
 
 namespace Lemon.Automation.App.UITracker
 {

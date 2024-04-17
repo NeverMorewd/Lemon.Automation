@@ -10,6 +10,7 @@ using Lemon.Automation.GrpcWorkShop.GrpcDomains;
 using Lemon.Automation.GrpcWorkShop.GrpcServices;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using R3;
 using System.Reflection;
 using Application = System.Windows.Forms.Application;
 
@@ -58,6 +59,7 @@ namespace Lemon.Automation.App.UIProvider
 
         private void Application_Idle(object? sender, EventArgs e)
         {
+            Application.Idle -= Application_Idle;
             _logger.LogInformation("Application_Idle");
         }
 
@@ -90,6 +92,9 @@ namespace Lemon.Automation.App.UIProvider
         }
         public void Run(string[]? runArgs)
         {
+            //https://github.com/Cysharp/R3?tab=readme-ov-file#wpf
+            WpfProviderInitializer.SetDefaultObservableSystem(ex => Console.WriteLine($"R3 UnhandledException:{ex}"));
+            //WinFormsProviderInitializer.SetDefaultObservableSystem(ex => Console.WriteLine($"R3 UnhandledException:{ex}"));
             Application.Run(this);
         }
     }

@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
+using Panel = System.Windows.Controls.Panel;
 
 namespace Lemon.Automation.App.UITracker.Services
 {

@@ -1,6 +1,5 @@
 ﻿using FlaUI.Core;
 using FlaUI.Core.Input;
-using FlaUI.UIA3;
 using Lemon.Automation.Framework.AutomationCore.Domains;
 using Lemon.Automation.Framework.AutomationCore.Models;
 using Microsoft.Extensions.Logging;
@@ -27,19 +26,15 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
             _win32AutomationService = win32AutomationSerivce;
             _msaaService = msaaService;
         }
-        public Observable<JObject> ObserveElementObjectsFromCurrentPoint(CancellationToken cancellationToken)
-        {
-            return ObserveElementsFromCurrentPoint(cancellationToken).Select(JObject.FromObject);
-        }
-        public Observable<IUIElement> ObserveElementsFromCurrentPoint(CancellationToken cancellationToken) 
+        public Observable<IUIElement> ObserveElementsFromCurrentPoint(CancellationToken cancellationToken, 
+            TimeSpan inerval) 
         {
             return Observable.CreateFrom(t =>
             {
-                return ElementsFromCurrentPoint(cancellationToken);
+                return ElementsFromCurrentPoint(cancellationToken, inerval);
             });
         }
-
-        private async IAsyncEnumerable<IUIElement> ElementsFromCurrentPoint([EnumeratorCancellation] CancellationToken cancellationToken)
+        private async IAsyncEnumerable<IUIElement> ElementsFromCurrentPoint([EnumeratorCancellation] CancellationToken cancellationToken, TimeSpan inerval)
         {
             while (true)
             {
@@ -47,7 +42,14 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
                 {
                     break;
                 }
-                await Task.Yield();
+                if (inerval.Milliseconds > 0)
+                {
+                    await Task.Delay(inerval);
+                }
+                else
+                {
+                    await Task.Yield();
+                }
                 yield return ElementFromCurrentPoint();
             }
         }
@@ -92,16 +94,33 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
             }
             catch (UnauthorizedAccessException)
             {
-               var handle = _win32AutomationService.WindowFromPoint(Mouse.Position);
-                return new Win32UIElement(()=>_win32AutomationService, handle, nameof(UnauthorizedAccessException));
-
-
+                try
+                {
+                    var handle = _win32AutomationService.WindowFromPoint(Mouse.Position);
+                    return new Win32UIElement(() => _win32AutomationService, handle, nameof(UnauthorizedAccessException));
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, ex.Message);
+                    return new Fla3UIElement(_automationBase.GetDesktop());
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                throw;
+                return new Fla3UIElement(_automationBase.GetDesktop());
             }
+        }
+
+        public Observable<IUIElement> ObserveElementsByMouseMove(CancellationToken cancellationToken, 
+            TimeSpan inerval)
+        {
+            return Observable.EveryValueChanged(this, _ => Mouse.Position, cancellationToken)
+                .Select(p =>
+                {
+                    _logger.LogDebug($"point = ({p.X},{p.Y})");
+                    return ElementFromCurrentPoint();
+                });
         }
     }
 }

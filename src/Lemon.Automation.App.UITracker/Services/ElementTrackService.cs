@@ -21,7 +21,7 @@ namespace Lemon.Automation.App.UITracker.Services
             _automationGrpcClientProvider = automationGrpcClientProvider;
             _elementHighlighter = elementHighlighter;
         }
-        public async Task<bool> Start()
+        public async Task<bool> Start(TrackTypeEnum trackType = TrackTypeEnum.MouseMove)
         {
             if (_isTracking)
             {
@@ -30,7 +30,11 @@ namespace Lemon.Automation.App.UITracker.Services
             _isTracking = true;
             _cancellationSource = new CancellationTokenSource();
             _elementHighlighter.Enable();
-            TrackRequest trackRequest = new();
+            TrackRequest trackRequest = new()
+            {
+                Interval = 1,
+                TrackType = trackType,
+            };
             var trackStreaming = _automationGrpcClientProvider.UIAutomationGrpcServiceClient.Tracking(trackRequest, cancellationToken: _cancellationSource.Token);
             try
             {
@@ -59,6 +63,10 @@ namespace Lemon.Automation.App.UITracker.Services
                     catch (Exception ex)
                     {
                         _logger.LogError(AppLogEventIds.GrpcClient, ex, ex.Message);
+                        if (ex.InnerException != null)
+                        {
+                            _logger.LogError(AppLogEventIds.GrpcClient, ex.InnerException, ex.InnerException.Message);
+                        }
                     }
                 }
             }
@@ -66,6 +74,10 @@ namespace Lemon.Automation.App.UITracker.Services
             {
                 //ignore
                 _logger.LogWarning(ex,"Tracking over with error");
+                if (ex.InnerException != null)
+                {
+                    _logger.LogWarning(AppLogEventIds.GrpcClient, ex.InnerException, ex.InnerException.Message);
+                }
             }
             _isTracking = false;
             return _isTracking;

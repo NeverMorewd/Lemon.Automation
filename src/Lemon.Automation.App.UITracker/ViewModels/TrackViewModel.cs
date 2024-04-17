@@ -1,4 +1,5 @@
 ﻿using Lemon.Automation.App.UITracker.Services;
+using Lemon.Automation.Protos;
 using R3;
 
 namespace Lemon.Automation.App.UITracker.ViewModels
@@ -10,17 +11,24 @@ namespace Lemon.Automation.App.UITracker.ViewModels
         public TrackViewModel(ElementTrackService elementTracker)
         {
             _elementTracker = elementTracker;
+
             IsTracking = new BindableReactiveProperty<bool>(false);
+            SelectTypeCanUse = new BindableReactiveProperty<bool>(true);
+            TrackType = new BindableReactiveProperty<TrackTypeEnum>(TrackTypeEnum.MouseMove);
+
             SwitchTrackCommand = new ReactiveCommand<bool>(async (ischecked) =>
             {
                 if (ischecked)
                 {
-                    var isTracking = await _elementTracker.Start();
+                    SelectTypeCanUse.Value = false;
+                    var isTracking = await _elementTracker.Start(TrackType.Value);
+                    SelectTypeCanUse.Value = !isTracking;
                     IsTracking.Value = isTracking;
                 }
                 else
                 {
-                    await elementTracker.Stop();
+                    SelectTypeCanUse.Value = true;
+                    await _elementTracker.Stop();
                 }
             });
         }
@@ -30,6 +38,17 @@ namespace Lemon.Automation.App.UITracker.ViewModels
             get;
         }
         public BindableReactiveProperty<bool> IsTracking
+        {
+            get;
+        }
+
+        public BindableReactiveProperty<bool> SelectTypeCanUse
+        {
+            get;
+        }
+
+
+        public BindableReactiveProperty<TrackTypeEnum> TrackType
         {
             get;
         }

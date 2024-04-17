@@ -5,19 +5,37 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Lemon.Automation.App.UITracker.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:protos="clr-namespace:Lemon.Automation.Protos;assembly=Lemon.Automation.GrpcWorkShop"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="TrackView"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
+    <Page.Resources>
+        <ObjectDataProvider
+            x:Key="TrackTypes"
+            MethodName="GetValues"
+            ObjectType="{x:Type system:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="protos:TrackTypeEnum" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Page.Resources>
 
-    <Grid>
+    <StackPanel Margin="10" Orientation="Vertical">
+        <ComboBox
+            FocusVisualStyle="{x:Null}"
+            IsEnabled="{Binding SelectTypeCanUse.Value, Mode=TwoWay}"
+            ItemsSource="{Binding Source={StaticResource TrackTypes}}"
+            SelectedIndex="0"
+            SelectedItem="{Binding TrackType.Value, Mode=OneWayToSource}" />
         <ui:ToggleSwitch
+            Margin="0,10,0,0"
             Command="{Binding SwitchTrackCommand}"
             CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Mode=Self}}"
             IsChecked="{Binding IsTracking.Value}"
             OffContent="Track"
             OnContent="Tracking" />
-    </Grid>
+    </StackPanel>
 </Page>

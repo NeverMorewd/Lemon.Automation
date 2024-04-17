@@ -4,6 +4,8 @@ using Lemon.Automation.App.UITracker.Views;
 using Lemon.Automation.Domains;
 using Lemon.Automation.GrpcProvider.GrpcClients;
 using Microsoft.Extensions.DependencyInjection;
+using R3;
+using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
@@ -17,7 +19,7 @@ namespace Lemon.Automation.App.UITracker
     public partial class App : Application, IWpfApplication
     {
         private readonly IServiceCollection _serviceCollection;
-        public App(IServiceCollection serviceCollection):base()
+        public App(IServiceCollection serviceCollection) : base()
         {
             InitializeComponent();
             _serviceCollection = serviceCollection;
@@ -35,15 +37,15 @@ namespace Lemon.Automation.App.UITracker
             Services = _serviceCollection.BuildServiceProvider();
         }
         public new static App Current => (App)Application.Current;
-        public IServiceProvider Services 
-        { 
-            get; 
+        public IServiceProvider Services
+        {
+            get;
         }
 
         public AssemblyName AssemblyName => Assembly.GetExecutingAssembly().GetName();
         public string? AppName => AssemblyName.Name;
         public SynchronizationContext AppSynchronizationContext => new DispatcherSynchronizationContext(Current.Dispatcher);
-        
+
         public IAppHostedService ResolveHostService(IServiceProvider serviceProvider)
         {
             return serviceProvider.GetRequiredService<IAppHostedService>();
@@ -52,6 +54,8 @@ namespace Lemon.Automation.App.UITracker
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            //https://github.com/Cysharp/R3?tab=readme-ov-file#wpf
+            WpfProviderInitializer.SetDefaultObservableSystem(ex => Debug.WriteLine($"R3 UnhandledException:{ex}"));
         }
 
         public void Run(string[]? runArgs)

@@ -10,11 +10,19 @@ import "request_context.proto";
 import "response_context.proto";
 import "google/protobuf/wrappers.proto";
 
+enum TrackTypeEnum
+{
+  MouseMove = 0;
+  continuous = 1;
+}
+
 message TrackRequest
 {
 	RequestContext context = 1;
 	google.protobuf.Int32Value cursor_x = 2;
 	google.protobuf.Int32Value cursor_y = 3;
+	TrackTypeEnum track_type = 4;
+	google.protobuf.Int32Value interval = 5;
 }
 
 message TrackResponse

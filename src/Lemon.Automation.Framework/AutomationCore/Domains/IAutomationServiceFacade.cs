@@ -6,7 +6,7 @@ namespace Lemon.Automation.Framework.AutomationCore.Domains
     public interface IAutomationServiceFacade
     {
         IUIElement ElementFromCurrentPoint();
-        Observable<JObject> ObserveElementObjectsFromCurrentPoint(CancellationToken cancellationToken);
-        Observable<IUIElement> ObserveElementsFromCurrentPoint(CancellationToken cancellationToken);
+        Observable<IUIElement> ObserveElementsFromCurrentPoint(CancellationToken cancellationToken,TimeSpan inerval);
+        Observable<IUIElement> ObserveElementsByMouseMove(CancellationToken cancellationToken, TimeSpan inerval);
     }
 }

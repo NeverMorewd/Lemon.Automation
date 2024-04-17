@@ -21,7 +21,6 @@ namespace Lemon.Automation.App.UIProvider
             _application = application;
             _connection = connection;
             _logger.LogDebug($"{nameof(HostedService)} init thread:{Environment.CurrentManagedThreadId}");
-
         }
 
         public Task StartAsync(CancellationToken cancellationToken)

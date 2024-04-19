@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using R3;
+﻿using R3;
 
 namespace Lemon.Automation.Framework.AutomationCore.Domains
 {
@@ -8,5 +7,6 @@ namespace Lemon.Automation.Framework.AutomationCore.Domains
         IUIElement ElementFromCurrentPoint();
         Observable<IUIElement> ObserveElementsFromCurrentPoint(CancellationToken cancellationToken,TimeSpan inerval);
         Observable<IUIElement> ObserveElementsByMouseMove(CancellationToken cancellationToken, TimeSpan inerval);
+        IEnumerable<IUIElement> GetAllChildFromPoint();
     }
 }

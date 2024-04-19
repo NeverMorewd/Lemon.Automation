@@ -7,6 +7,7 @@
 	<UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
 	<BaseOutputPath>..\..\bin</BaseOutputPath>
+	<!--https://stackoverflow.com/questions/17281012/some-dll-from-nuget-packages-are-not-copied-to-bin-->
 	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 

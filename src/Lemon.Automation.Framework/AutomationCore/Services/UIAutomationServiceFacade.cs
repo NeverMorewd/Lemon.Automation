@@ -1,10 +1,11 @@
 ﻿using FlaUI.Core;
+using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Input;
 using Lemon.Automation.Framework.AutomationCore.Domains;
 using Lemon.Automation.Framework.AutomationCore.Models;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
 using R3;
+using System.Drawing;
 using System.Runtime.CompilerServices;
 //using System.Windows.Automation;
 
@@ -111,6 +112,28 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
                 return new Fla3UIElement(_automationBase.GetDesktop());
             }
         }
+        private bool TryGetElementFromCurrentPointInternal(out AutomationElement? automationElement)
+        {
+            try
+            {
+                automationElement = _automationBase.FromPoint(Mouse.Position);
+                if (automationElement.Properties.ProcessId == Environment.ProcessId)
+                {
+                    automationElement = _automationBase.GetDesktop();
+                }
+                if (!automationElement.Properties.BoundingRectangle.IsSupported)
+                {
+                    automationElement = _automationBase.GetDesktop();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                automationElement = null;
+                return false;
+            }
+        }
 
         public Observable<IUIElement> ObserveElementsByMouseMove(CancellationToken cancellationToken, 
             TimeSpan inerval)
@@ -121,6 +144,49 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
                     _logger.LogDebug($"point = ({p.X},{p.Y})");
                     return ElementFromCurrentPoint();
                 });
+        }
+
+        public IEnumerable<IUIElement> GetAllChildFromPoint()
+        {
+            if (TryGetElementFromCurrentPointInternal(out AutomationElement? automation) && automation != null)
+            {
+                var treeWalker = _automationBase.TreeWalkerFactory.GetRawViewWalker();
+                return GetAllChild(treeWalker, automation).Select(element=>new Fla3UIElement(element));
+            }
+            return [];
+        }
+        //private static AutomationElement GetTopmostChild(ITreeWalker treeWalker, AutomationElement targetElement)
+        //{
+        //    var firstChildInFirstLevel = treeWalker.GetFirstChild(targetElement);
+        //    var allChildrenInFirstLevel = GetAllSibling(treeWalker, firstChildInFirstLevel);
+        //    foreach (var child in allChildrenInFirstLevel)
+        //    {
+        //        var childInSecondLevel = treeWalker.GetFirstChild(targetElement);
+        //        if (childInSecondLevel != null)
+        //        {
+
+        //        }
+        //        else
+        //        {
+        //            continue;
+        //        }
+        //    }
+            
+        //}
+        private static IEnumerable<AutomationElement> GetAllChild(ITreeWalker treeWalker, AutomationElement targetElement)
+        {
+            var firstChildInFirstLevel = treeWalker.GetFirstChild(targetElement);
+            var allChildrenInFirstLevel = GetAllSibling(treeWalker, firstChildInFirstLevel);
+            return allChildrenInFirstLevel.SelectMany(child => GetAllChild(treeWalker, targetElement));
+        }
+
+        private static IEnumerable<AutomationElement> GetAllSibling(ITreeWalker treeWalker, AutomationElement targetElement)
+        {
+            while (targetElement != null)
+            {
+                yield return targetElement;
+                targetElement = treeWalker.GetNextSibling(targetElement);
+            }
         }
     }
 }

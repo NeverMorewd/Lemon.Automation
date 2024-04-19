@@ -1,4 +1,6 @@
-﻿using Lemon.Automation.App.UITracker.Services;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using Lemon.Automation.App.UITracker.Messages;
+using Lemon.Automation.App.UITracker.Services;
 using Lemon.Automation.Protos;
 using R3;
 
@@ -7,10 +9,12 @@ namespace Lemon.Automation.App.UITracker.ViewModels
     public class TrackViewModel : IDisposable
     {
         private readonly ElementTrackService _elementTracker;
+        private readonly WeakReferenceMessenger _messenger;
 
-        public TrackViewModel(ElementTrackService elementTracker)
+        public TrackViewModel(ElementTrackService elementTracker, WeakReferenceMessenger messenger)
         {
             _elementTracker = elementTracker;
+            _messenger = messenger;
 
             IsTracking = new BindableReactiveProperty<bool>(false);
             SelectTypeCanUse = new BindableReactiveProperty<bool>(true);
@@ -30,6 +34,11 @@ namespace Lemon.Automation.App.UITracker.ViewModels
                     SelectTypeCanUse.Value = true;
                     await _elementTracker.Stop();
                 }
+            });
+
+            messenger.Register<EscUpMessage>(this, (r, m) => 
+            {
+                SwitchTrackCommand.Execute(false);
             });
         }
 

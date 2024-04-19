@@ -24,14 +24,16 @@
     </Page.Resources>
 
     <StackPanel Margin="10" Orientation="Vertical">
-        <GroupBox Padding="5" Header="TrackOptions">
-            <!--<TextBlock Text="TrackType:" />-->
-            <ComboBox
-                FocusVisualStyle="{x:Null}"
-                IsEnabled="{Binding SelectTypeCanUse.Value, Mode=TwoWay}"
-                ItemsSource="{Binding Source={StaticResource TrackTypes}}"
-                SelectedIndex="0"
-                SelectedItem="{Binding TrackType.Value, Mode=OneWayToSource}" />
+        <GroupBox Padding="5" Header="Options">
+            <StackPanel>
+                <!--<TextBlock Text="TrackType:" />-->
+                <ComboBox
+                    FocusVisualStyle="{x:Null}"
+                    IsEnabled="{Binding SelectTypeCanUse.Value, Mode=TwoWay}"
+                    ItemsSource="{Binding Source={StaticResource TrackTypes}}"
+                    SelectedIndex="0"
+                    SelectedItem="{Binding TrackType.Value, Mode=OneWayToSource}" />
+            </StackPanel>
         </GroupBox>
         <ui:ToggleSwitch
             Margin="0,10,0,0"
@@ -39,6 +41,6 @@
             CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Mode=Self}}"
             IsChecked="{Binding IsTracking.Value}"
             OffContent="Track"
-            OnContent="Tracking" />
+            OnContent="Tracking,cancel by Esc" />
     </StackPanel>
 </Page>

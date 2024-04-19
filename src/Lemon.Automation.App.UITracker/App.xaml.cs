@@ -1,11 +1,12 @@
-﻿using Lemon.Automation.App.UITracker.Services;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using Gma.System.MouseKeyHook;
+using Lemon.Automation.App.UITracker.Services;
 using Lemon.Automation.App.UITracker.ViewModels;
 using Lemon.Automation.App.UITracker.Views;
 using Lemon.Automation.Domains;
 using Lemon.Automation.GrpcProvider.GrpcClients;
 using Microsoft.Extensions.DependencyInjection;
 using R3;
-using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
@@ -19,10 +20,13 @@ namespace Lemon.Automation.App.UITracker
     public partial class App : Application, IWpfApplication
     {
         private readonly IServiceCollection _serviceCollection;
+        private readonly IKeyboardMouseEvents _globalHook;
         public App(IServiceCollection serviceCollection) : base()
         {
             InitializeComponent();
+            _globalHook = Hook.GlobalEvents();
             _serviceCollection = serviceCollection;
+
             _serviceCollection.AddSingleton<UIAutomationGrpcClientProvider>()
                               .AddTransient<ElementHighlightService>()
                               .AddSingleton<TestViewMode>()
@@ -32,6 +36,8 @@ namespace Lemon.Automation.App.UITracker
                               .AddSingleton<ElementTrackService>()
                               .AddSingleton<MainWindowViewModel>()
                               .AddSingleton<MainWindow>()
+                              .AddSingleton(_globalHook)
+                              .AddSingleton(WeakReferenceMessenger.Default)
                               .AddSingleton<IAppHostedService, HostedService>();
 
             Services = _serviceCollection.BuildServiceProvider();
@@ -55,9 +61,12 @@ namespace Lemon.Automation.App.UITracker
         {
             base.OnStartup(e);
             //https://github.com/Cysharp/R3?tab=readme-ov-file#wpf
-            WpfProviderInitializer.SetDefaultObservableSystem(ex => Debug.WriteLine($"R3 UnhandledException:{ex}"));
+            WpfProviderInitializer.SetDefaultObservableSystem(ex => Console.WriteLine($"R3 UnhandledException:{ex}"));
         }
-
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+        }
         public void Run(string[]? runArgs)
         {
             Run();

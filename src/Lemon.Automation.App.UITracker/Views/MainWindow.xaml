@@ -297,22 +297,5 @@
                 <ui:ImageIcon Source="pack://application:,,,/Lemon.Automation.Framework;component/Assets/Lemon.png" />
             </ui:TitleBar.Icon>
         </ui:TitleBar>
-        <!--<TabControl Grid.Row="1" Panel.ZIndex="999">
-            <TabItem Header="Track">
-                <TabItem.Content>
-                    <ui:ToggleSwitch
-                        Command="{Binding SwitchTrackCommand}"
-                        CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Mode=Self}}"
-                        IsChecked="{Binding IsTracking.Value}"
-                        OffContent="Track"
-                        OnContent="Tracking" />
-                </TabItem.Content>
-            </TabItem>
-            <TabItem Header="Test">
-                <TabItem.Content>
-                    <Button Command="{Binding BrowseExeAndRunCommand}" Content="BrowseExeAndRun" />
-                </TabItem.Content>
-            </TabItem>
-        </TabControl>-->
     </Grid>
 </ui:FluentWindow>

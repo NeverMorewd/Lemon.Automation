@@ -20,9 +20,17 @@ namespace Lemon.Automation.App
                 {
                     if (outAppSetting != null)
                     {
-                        return BuildApp(outAppSetting.AssemblyName, 
-                            outAppSetting.TypeName, 
-                            aServiceCollection);
+                        if (!string.IsNullOrEmpty(outAppSetting.AssemblyName)
+                            && !string.IsNullOrEmpty(outAppSetting.TypeName))
+                        {
+                            return BuildApp(outAppSetting.AssemblyName,
+                                outAppSetting.TypeName,
+                                aServiceCollection);
+                        }
+                        else 
+                        {
+                            throw new InvalidOperationException($"AssemblyName:{outAppSetting.AssemblyName};TypeName{outAppSetting.TypeName}");
+                        }
                     }
                 }
             }
@@ -48,7 +56,7 @@ namespace Lemon.Automation.App
             {
                 return application;
             }
-            throw new InvalidOperationException();
+            throw new TypeLoadException($"{aTypeName},{anAssemblyName}");
         }
     }
 }

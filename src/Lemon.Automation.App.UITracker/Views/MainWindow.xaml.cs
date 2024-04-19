@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Wpf.Ui.Controls;
 using Lemon.Automation.Framework.Rx;
+using Gma.System.MouseKeyHook;
 
 namespace Lemon.Automation.App.UITracker.Views
 {

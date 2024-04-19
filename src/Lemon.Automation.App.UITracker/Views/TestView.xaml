@@ -12,6 +12,18 @@
     mc:Ignorable="d">
 
     <Grid>
-        <Button Command="{Binding BrowseExeAndRunCommand}" Content="BrowseExeAndRun" />
+        <StackPanel>
+            <ui:TextBox Name="textBox" PlaceholderText="Type something to set clipboard" />
+            <ui:CardAction
+                Command="{Binding TestClipboardCommand}"
+                CommandParameter="{Binding ElementName=textBox, Path=Text}"
+                Content="TestClipboard"
+                Icon="{ui:SymbolIcon Home24}" />
+            <ui:CardAction
+                Command="{Binding BrowseExeAndRunCommand}"
+                Content="BrowseExeAndRun"
+                Icon="{ui:SymbolIcon Home24}" />
+        </StackPanel>
+
     </Grid>
 </Page>

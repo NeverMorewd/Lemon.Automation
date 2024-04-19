@@ -75,6 +75,7 @@
                                     x:Name="ElementContentPresenter"
                                     HorizontalAlignment="Center"
                                     Content="{TemplateBinding Content}"
+                                    TextBlock.FontSize="{TemplateBinding FontSize}"
                                     TextElement.FontSize="{TemplateBinding FontSize}"
                                     TextElement.Foreground="{DynamicResource NavigationViewItemForegroundLeftFluent}" />
                             </Grid>
@@ -85,7 +86,8 @@
                                 Margin="0"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Top"
-                                Content="{TemplateBinding InfoBadge}" />
+                                Content="{TemplateBinding InfoBadge}"
+                                TextElement.FontSize="{TemplateBinding FontSize}" />
                         </Grid>
                     </Grid>
                 </Border>
@@ -187,46 +189,56 @@
             <RowDefinition Height="35" />
             <RowDefinition x:Name="SecondRow" Height="*" />
         </Grid.RowDefinitions>
-        <ui:TitleBar
-            x:Name="TitleBar"
-            Title="{Binding ElementName=RootWindow, Path=Title}"
-            Grid.Row="0"
-            CloseWindowByDoubleClickOnIcon="True" />
+
         <ui:NavigationView
             Grid.Row="1"
-            MinHeight="300"
-            Margin="0"
-            IsBackButtonVisible="Collapsed"
-            IsPaneToggleVisible="False"
+            Margin="4,4,4,4"
+            Padding="4,4,4,4"
+            FontSize="9"
+            IsBackButtonVisible="Visible"
+            IsPaneToggleVisible="True"
             PaneDisplayMode="LeftFluent"
-            Style="{StaticResource NewNavigationViewStyle}">
+            Style="{StaticResource NewNavigationViewStyle}"
+            Transition="FadeInWithSlide">
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem
                     Width="auto"
                     Height="{StaticResource NewPaneFluentButtonHeight}"
-                    Content="Home"
                     Icon="{ui:SymbolIcon Home24}"
-                    TargetPageType="{x:Type views:HomeView}" />
+                    TargetPageType="{x:Type views:HomeView}">
+                    <ui:NavigationViewItem.Content>
+                        <TextBlock FontSize="11" Text="Home" />
+                    </ui:NavigationViewItem.Content>
+                </ui:NavigationViewItem>
                 <ui:NavigationViewItem
                     Width="auto"
                     Height="{StaticResource NewPaneFluentButtonHeight}"
-                    Content="Track"
                     Icon="{ui:SymbolIcon HandLeft24}"
-                    TargetPageType="{x:Type views:TrackView}" />
+                    TargetPageType="{x:Type views:TrackView}">
+                    <ui:NavigationViewItem.Content>
+                        <TextBlock FontSize="11" Text="Track" />
+                    </ui:NavigationViewItem.Content>
+                </ui:NavigationViewItem>
                 <ui:NavigationViewItem
                     Width="auto"
                     Height="{StaticResource NewPaneFluentButtonHeight}"
-                    Content="Inspect"
                     Icon="{ui:SymbolIcon DesktopPulse24}"
-                    TargetPageType="{x:Type views:InspectView}" />
+                    TargetPageType="{x:Type views:InspectView}">
+                    <ui:NavigationViewItem.Content>
+                        <TextBlock FontSize="11" Text="Inspect" />
+                    </ui:NavigationViewItem.Content>
+                </ui:NavigationViewItem>
             </ui:NavigationView.MenuItems>
             <ui:NavigationView.FooterMenuItems>
                 <ui:NavigationViewItem
                     Width="auto"
                     Height="{StaticResource NewPaneFluentButtonHeight}"
-                    Content="Settings"
                     Icon="{ui:SymbolIcon Settings24}"
-                    TargetPageType="{x:Type views:TestView}" />
+                    TargetPageType="{x:Type views:TestView}">
+                    <ui:NavigationViewItem.Content>
+                        <TextBlock FontSize="11" Text="Settings" />
+                    </ui:NavigationViewItem.Content>
+                </ui:NavigationViewItem>
             </ui:NavigationView.FooterMenuItems>
             <!--<ui:NavigationView.Header>
                 <Border
@@ -276,6 +288,15 @@
                 </Border>
             </ui:NavigationView.PaneFooter>-->
         </ui:NavigationView>
+        <ui:TitleBar
+            x:Name="TitleBar"
+            Title="{Binding AppName}"
+            Grid.Row="0"
+            CloseWindowByDoubleClickOnIcon="True">
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon Source="pack://application:,,,/Lemon.Automation.Framework;component/Assets/Lemon.png" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
         <!--<TabControl Grid.Row="1" Panel.ZIndex="999">
             <TabItem Header="Track">
                 <TabItem.Content>

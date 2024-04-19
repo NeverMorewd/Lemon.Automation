@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\lemon.png" />
     <None Remove="Libs\Lemon.Native.Winx64.dll" />
     <None Remove="NativeMethods.txt" />
     <None Remove="NatvieMethods.json" />
@@ -31,12 +32,17 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Polly" Version="8.3.1" />
     <PackageReference Include="R3Extensions.WPF" Version="1.1.11" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Lemon.Automation\Lemon.Automation.csproj" />
     <ProjectReference Include="..\WindowsInput\WindowsInput.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\lemon.png" />
   </ItemGroup>
 
 </Project>

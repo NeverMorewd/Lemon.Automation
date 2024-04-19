@@ -9,4 +9,12 @@ GetWindowText
 GetClassName
 GetWindowRect
 AttachConsole
+GlobalAlloc
+GlobalLock
+GlobalUnlock
+OpenClipboard
+EmptyClipboard
+SetClipboardData
+CloseClipboard
+GetOpenClipboardWindow
 ATTACH_PARENT_PROCESS

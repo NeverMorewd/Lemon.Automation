@@ -3,6 +3,7 @@ using Lemon.Automation.App.UITracker.Views;
 using Microsoft.Extensions.Logging;
 using System.Windows;
 using Application = System.Windows.Application;
+using Microsoft.Xaml.Behaviors.Core;
 
 namespace Lemon.Automation.App.UITracker
 {
@@ -21,6 +22,9 @@ namespace Lemon.Automation.App.UITracker
             _window = window;
             _synchronizationContext = _application.AppSynchronizationContext;
             _logger.LogDebug($"CurrentThread:{Environment.CurrentManagedThreadId}:{_synchronizationContext}");
+
+            //https://github.com/dotnet/wpf/issues/9039
+            _ = new ConditionBehavior();
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {
@@ -44,7 +48,7 @@ namespace Lemon.Automation.App.UITracker
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-
+            
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using AutomationTestApp.Models;
 using Microsoft.Web.WebView2.Core;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -32,6 +34,26 @@ namespace AutomationTestApp
             //webView.CoreWebView2.Settings.AreDefaultScriptDialogsEnabled = false;
             //webView.CoreWebView2.ScriptDialogOpening += CoreWebView2_ScriptDialogOpening;
             //webView.Source = new Uri($"file:///{AppDomain.CurrentDomain.BaseDirectory}Demos-main/pwa-to-do/index.html");
+            Native();
+            void Native()
+            {
+                unsafe
+                {
+                    string txt = "1234567890";
+                    nint handle = nint.Parse(txt);
+                    if (TrySetClipboardText(handle))
+                    {
+                        var getHandle = TryGetClipboardText();
+                        Span<char> charSpan = new(getHandle.ToPointer(), 10);
+                        var getText = charSpan.ToString();
+                        if (TryClearClipboardText())
+                        {
+                            
+                        }
+                    }
+                }
+            }
+
 
         }
 
@@ -87,5 +109,15 @@ namespace AutomationTestApp
             webView.Reload();
             await webView.CoreWebView2.ExecuteScriptAsync($"alert('{webView.Source} has been reloaded successfully')");
         }
+
+        [DllImport("Lemon.Native.Winx64.dll")]
+        public extern static bool TrySetClipboardText(nint textHandle);
+
+        [DllImport("Lemon.Native.Winx64.dll")]
+        public extern static nint TryGetClipboardText();
+
+        [DllImport("Lemon.Native.Winx64.dll")]
+        public extern static bool TryClearClipboardText();
+
     }
 }

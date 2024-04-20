@@ -1,5 +1,7 @@
-﻿using System.Runtime.CompilerServices;
+﻿using Lemon.Native.Winx64.Natives;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Lemon.Native.Winx64
 {
@@ -42,6 +44,28 @@ namespace Lemon.Native.Winx64
         {
             Console.WriteLine($"Int32Plus:{anInt} + {anotherInt}");
             return anInt + anotherInt;
+        }
+
+        [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)], EntryPoint = nameof(TrySetClipboardText))]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static bool TrySetClipboardText(nint textHandle)
+        {
+            var text = textHandle.ToString();
+            return Clipboard.TrySetText(text);
+        }
+
+        [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)], EntryPoint = nameof(TryGetClipboardText))]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        public static nint TryGetClipboardText()
+        {
+            return Clipboard.TryGetText();
+        }
+
+        [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)], EntryPoint = nameof(TryClearClipboardText))]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static bool TryClearClipboardText()
+        {
+            return Clipboard.TryClear();
         }
     }
     public enum EnumReasonForCall : uint

@@ -1,2 +1,11 @@
 ﻿AttachConsole
 ATTACH_PARENT_PROCESS
+GlobalAlloc
+GlobalLock
+GlobalUnlock
+OpenClipboard
+EmptyClipboard
+SetClipboardData
+CloseClipboard
+GetOpenClipboardWindow
+GetClipboardData

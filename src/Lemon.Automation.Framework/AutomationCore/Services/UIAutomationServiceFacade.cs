@@ -155,24 +155,7 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
             }
             return [];
         }
-        //private static AutomationElement GetTopmostChild(ITreeWalker treeWalker, AutomationElement targetElement)
-        //{
-        //    var firstChildInFirstLevel = treeWalker.GetFirstChild(targetElement);
-        //    var allChildrenInFirstLevel = GetAllSibling(treeWalker, firstChildInFirstLevel);
-        //    foreach (var child in allChildrenInFirstLevel)
-        //    {
-        //        var childInSecondLevel = treeWalker.GetFirstChild(targetElement);
-        //        if (childInSecondLevel != null)
-        //        {
 
-        //        }
-        //        else
-        //        {
-        //            continue;
-        //        }
-        //    }
-            
-        //}
         private static IEnumerable<AutomationElement> GetAllChild(ITreeWalker treeWalker, AutomationElement targetElement)
         {
             var firstChildInFirstLevel = treeWalker.GetFirstChild(targetElement);

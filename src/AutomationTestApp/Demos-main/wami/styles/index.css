@@ -1,0 +1,28 @@
+@import "reset.css";
+@import "buttons.css";
+@import "dialogs.css";
+@import "layout.css";
+@import "list-of-flows.css";
+@import "editor.css";
+@import "welcome.css";
+@import "step-chooser.css";
+@import "images.css";
+@import "image-viewer.css";
+@import "mobile.css";
+
+:root {
+  --background-color: white;
+  --flows-sidebar-width: minmax(200px, 15%);
+  --steps-sidebar-width: minmax(250px, 20%);
+  --main-color: hsl(201, 71%, 24%);
+  --clear-background-color: hsl(201, 71%, 94%);
+  --sidebar-text-color: white;
+  --text-color: black;
+  --separator-color: #0003;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --flows-sidebar-width: 120px;
+  }
+}

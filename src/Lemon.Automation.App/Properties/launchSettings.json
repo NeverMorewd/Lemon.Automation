@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Lemon.Automation.App": {
+      "commandName": "Project",
+      "commandLineArgs": "-a AppUITracker AppUIProvider\r\n-b false",
+      "jsWebView2Debugging": false
+    }
+  }
+}

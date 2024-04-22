@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "NativeConsole": {
+      "commandName": "Project",
+      "commandLineArgs": "gettext 1234567890"
+    }
+  }
+}

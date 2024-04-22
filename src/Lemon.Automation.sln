@@ -3,23 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lemon.Automation.Executor", "Lemon.Automation.Executor\Lemon.Automation.Executor.csproj", "{841BC216-6805-436C-9991-E06D9243302C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lemon.Automation.UITracker", "Lemon.Automation.UITracker\Lemon.Automation.UITracker.csproj", "{72FDEB1A-BAE5-4372-ADB4-EDB096B09444}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lemon.Automation.App.UITracker", "Lemon.Automation.App.UITracker\Lemon.Automation.App.UITracker.csproj", "{72FDEB1A-BAE5-4372-ADB4-EDB096B09444}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lemon.Automation", "Lemon.Automation\Lemon.Automation.csproj", "{2A9B1034-CFC0-405B-960B-213E600BC012}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lemon.Automation.Framework", "Lemon.Automation.Framework\Lemon.Automation.Framework.csproj", "{0EFE6C11-782F-4D8D-9A0D-144F2B8D6128}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lemon.Automation.Studio", "Lemon.Automation.Studio\Lemon.Automation.Studio.csproj", "{ED52D7DC-3AC4-4D97-BBF6-7247F1A6FE1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lemon.Automation.App", "Lemon.Automation.App\Lemon.Automation.App.csproj", "{4672528A-0851-44F3-BCDA-4A927A4BE8E9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lemon.Automation.ChildDesktop", "Lemon.Automation.ChildDesktop\Lemon.Automation.ChildDesktop.csproj", "{5BA747FF-B6F5-4BA7-B109-C08F0B09C3DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lemon.Automation.App.UIProvider", "Lemon.Automation.App.UIProvider\Lemon.Automation.App.UIProvider.csproj", "{5A8FB8E3-8E1E-40B3-B6E3-966E0417E637}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lemon.Automation.Bootstrapper", "Lemon.Automation.Bootstrapper\Lemon.Automation.Bootstrapper.csproj", "{4672528A-0851-44F3-BCDA-4A927A4BE8E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lemon.Automation.GrpcWorkShop", "Lemon.Automation.GrpcWorkShop\Lemon.Automation.GrpcWorkShop.csproj", "{353E5669-D6FE-4F80-AE3E-E71B54E86B37}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lemon.Automation.UIProvider", "Lemon.Automation.UIProvider\Lemon.Automation.UIProvider.csproj", "{5A8FB8E3-8E1E-40B3-B6E3-966E0417E637}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationTestApp", "AutomationTestApp\AutomationTestApp.csproj", "{F43814A2-85CC-4EEE-AC58-6B86E70CE9E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lemon.Automation.GrpcWorkShop", "Lemon.Automation.ServiceProvider\Lemon.Automation.GrpcWorkShop.csproj", "{353E5669-D6FE-4F80-AE3E-E71B54E86B37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lemon.Native.Winx64", "Lemon.Native.Winx64\Lemon.Native.Winx64.csproj", "{7223BBA5-9DDB-4BBE-BED0-475CB918AD8D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsInput", "WindowsInput\WindowsInput.csproj", "{4EBC739C-A5D1-4A92-8BB5-8E32EA0A4208}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeConsole", "NativeConsole\NativeConsole.csproj", "{26CEEF8B-4D5B-4A18-9383-636304A48C23}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +29,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{841BC216-6805-436C-9991-E06D9243302C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{841BC216-6805-436C-9991-E06D9243302C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{841BC216-6805-436C-9991-E06D9243302C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{841BC216-6805-436C-9991-E06D9243302C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{72FDEB1A-BAE5-4372-ADB4-EDB096B09444}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{72FDEB1A-BAE5-4372-ADB4-EDB096B09444}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72FDEB1A-BAE5-4372-ADB4-EDB096B09444}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -43,14 +41,6 @@ Global
 		{0EFE6C11-782F-4D8D-9A0D-144F2B8D6128}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EFE6C11-782F-4D8D-9A0D-144F2B8D6128}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EFE6C11-782F-4D8D-9A0D-144F2B8D6128}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ED52D7DC-3AC4-4D97-BBF6-7247F1A6FE1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ED52D7DC-3AC4-4D97-BBF6-7247F1A6FE1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ED52D7DC-3AC4-4D97-BBF6-7247F1A6FE1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ED52D7DC-3AC4-4D97-BBF6-7247F1A6FE1E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5BA747FF-B6F5-4BA7-B109-C08F0B09C3DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5BA747FF-B6F5-4BA7-B109-C08F0B09C3DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5BA747FF-B6F5-4BA7-B109-C08F0B09C3DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5BA747FF-B6F5-4BA7-B109-C08F0B09C3DA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4672528A-0851-44F3-BCDA-4A927A4BE8E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4672528A-0851-44F3-BCDA-4A927A4BE8E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4672528A-0851-44F3-BCDA-4A927A4BE8E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,6 +53,22 @@ Global
 		{353E5669-D6FE-4F80-AE3E-E71B54E86B37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{353E5669-D6FE-4F80-AE3E-E71B54E86B37}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{353E5669-D6FE-4F80-AE3E-E71B54E86B37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F43814A2-85CC-4EEE-AC58-6B86E70CE9E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F43814A2-85CC-4EEE-AC58-6B86E70CE9E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F43814A2-85CC-4EEE-AC58-6B86E70CE9E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F43814A2-85CC-4EEE-AC58-6B86E70CE9E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7223BBA5-9DDB-4BBE-BED0-475CB918AD8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7223BBA5-9DDB-4BBE-BED0-475CB918AD8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7223BBA5-9DDB-4BBE-BED0-475CB918AD8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7223BBA5-9DDB-4BBE-BED0-475CB918AD8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EBC739C-A5D1-4A92-8BB5-8E32EA0A4208}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EBC739C-A5D1-4A92-8BB5-8E32EA0A4208}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EBC739C-A5D1-4A92-8BB5-8E32EA0A4208}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EBC739C-A5D1-4A92-8BB5-8E32EA0A4208}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26CEEF8B-4D5B-4A18-9383-636304A48C23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26CEEF8B-4D5B-4A18-9383-636304A48C23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26CEEF8B-4D5B-4A18-9383-636304A48C23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26CEEF8B-4D5B-4A18-9383-636304A48C23}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

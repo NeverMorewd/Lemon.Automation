@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 
 namespace Lemon.Automation.Domains
 {
     public interface IApplication
     {
-        string AppName { get; }
-        void Run(string[] runArgs);
+        AssemblyName AssemblyName { get; }
+        string? AppName { get; }
+        void Run(string[]? runArgs);
+        SynchronizationContext? AppSynchronizationContext { get; }
+        IAppHostedService ResolveHostService(IServiceProvider serviceProvider);
     }
 }

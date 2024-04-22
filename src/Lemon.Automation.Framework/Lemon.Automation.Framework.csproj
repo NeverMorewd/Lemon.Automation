@@ -8,11 +8,42 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\lemon.png" />
+    <None Remove="Libs\Lemon.Native.Winx64.dll" />
+    <None Remove="NativeMethods.txt" />
+    <None Remove="NatvieMethods.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="NativeMethods.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Libs\Lemon.Native.Winx64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <TargetPath>Lemon.Native.Winx64.dll</TargetPath>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FlaUI.UIA3" Version="4.0.0" />
     <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.49-beta">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Polly" Version="8.3.1" />
     <PackageReference Include="R3Extensions.WPF" Version="1.1.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lemon.Automation\Lemon.Automation.csproj" />
+    <ProjectReference Include="..\WindowsInput\WindowsInput.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\lemon.png" />
   </ItemGroup>
 
 </Project>

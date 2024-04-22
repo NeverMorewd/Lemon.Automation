@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<BaseOutputPath>..\..\bin</BaseOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="GrpcNamedPipeServer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.26.1" />
+    <PackageReference Include="Grpc.Core.Api" Version="2.61.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.62.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="GrpcDotNetNamedPipes" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lemon.Automation.Framework\Lemon.Automation.Framework.csproj" />
+    <ProjectReference Include="..\Lemon.Automation\Lemon.Automation.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\Lemon.Automation\Protos\beep_service.proto">
+      <Link>Protos\beep_service.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\Lemon.Automation\Protos\element.proto">
+      <Link>Protos\element.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\Lemon.Automation\Protos\element_type.proto">
+      <Link>Protos\element_type.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\Lemon.Automation\Protos\request_context.proto">
+      <Link>Protos\request_context.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\Lemon.Automation\Protos\response_context.proto">
+      <Link>Protos\response_context.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\Lemon.Automation\Protos\uiautomation_service.proto">
+      <Link>Protos\uiautomation_service.proto</Link>
+    </Protobuf>
+  </ItemGroup>
+
+</Project>

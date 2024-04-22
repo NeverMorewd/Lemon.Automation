@@ -1,0 +1,54 @@
+html {
+  font-family: system-ui;
+  font-size: .85rem;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.controls {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  z-index: 1;
+  width: 18rem;
+  background: #f1edb2d9;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.controls > p {
+  margin-block-start: 0;
+}
+
+.controls .buttons + p {
+  color: #333;
+  font-size: .8rem;
+  margin-block-start: .5rem;
+}
+
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.canvas .element {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  background: url(./logo1024.png);
+  background-size: contain;
+}

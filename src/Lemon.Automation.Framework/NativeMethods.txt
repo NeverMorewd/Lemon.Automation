@@ -18,3 +18,5 @@ SetClipboardData
 CloseClipboard
 GetOpenClipboardWindow
 ATTACH_PARENT_PROCESS
+GetConsoleWindow
+ShowWindow

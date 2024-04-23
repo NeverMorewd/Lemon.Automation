@@ -14,28 +14,29 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
     public class UIAutomationServiceFacade : IAutomationServiceFacade
     {
         private readonly AutomationBase _automationBase;
-        private readonly Win32AutomationSerivce _win32AutomationService;
+        private readonly Win32AutomationService _win32AutomationService;
         private readonly MSAAService _msaaService;
         private readonly ILogger _logger;
         public UIAutomationServiceFacade(ILogger<UIAutomationServiceFacade> logger,
             AutomationBase automationBase,
-            Win32AutomationSerivce win32AutomationSerivce,
+            Win32AutomationService win32AutomationService,
             MSAAService msaaService)
         {
             _logger = logger;
             _automationBase = automationBase;
-            _win32AutomationService = win32AutomationSerivce;
+            _win32AutomationService = win32AutomationService;
             _msaaService = msaaService;
         }
         public Observable<IUIElement> ObserveElementsFromCurrentPoint(CancellationToken cancellationToken, 
-            TimeSpan inerval) 
+            TimeSpan interval,
+            bool enableDeep) 
         {
             return Observable.CreateFrom(t =>
             {
-                return ElementsFromCurrentPoint(cancellationToken, inerval);
+                return ElementsFromCurrentPoint(cancellationToken, interval, enableDeep);
             });
         }
-        private async IAsyncEnumerable<IUIElement> ElementsFromCurrentPoint([EnumeratorCancellation] CancellationToken cancellationToken, TimeSpan inerval)
+        private async IAsyncEnumerable<IUIElement> ElementsFromCurrentPoint([EnumeratorCancellation] CancellationToken cancellationToken, TimeSpan interval, bool enableDeep)
         {
             while (true)
             {
@@ -43,18 +44,18 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
                 {
                     break;
                 }
-                if (inerval.Milliseconds > 0)
+                if (interval.Milliseconds > 0)
                 {
-                    await Task.Delay(inerval);
+                    await Task.Delay(interval);
                 }
                 else
                 {
                     await Task.Yield();
                 }
-                yield return ElementFromCurrentPoint();
+                yield return ElementFromCurrentPoint(enableDeep);
             }
         }
-        public IUIElement ElementFromCurrentPoint()
+        public IUIElement ElementFromCurrentPoint(bool enableDeep)
         {
             /* FlaUI Mouse.Position
             {
@@ -90,6 +91,14 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
                 if (!element.Properties.BoundingRectangle.IsSupported)
                 {
                     element = _automationBase.GetDesktop();
+                }
+                if (enableDeep)
+                {
+                    var deepElement = GetClosestAndDeepestChildFromPoint();
+                    if (deepElement != null)
+                    {
+                        return deepElement;
+                    }
                 }
                 return new Fla3UIElement(element);
             }
@@ -136,13 +145,14 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
         }
 
         public Observable<IUIElement> ObserveElementsByMouseMove(CancellationToken cancellationToken, 
-            TimeSpan inerval)
+            TimeSpan interval,
+            bool enableDeep)
         {
             return Observable.EveryValueChanged(this, _ => Mouse.Position, cancellationToken)
                 .Select(p =>
                 {
                     _logger.LogDebug($"point = ({p.X},{p.Y})");
-                    return ElementFromCurrentPoint();
+                    return ElementFromCurrentPoint(enableDeep);
                 });
         }
 
@@ -155,12 +165,85 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
             }
             return [];
         }
+        public IUIElement GetClosestAndDeepestChildFromPoint()
+        {
+            var child = GetClosestAndDeepestChild(Mouse.Position);
+            if (child != null)
+            {
+                return new Fla3UIElement(child);
+            }
+            else
+            {
+                return new Fla3UIElement(_automationBase.GetDesktop());
+            }
+        }
+        private AutomationElement? GetClosestAndDeepestChild(Point point)
+        {
+            if (TryGetElementFromCurrentPointInternal(out AutomationElement? automation) && automation != null)
+            {
+                var treeWalker = _automationBase.TreeWalkerFactory.GetRawViewWalker();
+                var children = GetDeepestChildren(treeWalker, automation);
+                AutomationElement? closestElement = null;
+                double minDistance = double.MaxValue;
+
+                foreach (AutomationElement element in children)
+                {
+                    Rectangle elementRect = element.Properties.BoundingRectangle.ValueOrDefault;
+                    if (elementRect.Contains(point))
+                    {
+                        Point elementCenter = new(elementRect.Left + elementRect.Width / 2,
+                                                        elementRect.Top + elementRect.Height / 2);
+                        double distance = Distance(point, elementCenter);
+
+                        if (distance < minDistance)
+                        {
+                            minDistance = distance;
+                            closestElement = element;
+                        }
+                    }
+                }
+                return closestElement;
+            }
+            return null;
+        }
+        private static IEnumerable<AutomationElement> GetDeepestChildren(ITreeWalker treeWalker, AutomationElement targetElement)
+        {
+            var deepestChildren = new List<AutomationElement>();
+            var queue = new Queue<AutomationElement>();
+            queue.Enqueue(targetElement);
+
+            while (queue.Count > 0)
+            {
+                deepestChildren.Clear();
+                int levelSize = queue.Count;
+
+                for (int i = 0; i < levelSize; i++)
+                {
+                    var current = queue.Dequeue();
+                    deepestChildren.Add(current);
+
+                    var child = treeWalker.GetFirstChild(current);
+                    while (child != null)
+                    {
+                        queue.Enqueue(child);
+                        child = treeWalker.GetNextSibling(child);
+                    }
+                    if (child == null)
+                    {
+                        // If no child was found, current is one of the deepest children
+                        deepestChildren.Add(current);
+                    }
+                }
+            }
+
+            return deepestChildren;
+        }
 
         private static IEnumerable<AutomationElement> GetAllChild(ITreeWalker treeWalker, AutomationElement targetElement)
         {
             var firstChildInFirstLevel = treeWalker.GetFirstChild(targetElement);
             var allChildrenInFirstLevel = GetAllSibling(treeWalker, firstChildInFirstLevel);
-            return allChildrenInFirstLevel.SelectMany(child => GetAllChild(treeWalker, targetElement));
+            return allChildrenInFirstLevel.SelectMany(child => GetAllChild(treeWalker, child));
         }
 
         private static IEnumerable<AutomationElement> GetAllSibling(ITreeWalker treeWalker, AutomationElement targetElement)
@@ -170,6 +253,21 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
                 yield return targetElement;
                 targetElement = treeWalker.GetNextSibling(targetElement);
             }
+        }
+
+        static double CalculateDistance(Point mousePos, Rectangle elementRect)
+        {
+            Point elementCenter = new(elementRect.Left + elementRect.Width / 2,
+                                            elementRect.Top + elementRect.Height / 2);
+
+            return Distance(mousePos, elementCenter);
+        }
+
+        static double Distance(Point p1, Point p2)
+        {
+            int dx = p2.X - p1.X;
+            int dy = p2.Y - p1.Y;
+            return Math.Sqrt(dx * dx + dy * dy);
         }
     }
 }

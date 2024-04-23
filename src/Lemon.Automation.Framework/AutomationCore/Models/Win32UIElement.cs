@@ -6,10 +6,10 @@ namespace Lemon.Automation.Framework.AutomationCore.Models
 {
     public class Win32UIElement : IUIElement
     {
-        private readonly Func<Win32AutomationSerivce> _win32AutomationSerivceGetter;
-        private Win32AutomationSerivce? _win32AutomationSerivce;
+        private readonly Func<Win32AutomationService> _win32AutomationSerivceGetter;
+        private Win32AutomationService? _win32AutomationSerivce;
         private readonly nint _windowHandle;
-        public Win32UIElement(Func<Win32AutomationSerivce> win32AutomationSerivceGetter, 
+        public Win32UIElement(Func<Win32AutomationService> win32AutomationSerivceGetter, 
             nint windowHandle,
             string? additionText = null) 
         {
@@ -88,7 +88,7 @@ namespace Lemon.Automation.Framework.AutomationCore.Models
             get;
         }
 
-        private Win32AutomationSerivce EnsureWin32AutomationSerivce()
+        private Win32AutomationService EnsureWin32AutomationSerivce()
         {
             if (_win32AutomationSerivce == null)
             {

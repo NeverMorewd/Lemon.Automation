@@ -5,10 +5,10 @@ using Windows.Win32.Foundation;
 
 namespace Lemon.Automation.Framework.AutomationCore.Services
 {
-    public class Win32AutomationSerivce
+    public class Win32AutomationService
     {
         private readonly ILogger _logger;
-        public Win32AutomationSerivce(ILogger<Win32AutomationSerivce> logger) 
+        public Win32AutomationService(ILogger<Win32AutomationService> logger) 
         {
             _logger = logger;
         }

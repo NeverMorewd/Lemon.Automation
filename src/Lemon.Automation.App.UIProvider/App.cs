@@ -46,7 +46,7 @@ namespace Lemon.Automation.App.UIProvider
                 .AddSingleton<IGrpcServer, GrpcNamedPipeServer>()
                 .AddSingleton<GrpcServerWorkShop>()
                 .AddSingleton<AutomationBase, UIA3Automation>()
-                .AddSingleton<Win32AutomationSerivce>()
+                .AddSingleton<Win32AutomationService>()
                 .AddSingleton<MSAAService>()
                 .AddSingleton<IAutomationServiceFacade, UIAutomationServiceFacade>()
                 .AddKeyedSingleton<IGrpcService, UIAutomationGrpcService>(nameof(IGrpcService))

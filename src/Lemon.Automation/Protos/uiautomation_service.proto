@@ -23,6 +23,7 @@ message TrackRequest
 	google.protobuf.Int32Value cursor_y = 3;
 	TrackTypeEnum track_type = 4;
 	google.protobuf.Int32Value interval = 5;
+	bool enable_deep = 6;
 }
 
 message TrackResponse

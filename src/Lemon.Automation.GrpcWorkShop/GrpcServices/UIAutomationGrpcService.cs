@@ -39,9 +39,17 @@ namespace Lemon.Automation.GrpcWorkShop.GrpcServices
             _logger.LogDebug($"Tracking start");
             Observable<IUIElement> elementObservable = request.TrackType switch
             {
-                TrackTypeEnum.MouseMove => _automationService.ObserveElementsByMouseMove(context.CancellationToken, TimeSpan.FromMilliseconds(request.Interval.GetValueOrDefault())),
-                TrackTypeEnum.Continuous => _automationService.ObserveElementsFromCurrentPoint(context.CancellationToken, TimeSpan.FromMilliseconds(request.Interval.GetValueOrDefault())),
-                _ => _automationService.ObserveElementsByMouseMove(context.CancellationToken, TimeSpan.FromMilliseconds(request.Interval.GetValueOrDefault())),
+                TrackTypeEnum.MouseMove => _automationService.ObserveElementsByMouseMove(context.CancellationToken, 
+                                            TimeSpan.FromMilliseconds(request.Interval.GetValueOrDefault()),
+                                            request.EnableDeep),
+
+                TrackTypeEnum.Continuous => _automationService.ObserveElementsFromCurrentPoint(context.CancellationToken, 
+                                            TimeSpan.FromMilliseconds(request.Interval.GetValueOrDefault()),
+                                            request.EnableDeep),
+
+                _ => _automationService.ObserveElementsByMouseMove(context.CancellationToken, 
+                                            TimeSpan.FromMilliseconds(request.Interval.GetValueOrDefault()),
+                                            request.EnableDeep),
             };
             var disposable = elementObservable
                                .Do(x =>

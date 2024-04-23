@@ -6,7 +6,7 @@ internal class Program
     [STAThread]
     static void Main(string[] args)
     {
-        ConsoleNative.Attach();
+        //ConsoleNative.Attach();
         Console.WriteLine($"start param:{string.Join(' ',args)}");
         if (args.Length > 0 ) 
         {

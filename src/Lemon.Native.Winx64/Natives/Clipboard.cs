@@ -17,42 +17,55 @@ namespace Lemon.Native.Winx64.Natives
         {
             try
             {
-                unsafe
+                if (ClipboardIdle())
                 {
-                    byte[] textBytes = Encoding.Unicode.GetBytes(value);
-                    nuint memorySize = new((uint)(textBytes.Length + 2));
-                    nint hGlobalMemory = PInvoke.GlobalAlloc(Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE, memorySize);
-                    if (hGlobalMemory == 0)
+                    unsafe
                     {
-                        throw new Win32Exception(Marshal.GetLastWin32Error());
+                        byte[] textBytes = Encoding.Unicode.GetBytes(value);
+                        nuint memorySize = new((uint)(textBytes.Length + 2));
+                        nint hGlobalMemory = PInvoke.GlobalAlloc(Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE, memorySize);
+                        if (hGlobalMemory == 0)
+                        {
+                            throw new Win32Exception(Marshal.GetLastWin32Error());
+                        }
+                        void* pGlobalMemory = PInvoke.GlobalLock(new GlobalFreeSafeHandle(hGlobalMemory));
+                        if (pGlobalMemory == null)
+                        {
+                            throw new Win32Exception(Marshal.GetLastWin32Error());
+                        }
+                        Marshal.Copy(textBytes, 0, (nint)pGlobalMemory, textBytes.Length);
+                        Marshal.WriteInt16((nint)pGlobalMemory, textBytes.Length, 0);
+                        PInvoke.GlobalUnlock(new GlobalFreeSafeHandle((nint)pGlobalMemory));
+                        if (!PInvoke.OpenClipboard(default))
+                        {
+                            throw new Win32Exception(Marshal.GetLastWin32Error());
+                        }
+                        if (!PInvoke.EmptyClipboard())
+                        {
+                            throw new Win32Exception(Marshal.GetLastWin32Error());
+                        }
+                        // https://learn.microsoft.com/zh-cn/windows/win32/dataxchg/standard-clipboard-formats
+                        if (PInvoke.SetClipboardData(13u, new Windows.Win32.Foundation.HANDLE(hGlobalMemory)) == nint.Zero)
+                        {
+                            throw new Win32Exception(Marshal.GetLastWin32Error());
+                        }
+                        PInvoke.CloseClipboard();
                     }
-                    void* pGlobalMemory = PInvoke.GlobalLock(new GlobalFreeSafeHandle(hGlobalMemory));
-                    if (pGlobalMemory == null)
-                    {
-                        throw new Win32Exception(Marshal.GetLastWin32Error());
-                    }
-                    Marshal.Copy(textBytes, 0, (nint)pGlobalMemory, textBytes.Length);
-                    Marshal.WriteInt16((nint)pGlobalMemory, textBytes.Length, 0);
-                    PInvoke.GlobalUnlock(new GlobalFreeSafeHandle((nint)pGlobalMemory));
-                    if (!PInvoke.OpenClipboard(default))
-                    {
-                        throw new Win32Exception(Marshal.GetLastWin32Error());
-                    }
-                    if (!PInvoke.EmptyClipboard())
-                    {
-                        throw new Win32Exception(Marshal.GetLastWin32Error());
-                    }
-                    // https://learn.microsoft.com/zh-cn/windows/win32/dataxchg/standard-clipboard-formats
-                    if (PInvoke.SetClipboardData(13u, new Windows.Win32.Foundation.HANDLE(hGlobalMemory)) == nint.Zero)
-                    {
-                        throw new Win32Exception(Marshal.GetLastWin32Error());
-                    }
-                    PInvoke.CloseClipboard();
+                }
+                else
+                {
+                    Console.WriteLine("The clipboard is being occupied");
+                    throw new InvalidOperationException("The clipboard is being occupied.");
                 }
             }
-            catch (Win32Exception ex)
+            catch (Win32Exception wex)
             {
-                throw new InvalidOperationException("Fail to set clipboard:" + ex.Message);
+                Console.WriteLine(wex);
+                throw new InvalidOperationException("Fail to set clipboard:" + wex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
         }
 
@@ -187,10 +200,11 @@ namespace Lemon.Native.Winx64.Natives
             return Policy<bool>
                   .Handle<Exception>()
                   .OrResult(res => !res)
-                  .Retry(3, (res, i, c) =>
-                  {
-                      Console.WriteLine($"Retry {i}th times, ex: {res.Exception?.Message}");
-                  })
+                  .WaitAndRetry(3, retryTimes => TimeSpan.FromSeconds(2*retryTimes),
+                    (res, delay, times, context) =>
+                    {
+                        Console.WriteLine($"retry {times}th times, sleep: {delay.TotalSeconds}s, ex: {res.Exception?.Message}");
+                    })
                   .Execute(() =>
                   {
                       return (nint)PInvoke.GetOpenClipboardWindow() == nint.Zero;

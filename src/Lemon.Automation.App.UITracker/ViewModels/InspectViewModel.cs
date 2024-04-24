@@ -13,23 +13,39 @@ namespace Lemon.Automation.App.UITracker.ViewModels
     public class InspectViewModel: RxViewModel
     {
         private readonly ObservableList<ElementProxyModel> _elements;
-        public InspectViewModel(UIAutomationGrpcClientProvider automationGrpcClientProvider,
+        private readonly ILogger _logger;
+        private readonly ElementInspectService _elementInspectService;
+        public InspectViewModel(ElementInspectService elementInspectService,
             ElementHighlightService elementHighlighter,
             ILogger<InspectViewModel> logger) 
         {
             _elements = [];
-            _elements.AddRange(BuildDummyData(100));
+           // _elements.AddRange(BuildDummyData(100));
 
-            Observable.Interval(TimeSpan.FromSeconds(3))
-                .ObserveOnThreadPool()
-                .Subscribe(_ =>
-                {
-                    _elements.Clear();
-                    _elements.AddRange(BuildDummyData(new Random().Next(9,100)));
-                });
+            _elementInspectService = elementInspectService;
+            _logger = logger;
+
+            //Observable.Interval(TimeSpan.FromSeconds(3))
+            //    .ObserveOnThreadPool()
+            //    .Subscribe(_ =>
+            //    {
+            //        _elements.Clear();
+            //        _elements.AddRange(BuildDummyData(new Random().Next(9,100)));
+            //    });
+            Task.Run(async() => 
+            {
+                var desktop = await _elementInspectService.GetDesktop();
+                var allchildren = await _elementInspectService.GetAllChildren(desktop);
+            });
 
             ElementsView = _elements.CreateView(x => x).ToNotifyCollectionChanged();
             BindingOperations.EnableCollectionSynchronization(ElementsView, new object());
+
+            LoadedCommand = new ReactiveCommand<RoutedEventArgs>(async _ => 
+            {
+               var desktop = await  _elementInspectService.GetDesktop();
+               var allchildren =await  _elementInspectService.GetAllChildren(desktop);
+            });
 
             LoadChildrenCommand = new ReactiveCommand<RoutedEventArgs>(param => 
             {

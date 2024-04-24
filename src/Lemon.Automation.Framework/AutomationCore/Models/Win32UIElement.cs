@@ -22,7 +22,7 @@ namespace Lemon.Automation.Framework.AutomationCore.Models
         {
             get
             {
-                var win32Service = EnsureWin32AutomationSerivce();
+                var win32Service = EnsureWin32AutomationService();
                 return win32Service.GetWindowClassName(_windowHandle);
             }
         }
@@ -51,7 +51,7 @@ namespace Lemon.Automation.Framework.AutomationCore.Models
         {
             get
             {
-                var win32Service = EnsureWin32AutomationSerivce();
+                var win32Service = EnsureWin32AutomationService();
                 return win32Service.GetWindowText(_windowHandle);
             }
         }
@@ -60,7 +60,7 @@ namespace Lemon.Automation.Framework.AutomationCore.Models
         {
             get
             {
-                var win32Service = EnsureWin32AutomationSerivce();
+                var win32Service = EnsureWin32AutomationService();
                 return win32Service.GetWindowRectangle(_windowHandle);
             }
         }
@@ -88,12 +88,19 @@ namespace Lemon.Automation.Framework.AutomationCore.Models
             get;
         }
 
-        private Win32AutomationService EnsureWin32AutomationSerivce()
+        public string FrameworkType
         {
-            if (_win32AutomationSerivce == null)
-            {
-                _win32AutomationSerivce = _win32AutomationSerivceGetter();
-            }
+            get;
+        } = "none";
+        public IEnumerable<IUIElement> FindAllChildren()
+        {
+            //return _flauiElement.FindAllChildren().Select(x => new FlaUI3Element(x));
+            return Enumerable.Empty<IUIElement>();
+        }
+
+        private Win32AutomationService EnsureWin32AutomationService()
+        {
+            _win32AutomationSerivce ??= _win32AutomationSerivceGetter();
             return _win32AutomationSerivce;
         }
     }

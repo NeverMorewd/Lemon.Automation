@@ -6,7 +6,7 @@ namespace Lemon.Automation.App.UITracker.Models
 {
     public class ElementProxyModel : ObservableObject
     {
-        private ObservableList<ElementProxyModel> _children;
+        private readonly ObservableList<ElementProxyModel>? _children;
         public ElementProxyModel(string automationId, 
             string name, 
             string controlType, 
@@ -34,7 +34,7 @@ namespace Lemon.Automation.App.UITracker.Models
         {
             get;
         }
-        public INotifyCollectionChangedSynchronizedView<ElementProxyModel> ChildrenView 
+        public INotifyCollectionChangedSynchronizedView<ElementProxyModel>? ChildrenView 
         { 
             get; 
             set; 

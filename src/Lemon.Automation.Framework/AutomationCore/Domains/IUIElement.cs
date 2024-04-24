@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Lemon.Automation.Framework.AutomationCore.Models;
+using ProtoBuf;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lemon.Automation.Framework.AutomationCore.Domains
 {
+    [ProtoContract]
+    [ProtoInclude(7, typeof(FlaUI3Element))]
     public interface IUIElement
     {
         public string? ClassName
@@ -29,7 +28,7 @@ namespace Lemon.Automation.Framework.AutomationCore.Domains
         {
             get;
         }
-        public string Name
+        public string? Name
         {
             get;
         }
@@ -55,5 +54,11 @@ namespace Lemon.Automation.Framework.AutomationCore.Domains
         {
             get;
         }
+        public string FrameworkType
+        {
+            get;
+        }
+
+        public IEnumerable<IUIElement> FindAllChildren();
     }
 }

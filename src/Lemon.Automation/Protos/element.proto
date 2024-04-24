@@ -21,4 +21,6 @@ message Element
 	bool enable_native = 13;
 	google.protobuf.Struct native_info = 14;
 	google.protobuf.Struct selector = 15; 
+	bytes native_uia_object = 16;
+	string native_uia_type = 17;
 }

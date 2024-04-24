@@ -9,6 +9,8 @@ import "element_type.proto";
 import "request_context.proto";
 import "response_context.proto";
 import "google/protobuf/wrappers.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/struct.proto";
 
 enum TrackTypeEnum
 {
@@ -64,6 +66,40 @@ message RetrievalResponse
 	ResponseContext context = 1;
 	repeated Element element = 2;
 }
+message UIAutomationProxyRequest
+{
+	RequestContext context = 1;
+	string method = 2;
+    repeated google.protobuf.Struct parameters = 3;
+}
+
+message UIAutomationProxyResponse
+{
+	RequestContext context = 1;
+	string method = 2;
+    repeated google.protobuf.Struct returnvalues = 3;
+}
+message GetDesktopRequest
+{
+    RequestContext context = 1;
+}
+
+message GetDesktopResponse
+{
+    ResponseContext context = 1;
+	Element element = 2;
+}
+message GetAllChildRequest
+{
+    RequestContext context = 1;
+	Element element = 2;
+}
+
+message GetAllChildResponse
+{
+    ResponseContext context = 1;
+	repeated Element element = 2;
+}
 
 service UIAutomationService
 {
@@ -77,4 +113,10 @@ service UIAutomationService
 	rpc Capture(CaptureRequest) returns (CaptureResponse);
 	// Indicate
 	rpc Indicate(IndicateRequest) returns (IndicateResponse);
+	// UIAutomationProxy
+	rpc UIAutomationProxy(UIAutomationProxyRequest) returns (UIAutomationProxyResponse);
+	// GetDesktop
+	rpc GetDesktop(GetDesktopRequest) returns (GetDesktopResponse);
+	// GetAllChild
+	rpc GetAllChild(GetAllChildRequest) returns (GetAllChildResponse);
 }

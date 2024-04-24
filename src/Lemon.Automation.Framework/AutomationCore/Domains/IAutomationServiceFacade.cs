@@ -13,5 +13,8 @@ namespace Lemon.Automation.Framework.AutomationCore.Domains
             bool isEnableDeepTraversal);
         IEnumerable<IUIElement> GetAllChildFromPoint();
         IUIElement GetClosestAndDeepestChildFromPoint();
+        IUIElement GetDesktop();
+        IEnumerable<IUIElement> GetAllChildren(IUIElement uiElement);
+
     }
 }

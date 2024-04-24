@@ -34,7 +34,7 @@ namespace Lemon.Automation.App.UITracker.Services
             {
                 Interval = 1,
                 TrackType = trackType,
-                EnableDeep = true,
+                EnableDeep = false,
             };
             var trackStreaming = _automationGrpcClientProvider.UIAutomationGrpcServiceClient.Tracking(trackRequest, cancellationToken: _cancellationSource.Token);
             try

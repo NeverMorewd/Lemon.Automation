@@ -1,12 +1,19 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Lemon.Automation.Framework.AutomationCore.Domains;
+using Lemon.Automation.Framework.AutomationCore.Models;
+using Lemon.Automation.Framework.Extensions;
 using Lemon.Automation.Globals;
 using Lemon.Automation.GrpcWorkShop.GrpcDomains;
 using Lemon.Automation.Protos;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using ProtoBuf;
 using R3;
+using System.IO;
+using System.Runtime.Intrinsics.X86;
+using System.Xml.Linq;
 
 namespace Lemon.Automation.GrpcWorkShop.GrpcServices
 {
@@ -30,6 +37,48 @@ namespace Lemon.Automation.GrpcWorkShop.GrpcServices
             ServerCallContext context)
         {
             return base.Track(request, context);
+        }
+
+        public async override Task<UIAutomationProxyResponse> UIAutomationProxy(UIAutomationProxyRequest request, ServerCallContext context)
+        {
+            return await base.UIAutomationProxy(request, context);
+        }
+        public async override Task<GetDesktopResponse> GetDesktop(GetDesktopRequest request, ServerCallContext context)
+        {
+            _logger.LogDebug($"GetDesktop start");
+            var desktopElement = _automationService.GetDesktop();
+            var uiElement = Transform(desktopElement);
+            return await Task.FromResult(new GetDesktopResponse 
+            {
+                Element = uiElement,
+                Context = new ResponseContext
+                {
+                    Code = 0, 
+                }
+            });
+        }
+
+        public override Task<GetAllChildResponse> GetAllChild(GetAllChildRequest request, ServerCallContext context)
+        {
+            _logger.LogDebug($"GetAllChild start");
+            //request.Element.na
+            var buffer = request.Element.NativeUiaObject.ToArray();
+            var element = FlaUI3Element.Deserialize(buffer);
+
+            if (element != null)
+            {
+                var eles = _automationService.GetAllChildren(element);
+
+                var uis = eles.Select(Transform);
+                GetAllChildResponse response = new();
+                response.Element.AddRange(uis);
+                response.Context = new ResponseContext
+                {
+                    Code = 0,
+                };
+                return Task.FromResult(response);
+            }
+            throw new Exception("IUIElement");
         }
 
         public override async Task Tracking(TrackRequest request,
@@ -57,29 +106,7 @@ namespace Lemon.Automation.GrpcWorkShop.GrpcServices
                                    //_logger.LogDebug($"{x.Name}:{x.IsVisible}");
                                })
                                .Where(x => x != null && x.IsVisible)
-                               .Select(ae =>
-                               {
-                                   var element = new Element
-                                   {
-                                       Height = ae.RegionRectangle.Height,
-                                       With = ae.RegionRectangle.Width,
-                                       Left = ae.RegionRectangle.Left,
-                                       Top = ae.RegionRectangle.Top,
-                                   };
-                                   if (ae.ProcessId.HasValue)
-                                   {
-                                       element.ProcessId = ae.ProcessId.Value;
-                                   }
-                                   if (ae.ElementHandle.HasValue)
-                                   {
-                                       element.ElementHandle = ae.ElementHandle.Value;
-                                   }
-                                   if (string.IsNullOrEmpty(ae.Name))
-                                   {
-                                       element.Name = "none";
-                                   }
-                                   return element;
-                               })
+                               .Select(Transform)
                                //R3:Throttle has been changed to Debounce, and Sample has been changed to ThrottleLast.
                                //https://github.com/Cysharp/R3/issues/193
                                //.Debounce(TimeSpan.FromMilliseconds(request.Interval ?? 1))
@@ -154,6 +181,47 @@ namespace Lemon.Automation.GrpcWorkShop.GrpcServices
         {
             UIAutomationService.BindService(serviceBinder, this);
         }
+
+        private Element Transform(IUIElement uiElement)
+        {
+            var element = new Element
+            {
+                Height = uiElement.RegionRectangle.Height,
+                With = uiElement.RegionRectangle.Width,
+                Left = uiElement.RegionRectangle.Left,
+                Top = uiElement.RegionRectangle.Top,
+            };
+            if (uiElement.ProcessId.HasValue)
+            {
+                element.ProcessId = uiElement.ProcessId.Value;
+            }
+            if (uiElement.ElementHandle.HasValue)
+            {
+                element.ElementHandle = uiElement.ElementHandle.Value;
+            }
+            if (string.IsNullOrEmpty(uiElement.Name))
+            {
+                element.Name = "none";
+            }
+            try
+            {
+                if (uiElement is FlaUI3Element flauiElement)
+                {
+                    var bytes = FlaUI3Element.Serialize(flauiElement);
+                    element.NativeUiaObject = ByteString.CopyFrom(bytes);
+                }
+
+
+                //var obj = ProtobufTest.Deserialize(bytes);
+
+            }
+            catch (Exception ex) 
+            {
+                _logger.LogDebug(ex,"");
+            }
+            return element;
+        }
+
 
     }
 }

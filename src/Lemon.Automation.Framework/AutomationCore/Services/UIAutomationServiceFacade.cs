@@ -36,6 +36,11 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
                 return ElementsFromCurrentPoint(cancellationToken, interval, enableDeep);
             });
         }
+        public IUIElement GetDesktop()
+        {
+            var desktopElement = _automationBase.GetDesktop();
+            return new FlaUI3Element(desktopElement);
+        }
         private async IAsyncEnumerable<IUIElement> ElementsFromCurrentPoint([EnumeratorCancellation] CancellationToken cancellationToken, TimeSpan interval, bool enableDeep)
         {
             while (true)
@@ -100,7 +105,7 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
                         return deepElement;
                     }
                 }
-                return new Fla3UIElement(element);
+                return new FlaUI3Element(element);
             }
             catch (UnauthorizedAccessException)
             {
@@ -112,13 +117,13 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, ex.Message);
-                    return new Fla3UIElement(_automationBase.GetDesktop());
+                    return new FlaUI3Element(_automationBase.GetDesktop());
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return new Fla3UIElement(_automationBase.GetDesktop());
+                return new FlaUI3Element(_automationBase.GetDesktop());
             }
         }
         private bool TryGetElementFromCurrentPointInternal(out AutomationElement? automationElement)
@@ -161,20 +166,25 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
             if (TryGetElementFromCurrentPointInternal(out AutomationElement? automation) && automation != null)
             {
                 var treeWalker = _automationBase.TreeWalkerFactory.GetRawViewWalker();
-                return GetAllChild(treeWalker, automation).Select(element=>new Fla3UIElement(element));
+                return GetAllChild(treeWalker, automation).Select(element=>new FlaUI3Element(element));
             }
             return [];
         }
+        /// <summary>
+        /// obsolete for now
+        /// </summary>
+        /// <returns></returns>
+        [Obsolete]
         public IUIElement GetClosestAndDeepestChildFromPoint()
         {
             var child = GetClosestAndDeepestChild(Mouse.Position);
             if (child != null)
             {
-                return new Fla3UIElement(child);
+                return new FlaUI3Element(child);
             }
             else
             {
-                return new Fla3UIElement(_automationBase.GetDesktop());
+                return new FlaUI3Element(_automationBase.GetDesktop());
             }
         }
         private AutomationElement? GetClosestAndDeepestChild(Point point)
@@ -269,5 +279,17 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
             int dy = p2.Y - p1.Y;
             return Math.Sqrt(dx * dx + dy * dy);
         }
+
+        public IEnumerable<IUIElement> GetAllChildren(IUIElement uiElement)
+        {
+            return uiElement.FindAllChildren();
+        }
+
+        static Type IndicateType(IUIElement source) => source switch
+        {
+            FlaUI3Element  => typeof(FlaUI3Element),
+            Win32UIElement  => typeof(Win32UIElement),
+            _ => typeof(FlaUI3Element),
+        };
     }
 }

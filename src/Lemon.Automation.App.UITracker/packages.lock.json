@@ -134,6 +134,11 @@
         "resolved": "10.19041.0",
         "contentHash": "Me5vKNZ1JSg6txTsPQXaWx7fVNh+fmcUPPwtDKJtqvbMM0N8aoa/l/QPolkJIRnasCabCNt4v2zG4p1Q9HU98A=="
       },
+      "MessagePack.Annotations": {
+        "type": "Transitive",
+        "resolved": "2.5.140",
+        "contentHash": "JE3vwluOrsJ4t3hnfXzIxJUh6lhx6M/KR8Sark/HOUw1DJ5UKu5JsAnnuaQngg6poFkRx1lzHSLTkxHNJO7+uQ=="
+      },
       "Microsoft.Extensions.Configuration.Abstractions": {
         "type": "Transitive",
         "resolved": "8.0.0",
@@ -240,6 +245,22 @@
         "resolved": "8.3.1",
         "contentHash": "b9mMAjqXuCXFCtf/RtRPwFUkAm/sz37s7G+taDvS5EqfkJsLiWfO2xO2cSISjIgIY+88oIZTGguP6UrRGRlqzg=="
       },
+      "protobuf-net": {
+        "type": "Transitive",
+        "resolved": "3.2.30",
+        "contentHash": "C/UTlmxEJHAHpqm8xQK1UyJKaIynVCSNG4mVrbLgnZ7ccH28nN49O8iMJvKEodTgVbnimvy+3mIiAdW6mATwnw==",
+        "dependencies": {
+          "protobuf-net.Core": "3.2.30"
+        }
+      },
+      "protobuf-net.Core": {
+        "type": "Transitive",
+        "resolved": "3.2.30",
+        "contentHash": "v2ZxxYrz+X212ukSx+uqkLuPu414bvmSAnTyf+PBUKR9ENJxO4P/csorA/27456MCp1JNoMssDj/f91RDiwBfQ==",
+        "dependencies": {
+          "System.Collections.Immutable": "7.0.0"
+        }
+      },
       "R3": {
         "type": "Transitive",
         "resolved": "1.1.11",
@@ -249,6 +270,11 @@
         "type": "Transitive",
         "resolved": "5.0.0",
         "contentHash": "JPJArwA1kdj8qDAkY2XGjSWoYnqiM7q/3yRNkt6n28Mnn95MuEGkZXUbPBf7qc3IjwrGY5ttQon7yqHZyQJmOQ=="
+      },
+      "System.Collections.Immutable": {
+        "type": "Transitive",
+        "resolved": "7.0.0",
+        "contentHash": "dQPcs0U1IKnBdRDBkrCTi1FoajSTBzLcVTpjO4MBCMC7f4pDOIPzgBoX8JjG7X6uZRJ8EBxsi8+DR1JuwjnzOQ=="
       },
       "System.Configuration.ConfigurationManager": {
         "type": "Transitive",
@@ -351,11 +377,13 @@
         "dependencies": {
           "FlaUI.UIA3": "[4.0.0, )",
           "Lemon.Automation": "[1.0.0, )",
+          "MessagePack.Annotations": "[2.5.140, )",
           "Microsoft.Xaml.Behaviors.Wpf": "[1.1.77, )",
           "Newtonsoft.Json": "[13.0.3, )",
           "Polly": "[8.3.1, )",
           "R3Extensions.WPF": "[1.1.11, )",
-          "WindowsInput": "[1.0.0, )"
+          "WindowsInput": "[1.0.0, )",
+          "protobuf-net": "[3.2.30, )"
         }
       },
       "lemon.automation.grpcworkshop": {

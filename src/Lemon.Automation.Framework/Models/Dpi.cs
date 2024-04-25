@@ -1,4 +1,4 @@
-﻿namespace Lemon.Automation.Framework.AutomationCore.Models
+﻿namespace Lemon.Automation.Framework.Models
 {
     public struct Dpi
     {

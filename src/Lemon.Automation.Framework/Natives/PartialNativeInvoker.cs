@@ -5,7 +5,7 @@ using Windows.Win32.Foundation;
 
 namespace Lemon.Automation.Framework.Natives
 {
-    public static partial class NativeInvoke
+    public static partial class PartialNativeInvoker
     {
 
         [LibraryImport("User32", SetLastError = true)]
@@ -16,7 +16,7 @@ namespace Lemon.Automation.Framework.Natives
         [LibraryImport("user32.dll", SetLastError = true)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static partial bool GetCursorPos(ref Point lpPoint);
+        public static partial bool GetCursorPos(ref PointWrapper lpPoint);
 
 
         [DllImport("Kernel32.dll", CharSet = CharSet.Unicode)]
@@ -65,7 +65,7 @@ namespace Lemon.Automation.Framework.Natives
         }
     }
 
-    public struct Point
+    public struct PointWrapper
     {
         public int X;
 

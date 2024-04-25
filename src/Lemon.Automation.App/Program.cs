@@ -18,7 +18,7 @@ namespace Lemon.Automation.App
         [STAThread]
         static void Main(string[] args)
         {
-            NativeInvoke.AttachConsole();
+            PartialNativeInvoker.AttachConsole();
             GlobalHandle();
 
             Parser.Default

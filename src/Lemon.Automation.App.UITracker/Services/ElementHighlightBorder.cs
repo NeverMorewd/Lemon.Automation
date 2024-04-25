@@ -1,5 +1,5 @@
-﻿using Lemon.Automation.Framework.AutomationCore.Models;
-using Lemon.Automation.Framework.Extensions;
+﻿using Lemon.Automation.Framework.Extensions;
+using Lemon.Automation.Framework.Models;
 using Lemon.Automation.Framework.Natives;
 using System.Drawing;
 using System.Windows;
@@ -141,12 +141,12 @@ namespace Lemon.Automation.App.UITracker.Services
             if (aTransparent)
             {
                 _innerPane.Background = System.Windows.Media.Brushes.Transparent;
-                NativeInvoke.EnableWindowTransparent(hwnd);
+                PartialNativeInvoker.EnableWindowTransparent(hwnd);
             }
             else
             {
                 _innerPane.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(100, 0, 0, 139));
-                NativeInvoke.DisableWindowTransparent(hwnd);
+                PartialNativeInvoker.DisableWindowTransparent(hwnd);
             }
         }
         public void SetBackgroundTransparent(bool aTransparent)

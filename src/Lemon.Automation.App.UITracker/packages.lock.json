@@ -369,7 +369,8 @@
         "type": "Project",
         "dependencies": {
           "CommandLineParser": "[2.9.1, )",
-          "Microsoft.Extensions.Hosting.Abstractions": "[8.0.0, )"
+          "Microsoft.Extensions.Hosting.Abstractions": "[8.0.0, )",
+          "R3": "[1.1.11, )"
         }
       },
       "lemon.automation.framework": {

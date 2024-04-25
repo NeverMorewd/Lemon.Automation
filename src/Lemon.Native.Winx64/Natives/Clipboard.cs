@@ -161,11 +161,6 @@ namespace Lemon.Native.Winx64.Natives
 
                             Marshal.FreeHGlobal(dataHandle);
                             return dataString;
-                            //if (!string.IsNullOrEmpty(dataString))
-                            //{
-                            //    Span<char> charSpan = new(dataPointer, dataString.Length);
-                            //    return charSpan.ToString();
-                            //}
                         }
                     }
 
@@ -185,16 +180,16 @@ namespace Lemon.Native.Winx64.Natives
         public static bool ClipboardIdle()
         {
             return Policy<bool>
-                  .Handle<Exception>()
-                  .OrResult(res => !res)
-                  .Retry(3, (res, i, c) =>
-                  {
-                      Console.WriteLine($"Retry {i}th times, ex: {res.Exception?.Message}");
-                  })
-                  .Execute(() =>
-                  {
-                      return (nint)PInvoke.GetOpenClipboardWindow() == nint.Zero;
-                  });
+                .Handle<Exception>()
+                .OrResult(res => !res)
+                .WaitAndRetry(3, retryTimes => TimeSpan.FromSeconds(Math.Pow(2, retryTimes)), (res, delay, times, context) =>
+                {
+                    Console.WriteLine($"Retry {times}th times, ex: {res.Exception?.Message}");
+                })
+                .Execute(() =>
+                {
+                    return PInvoke.GetOpenClipboardWindow().Value == nint.Zero;
+                });
         }
     }
 }

@@ -1,19 +1,13 @@
 ﻿using FlaUI.Core.AutomationElements;
-using Lemon.Automation.Framework.AutomationCore.Domains;
+using Lemon.Automation.Domains;
 using ProtoBuf;
-using System.Drawing;
 using System.IO;
 
 namespace Lemon.Automation.Framework.AutomationCore.Models
 {
-    [ProtoContract]
-    public class FlaUI3Element : IUIElement
+    public class FlaUI3Element : IUIAElement
     {
         private readonly AutomationElement _flauiElement;
-        public FlaUI3Element()
-        {
-            
-        }
         public FlaUI3Element(AutomationElement flauiElement, string? additionText = null)
         {
             _flauiElement = flauiElement;
@@ -55,46 +49,38 @@ namespace Lemon.Automation.Framework.AutomationCore.Models
             IsAvailable = _flauiElement.IsAvailable;
             AdditionText = additionText;
         }
-        [ProtoMember(1)]
         public string? ClassName
         {
             get;
         }
-        [ProtoMember(2)]
         public int? ProcessId
         {
             get;
         }
-        [ProtoMember(3)]
         public string? ControlType
         {
             get;
         }
-        [ProtoMember(4)]
         public bool IsAvailable
         {
             get;
             private set;
         }
-        [ProtoMember(5)]
         public bool IsVisible
         {
             get;
             private set;
         }
-        [ProtoMember(6)]
         public string? Name
         {
             get;
             private set;
         }
-        [ProtoIgnore]
         public Rectangle RegionRectangle
         {
             get;
             private set;
         }
-        [ProtoIgnore]
         public int? ElementHandle
         {
             get
@@ -106,7 +92,6 @@ namespace Lemon.Automation.Framework.AutomationCore.Models
                 return nint.Zero.ToInt32();
             }
         }
-        [ProtoIgnore]
         public string? WindowTitle
         {
             get
@@ -115,8 +100,7 @@ namespace Lemon.Automation.Framework.AutomationCore.Models
                 return string.Empty;
             }
         }
-        [ProtoIgnore]
-        public int? RootHandle
+        public nint RootHandle
         {
             get
             {
@@ -124,20 +108,21 @@ namespace Lemon.Automation.Framework.AutomationCore.Models
                 return nint.Zero.ToInt32();
             }
         }
-        [ProtoMember(12)]
         public string? AdditionText
         {
             get;
         }
-        [ProtoMember(11)]
         public string FrameworkType
         {
             get;
         } = "none";
-        [ProtoIgnore]
         public AutomationElement FlauiElement => _flauiElement;
 
-        public IEnumerable<IUIElement> FindAllChildren()
+        public string CacheId => throw new NotImplementedException();
+
+        public string ProcessName => throw new NotImplementedException();
+
+        public IEnumerable<IUIAElement> FindAllChildren()
         {
             return _flauiElement.FindAllChildren().Select(x => new FlaUI3Element(x));
         }

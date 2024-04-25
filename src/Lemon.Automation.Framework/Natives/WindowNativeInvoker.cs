@@ -1,27 +1,23 @@
-﻿using Microsoft.Extensions.Logging;
-using System.Drawing;
+﻿using System.Drawing;
 using Windows.Win32;
 using Windows.Win32.Foundation;
+using Point = System.Drawing.Point;
 
-namespace Lemon.Automation.Framework.AutomationCore.Services
+namespace Lemon.Automation.Framework.Natives
 {
-    public class Win32AutomationService
+    public static class WindowNativeInvoker
     {
-        private readonly ILogger _logger;
-        public Win32AutomationService(ILogger<Win32AutomationService> logger) 
-        {
-            _logger = logger;
-        }
-        public nint WindowFromPoint(Point point)
+        public static nint WindowFromPoint(Point point)
         {
             var handle = PInvoke.WindowFromPoint(point);
-            if (handle == IntPtr.Zero)
+            if (!handle.IsNull)
             {
-                _logger.LogWarning("None valid window");
+                return handle.Value;
             }
-            return handle.Value;
+            return nint.Zero;
         }
-        public Rectangle GetWindowRectangle(nint handle)
+
+        public static Rectangle GetWindowRectangle(nint handle)
         {
             var ret = PInvoke.GetWindowRect(new HWND(handle), out RECT lpRect);
             if (ret.Value == 0)
@@ -33,7 +29,7 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
                 return new Rectangle(lpRect.X, lpRect.Y, lpRect.Width, lpRect.Height);
             }
         }
-        public string GetWindowText(nint handle,int buffer = 2048)
+        public static string GetWindowText(nint handle, int buffer = 2048)
         {
             int bufferLength = buffer + 1;
             unsafe
@@ -54,7 +50,7 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
                 }
             }
         }
-        public string GetWindowClassName(nint handle, int buffer = 1024)
+        public static string GetWindowClassName(nint handle, int buffer = 1024)
         {
             int bufferLength = buffer + 1;
             unsafe

@@ -1,15 +1,14 @@
-﻿using Lemon.Automation.Framework.AutomationCore.Domains;
-using Lemon.Automation.Framework.AutomationCore.Services;
-using System.Drawing;
+﻿using Lemon.Automation.App.UIProvider.UIA.Services;
+using Lemon.Automation.Domains;
 
-namespace Lemon.Automation.Framework.AutomationCore.Models
+namespace Lemon.Automation.App.UIProvider.UIA.Windows
 {
-    public class Win32UIElement : IUIElement
+    public class Win32Element : IUIAElement
     {
         private readonly Func<Win32AutomationService> _win32AutomationSerivceGetter;
         private Win32AutomationService? _win32AutomationSerivce;
         private readonly nint _windowHandle;
-        public Win32UIElement(Func<Win32AutomationService> win32AutomationSerivceGetter, 
+        public Win32Element(Func<Win32AutomationService> win32AutomationSerivceGetter, 
             nint windowHandle,
             string? additionText = null) 
         {
@@ -81,7 +80,7 @@ namespace Lemon.Automation.Framework.AutomationCore.Models
             }
         }
 
-        public int? RootHandle => throw new NotImplementedException();
+        public nint RootHandle => throw new NotImplementedException();
 
         public string? AdditionText
         {
@@ -92,10 +91,15 @@ namespace Lemon.Automation.Framework.AutomationCore.Models
         {
             get;
         } = "none";
-        public IEnumerable<IUIElement> FindAllChildren()
+
+        public string CacheId => throw new NotImplementedException();
+
+        public string ProcessName => throw new NotImplementedException();
+
+        public IEnumerable<IUIAElement> FindAllChildren()
         {
             //return _flauiElement.FindAllChildren().Select(x => new FlaUI3Element(x));
-            return Enumerable.Empty<IUIElement>();
+            return Enumerable.Empty<IUIAElement>();
         }
 
         private Win32AutomationService EnsureWin32AutomationService()

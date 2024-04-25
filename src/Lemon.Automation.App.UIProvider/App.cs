@@ -1,9 +1,10 @@
 ﻿using FlaUI.Core;
 using FlaUI.UIA3;
 using Lemon.Automation.App.UIProvider.GrpcServers;
+using Lemon.Automation.App.UIProvider.UIA.Chrome;
+using Lemon.Automation.App.UIProvider.UIA.Services;
+using Lemon.Automation.App.UIProvider.UIA.Windows;
 using Lemon.Automation.Domains;
-using Lemon.Automation.Framework.AutomationCore.Domains;
-using Lemon.Automation.Framework.AutomationCore.Services;
 using Lemon.Automation.Globals;
 using Lemon.Automation.GrpcWorkShop;
 using Lemon.Automation.GrpcWorkShop.GrpcDomains;
@@ -47,11 +48,15 @@ namespace Lemon.Automation.App.UIProvider
                 .AddSingleton<GrpcServerWorkShop>()
                 .AddSingleton<AutomationBase, UIA3Automation>()
                 .AddSingleton<Win32AutomationService>()
+                .AddSingleton<WindowsInputService>()
+                .AddKeyedSingleton<IUIATracker, UIAWindowsServiceFacade>(nameof(IUIATracker))
+                .AddKeyedSingleton<IUIATracker, UIAChromeServiceFacade>(nameof(IUIATracker))
                 .AddSingleton<MSAAService>()
-                .AddSingleton<IAutomationServiceFacade, UIAutomationServiceFacade>()
+                .AddSingleton<IUIATrackService, UIATrackService>()
                 .AddKeyedSingleton<IGrpcService, UIAutomationGrpcService>(nameof(IGrpcService))
                 .AddKeyedSingleton<IGrpcService, BeepGrpcService>(nameof(IGrpcService))
                 .AddSingleton(sp => sp.GetKeyedServices<IGrpcService>(nameof(IGrpcService)))
+                .AddSingleton(sp => sp.GetKeyedServices<IUIATracker>(nameof(IUIATracker)))
                 .AddSingleton<IAppHostedService, HostedService>();
 
 

@@ -7,6 +7,7 @@ internal class Program
     static void Main(string[] args)
     {
         Console.WriteLine($"start param:{string.Join(' ',args)}");
+        Clipboard.ClipboardIdle();
         if (args.Length > 0 ) 
         {
             try

@@ -1,47 +1,49 @@
 ﻿using FlaUI.Core;
 using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Input;
-using Lemon.Automation.Framework.AutomationCore.Domains;
+using Lemon.Automation.App.UIProvider.UIA.Services;
+using Lemon.Automation.Domains;
 using Lemon.Automation.Framework.AutomationCore.Models;
 using Microsoft.Extensions.Logging;
 using R3;
-using System.Drawing;
 using System.Runtime.CompilerServices;
 //using System.Windows.Automation;
 
-namespace Lemon.Automation.Framework.AutomationCore.Services
+namespace Lemon.Automation.App.UIProvider.UIA.Windows
 {
-    public class UIAutomationServiceFacade : IAutomationServiceFacade
+    public class UIAWindowsServiceFacade : IUIATracker
     {
         private readonly AutomationBase _automationBase;
         private readonly Win32AutomationService _win32AutomationService;
         private readonly MSAAService _msaaService;
         private readonly ILogger _logger;
-        public UIAutomationServiceFacade(ILogger<UIAutomationServiceFacade> logger,
+        public UIAWindowsServiceFacade(ILogger<UIAWindowsServiceFacade> logger,
             AutomationBase automationBase,
             Win32AutomationService win32AutomationService,
-            MSAAService msaaService)
+            MSAAService msaaService,
+            WindowsInputService inputService)
         {
             _logger = logger;
             _automationBase = automationBase;
             _win32AutomationService = win32AutomationService;
             _msaaService = msaaService;
         }
-        public Observable<IUIElement> ObserveElementsFromCurrentPoint(CancellationToken cancellationToken, 
+        public Observable<IUIAElement> ObserveElementsFromCurrentPoint(
             TimeSpan interval,
-            bool enableDeep) 
+            bool enableDeep,
+            CancellationToken cancellationToken)
         {
             return Observable.CreateFrom(t =>
             {
                 return ElementsFromCurrentPoint(cancellationToken, interval, enableDeep);
             });
         }
-        public IUIElement GetDesktop()
+        public IUIAElement GetDesktop()
         {
             var desktopElement = _automationBase.GetDesktop();
             return new FlaUI3Element(desktopElement);
         }
-        private async IAsyncEnumerable<IUIElement> ElementsFromCurrentPoint([EnumeratorCancellation] CancellationToken cancellationToken, TimeSpan interval, bool enableDeep)
+        private async IAsyncEnumerable<IUIAElement> ElementsFromCurrentPoint([EnumeratorCancellation] CancellationToken cancellationToken, TimeSpan interval, bool enableDeep)
         {
             while (true)
             {
@@ -60,7 +62,7 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
                 yield return ElementFromCurrentPoint(enableDeep);
             }
         }
-        public IUIElement ElementFromCurrentPoint(bool enableDeep)
+        public IUIAElement ElementFromCurrentPoint(bool enableDeep)
         {
             /* FlaUI Mouse.Position
             {
@@ -112,7 +114,7 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
                 try
                 {
                     var handle = _win32AutomationService.WindowFromPoint(Mouse.Position);
-                    return new Win32UIElement(() => _win32AutomationService, handle, nameof(UnauthorizedAccessException));
+                    return new Win32Element(() => _win32AutomationService, handle, nameof(UnauthorizedAccessException));
                 }
                 catch (Exception ex)
                 {
@@ -149,9 +151,10 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
             }
         }
 
-        public Observable<IUIElement> ObserveElementsByMouseMove(CancellationToken cancellationToken, 
+        public Observable<IUIAElement> ObserveElementsByMouseMove(
             TimeSpan interval,
-            bool enableDeep)
+            bool enableDeep,
+            CancellationToken cancellationToken)
         {
             return Observable.EveryValueChanged(this, _ => Mouse.Position, cancellationToken)
                 .Select(p =>
@@ -161,12 +164,12 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
                 });
         }
 
-        public IEnumerable<IUIElement> GetAllChildFromPoint()
+        public IEnumerable<IUIAElement> GetAllChildFromPoint()
         {
             if (TryGetElementFromCurrentPointInternal(out AutomationElement? automation) && automation != null)
             {
                 var treeWalker = _automationBase.TreeWalkerFactory.GetRawViewWalker();
-                return GetAllChild(treeWalker, automation).Select(element=>new FlaUI3Element(element));
+                return GetAllChild(treeWalker, automation).Select(element => new FlaUI3Element(element));
             }
             return [];
         }
@@ -175,7 +178,7 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
         /// </summary>
         /// <returns></returns>
         [Obsolete]
-        public IUIElement GetClosestAndDeepestChildFromPoint()
+        public IUIAElement GetClosestAndDeepestChildFromPoint()
         {
             var child = GetClosestAndDeepestChild(Mouse.Position);
             if (child != null)
@@ -280,16 +283,66 @@ namespace Lemon.Automation.Framework.AutomationCore.Services
             return Math.Sqrt(dx * dx + dy * dy);
         }
 
-        public IEnumerable<IUIElement> GetAllChildren(IUIElement uiElement)
+        public IEnumerable<IUIAElement> GetAllChildren(IUIAElement uiElement)
         {
             return uiElement.FindAllChildren();
         }
 
-        static Type IndicateType(IUIElement source) => source switch
+        static Type IndicateType(IUIAElement source) => source switch
         {
-            FlaUI3Element  => typeof(FlaUI3Element),
-            Win32UIElement  => typeof(Win32UIElement),
+            FlaUI3Element => typeof(FlaUI3Element),
+            Win32Element => typeof(Win32Element),
             _ => typeof(FlaUI3Element),
         };
+
+        public IUIAElement ElementFromPoint(int aX, int aY, bool enableDeep)
+        {
+            try
+            {
+                var element = _automationBase.FromPoint(new Point(aX, aY));
+                if (element.Properties.ProcessId == Environment.ProcessId)
+                {
+                    element = _automationBase.GetDesktop();
+                }
+                if (!element.Properties.BoundingRectangle.IsSupported)
+                {
+                    element = _automationBase.GetDesktop();
+                }
+                if (enableDeep)
+                {
+                    var deepElement = GetClosestAndDeepestChildFromPoint();
+                    if (deepElement != null)
+                    {
+                        return deepElement;
+                    }
+                }
+                return new FlaUI3Element(element);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                try
+                {
+                    var handle = _win32AutomationService.WindowFromPoint(Mouse.Position);
+                    return new Win32Element(() => _win32AutomationService, handle, nameof(UnauthorizedAccessException));
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, ex.Message);
+                    return new FlaUI3Element(_automationBase.GetDesktop());
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return new FlaUI3Element(_automationBase.GetDesktop());
+            }
+        }
+
+
+        public bool Examine(ITrackEvidence evidence)
+        {
+            // todo
+            return true;
+        }
     }
 }

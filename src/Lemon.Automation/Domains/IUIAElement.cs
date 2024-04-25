@@ -1,13 +1,13 @@
-﻿using Lemon.Automation.Framework.AutomationCore.Models;
-using ProtoBuf;
-using System.Drawing;
+﻿using System.Drawing;
 
-namespace Lemon.Automation.Framework.AutomationCore.Domains
+namespace Lemon.Automation.Domains
 {
-    [ProtoContract]
-    [ProtoInclude(7, typeof(FlaUI3Element))]
-    public interface IUIElement
+    public interface IUIAElement
     {
+        public string CacheId
+        {
+            get;
+        }
         public string? ClassName
         {
             get;
@@ -45,7 +45,7 @@ namespace Lemon.Automation.Framework.AutomationCore.Domains
         {
             get;
         }
-        public int? RootHandle
+        public nint RootHandle
         {
             get;
         }
@@ -58,7 +58,10 @@ namespace Lemon.Automation.Framework.AutomationCore.Domains
         {
             get;
         }
-
-        public IEnumerable<IUIElement> FindAllChildren();
+        public string ProcessName
+        {
+            get;
+        }
+        public IEnumerable<IUIAElement> FindAllChildren();
     }
 }

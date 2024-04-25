@@ -1,4 +1,5 @@
 ﻿using Lemon.Automation.Framework.Natives;
+using System.Drawing;
 using WindowsInput;
 
 namespace Lemon.Automation.Framework.Inputs
@@ -23,12 +24,12 @@ namespace Lemon.Automation.Framework.Inputs
         {
             if (isForced)
             {
-                Point point = default;
-                NativeInvoke.GetCursorPos(ref point);
+                PointWrapper point = default;
+                PartialNativeInvoker.GetCursorPos(ref point);
 
                 if (point.X == aX && point.Y == aY)
                 {
-                    NativeInvoke.SetCursorPos(0, 0);
+                    PartialNativeInvoker.SetCursorPos(0, 0);
                 }
             }
             inputSimulator.Mouse.MoveMouseTo(aX, aY);
@@ -38,16 +39,16 @@ namespace Lemon.Automation.Framework.Inputs
         {
             if(isForced) 
             {
-                Point point = default;
-                NativeInvoke.GetCursorPos(ref point);
+                PointWrapper point = default;
+                PartialNativeInvoker.GetCursorPos(ref point);
 
                 if (point.X == aX && point.Y == aY)
                 {
-                    NativeInvoke.SetCursorPos(0, 0);
+                    PartialNativeInvoker.SetCursorPos(0, 0);
                 }
             }
             inputSimulator.Mouse.MoveMouseTo(aX, aY);
-            NativeInvoke.SetCursorPos(aX, aY);
+            PartialNativeInvoker.SetCursorPos(aX, aY);
         }
 
     }

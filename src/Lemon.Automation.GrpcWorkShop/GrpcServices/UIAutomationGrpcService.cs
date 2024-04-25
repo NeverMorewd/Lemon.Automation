@@ -1,30 +1,23 @@
-﻿using Google.Protobuf;
-using Google.Protobuf.WellKnownTypes;
+﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
-using Lemon.Automation.Framework.AutomationCore.Domains;
-using Lemon.Automation.Framework.AutomationCore.Models;
-using Lemon.Automation.Framework.Extensions;
+using Lemon.Automation.Domains;
 using Lemon.Automation.Globals;
 using Lemon.Automation.GrpcWorkShop.GrpcDomains;
 using Lemon.Automation.Protos;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using ProtoBuf;
 using R3;
-using System.IO;
-using System.Runtime.Intrinsics.X86;
-using System.Xml.Linq;
 
 namespace Lemon.Automation.GrpcWorkShop.GrpcServices
 {
     public class UIAutomationGrpcService : UIAutomationService.UIAutomationServiceBase, IGrpcService
     {
-        private readonly IAutomationServiceFacade _automationService;
+        private readonly IUIATrackService _trackService;
         private readonly ILogger _logger;
-        public UIAutomationGrpcService(IAutomationServiceFacade  automationService, 
+        public UIAutomationGrpcService(IUIATrackService trackService, 
             ILogger<UIAutomationGrpcService> logger)
         {
-            _automationService = automationService;
+            _trackService = trackService;
             _logger = logger;
             ObservableTracker.EnableTracking = true;
             ObservableTracker.EnableStackTrace = true;
@@ -45,12 +38,11 @@ namespace Lemon.Automation.GrpcWorkShop.GrpcServices
         }
         public async override Task<GetDesktopResponse> GetDesktop(GetDesktopRequest request, ServerCallContext context)
         {
-            _logger.LogDebug($"GetDesktop start");
-            var desktopElement = _automationService.GetDesktop();
-            var uiElement = Transform(desktopElement);
+            //_logger.LogDebug($"GetDesktop start");
+            //var desktopElement = _trackeService.GetDesktop();
+            //var uiElement = Transform(desktopElement);
             return await Task.FromResult(new GetDesktopResponse 
             {
-                Element = uiElement,
                 Context = new ResponseContext
                 {
                     Code = 0, 
@@ -61,23 +53,7 @@ namespace Lemon.Automation.GrpcWorkShop.GrpcServices
         public override Task<GetAllChildResponse> GetAllChild(GetAllChildRequest request, ServerCallContext context)
         {
             _logger.LogDebug($"GetAllChild start");
-            //request.Element.na
-            var buffer = request.Element.NativeUiaObject.ToArray();
-            var element = FlaUI3Element.Deserialize(buffer);
 
-            if (element != null)
-            {
-                var eles = _automationService.GetAllChildren(element);
-
-                var uis = eles.Select(Transform);
-                GetAllChildResponse response = new();
-                response.Element.AddRange(uis);
-                response.Context = new ResponseContext
-                {
-                    Code = 0,
-                };
-                return Task.FromResult(response);
-            }
             throw new Exception("IUIElement");
         }
 
@@ -86,19 +62,22 @@ namespace Lemon.Automation.GrpcWorkShop.GrpcServices
             ServerCallContext context)
         {
             _logger.LogDebug($"Tracking start");
-            Observable<IUIElement> elementObservable = request.TrackType switch
+            Observable<IUIAElement> elementObservable = request.TrackType switch
             {
-                TrackTypeEnum.MouseMove => _automationService.ObserveElementsByMouseMove(context.CancellationToken, 
+                TrackTypeEnum.MouseMove => _trackService.ObserveElementsByMouseMove(
                                             TimeSpan.FromMilliseconds(request.Interval.GetValueOrDefault()),
-                                            request.EnableDeep),
+                                            request.EnableDeep,
+                                            context.CancellationToken),
 
-                TrackTypeEnum.Continuous => _automationService.ObserveElementsFromCurrentPoint(context.CancellationToken, 
+                TrackTypeEnum.Continuous => _trackService.ObserveElementsFromCurrentPoint(
                                             TimeSpan.FromMilliseconds(request.Interval.GetValueOrDefault()),
-                                            request.EnableDeep),
+                                            request.EnableDeep,
+                                            context.CancellationToken),
 
-                _ => _automationService.ObserveElementsByMouseMove(context.CancellationToken, 
+                _ => _trackService.ObserveElementsByMouseMove(
                                             TimeSpan.FromMilliseconds(request.Interval.GetValueOrDefault()),
-                                            request.EnableDeep),
+                                            request.EnableDeep,
+                                            context.CancellationToken),
             };
             var disposable = elementObservable
                                .Do(x =>
@@ -182,7 +161,7 @@ namespace Lemon.Automation.GrpcWorkShop.GrpcServices
             UIAutomationService.BindService(serviceBinder, this);
         }
 
-        private Element Transform(IUIElement uiElement)
+        private Element Transform(IUIAElement uiElement)
         {
             var element = new Element
             {
@@ -203,22 +182,7 @@ namespace Lemon.Automation.GrpcWorkShop.GrpcServices
             {
                 element.Name = "none";
             }
-            try
-            {
-                if (uiElement is FlaUI3Element flauiElement)
-                {
-                    var bytes = FlaUI3Element.Serialize(flauiElement);
-                    element.NativeUiaObject = ByteString.CopyFrom(bytes);
-                }
 
-
-                //var obj = ProtobufTest.Deserialize(bytes);
-
-            }
-            catch (Exception ex) 
-            {
-                _logger.LogDebug(ex,"");
-            }
             return element;
         }
 

@@ -4,6 +4,7 @@ using Lemon.Automation.App.UIProvider.UIA.Windows;
 using Lemon.Automation.Domains;
 using Microsoft.Extensions.Logging;
 using R3;
+using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 
 namespace Lemon.Automation.App.UIProvider.UIA.Services
@@ -13,6 +14,8 @@ namespace Lemon.Automation.App.UIProvider.UIA.Services
         public readonly Win32AutomationService _win32AutomationService;
         public readonly IEnumerable<IUIATracker> _trackers;
         public readonly ILogger _logger;
+        public ValidEvidence? _validEvidence;
+
         public UIATrackService(IEnumerable<IUIATracker> trackers, 
             Win32AutomationService win32AutomationService,
             ILogger<UIATrackService> logger)
@@ -28,6 +31,7 @@ namespace Lemon.Automation.App.UIProvider.UIA.Services
             Win32Element win32Element = new(() => _win32AutomationService, handle);
             TrackEvidence evidence = new(win32Element, cursor);
             var targetTracker = ResolveTracker(evidence);
+
             return targetTracker.ElementFromPoint(aX, aY, isEnableDeepTraversal);
         }
 
@@ -56,14 +60,25 @@ namespace Lemon.Automation.App.UIProvider.UIA.Services
 
         private IUIATracker ResolveTracker(TrackEvidence trackEvidence)
         {
+            if (_validEvidence != null && trackEvidence.RootWindow != nint.Zero)
+            {
+                if (_validEvidence.Handle == trackEvidence.RootWindow)
+                {
+                    return _validEvidence.Tracker;
+                }
+            }
             foreach (var tracker in _trackers)
             {
                 if (tracker.Examine(trackEvidence))
                 {
+                    if (tracker is not UIAWindowsServiceFacade)
+                    {
+                        _validEvidence = new ValidEvidence(trackEvidence.RootWindow, tracker);
+                    }
                     return tracker;
                 }
             }
-            return _trackers.Last();
+            return _trackers.First();
         }
         private async IAsyncEnumerable<IUIAElement> ElementsFromCurrentPointInternal(
             TimeSpan interval, 
@@ -80,6 +95,8 @@ namespace Lemon.Automation.App.UIProvider.UIA.Services
                 {
                     await Task.Delay(interval, cancellationToken);
                 }
+                cancellationToken.ThrowIfCancellationRequested();
+
                 Point cursor = Mouse.Position;
                 var handle = _win32AutomationService.WindowFromPoint(cursor);
                 Win32Element win32Element = new(() => _win32AutomationService, handle);

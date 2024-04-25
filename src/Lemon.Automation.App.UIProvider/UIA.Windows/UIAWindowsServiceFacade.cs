@@ -41,7 +41,7 @@ namespace Lemon.Automation.App.UIProvider.UIA.Windows
         public IUIAElement GetDesktop()
         {
             var desktopElement = _automationBase.GetDesktop();
-            return new FlaUI3Element(desktopElement);
+            return new Flaui3Element(desktopElement);
         }
         private async IAsyncEnumerable<IUIAElement> ElementsFromCurrentPoint([EnumeratorCancellation] CancellationToken cancellationToken, TimeSpan interval, bool enableDeep)
         {
@@ -107,7 +107,7 @@ namespace Lemon.Automation.App.UIProvider.UIA.Windows
                         return deepElement;
                     }
                 }
-                return new FlaUI3Element(element);
+                return new Flaui3Element(element);
             }
             catch (UnauthorizedAccessException)
             {
@@ -119,13 +119,13 @@ namespace Lemon.Automation.App.UIProvider.UIA.Windows
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, ex.Message);
-                    return new FlaUI3Element(_automationBase.GetDesktop());
+                    return new Flaui3Element(_automationBase.GetDesktop());
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return new FlaUI3Element(_automationBase.GetDesktop());
+                return new Flaui3Element(_automationBase.GetDesktop());
             }
         }
         private bool TryGetElementFromCurrentPointInternal(out AutomationElement? automationElement)
@@ -169,7 +169,7 @@ namespace Lemon.Automation.App.UIProvider.UIA.Windows
             if (TryGetElementFromCurrentPointInternal(out AutomationElement? automation) && automation != null)
             {
                 var treeWalker = _automationBase.TreeWalkerFactory.GetRawViewWalker();
-                return GetAllChild(treeWalker, automation).Select(element => new FlaUI3Element(element));
+                return GetAllChild(treeWalker, automation).Select(element => new Flaui3Element(element));
             }
             return [];
         }
@@ -183,11 +183,11 @@ namespace Lemon.Automation.App.UIProvider.UIA.Windows
             var child = GetClosestAndDeepestChild(Mouse.Position);
             if (child != null)
             {
-                return new FlaUI3Element(child);
+                return new Flaui3Element(child);
             }
             else
             {
-                return new FlaUI3Element(_automationBase.GetDesktop());
+                return new Flaui3Element(_automationBase.GetDesktop());
             }
         }
         private AutomationElement? GetClosestAndDeepestChild(Point point)
@@ -290,9 +290,9 @@ namespace Lemon.Automation.App.UIProvider.UIA.Windows
 
         static Type IndicateType(IUIAElement source) => source switch
         {
-            FlaUI3Element => typeof(FlaUI3Element),
+            Flaui3Element => typeof(Flaui3Element),
             Win32Element => typeof(Win32Element),
-            _ => typeof(FlaUI3Element),
+            _ => typeof(Flaui3Element),
         };
 
         public IUIAElement ElementFromPoint(int aX, int aY, bool enableDeep)
@@ -316,7 +316,7 @@ namespace Lemon.Automation.App.UIProvider.UIA.Windows
                         return deepElement;
                     }
                 }
-                return new FlaUI3Element(element);
+                return new Flaui3Element(element);
             }
             catch (UnauthorizedAccessException)
             {
@@ -328,13 +328,13 @@ namespace Lemon.Automation.App.UIProvider.UIA.Windows
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, ex.Message);
-                    return new FlaUI3Element(_automationBase.GetDesktop());
+                    return new Flaui3Element(_automationBase.GetDesktop());
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return new FlaUI3Element(_automationBase.GetDesktop());
+                return new Flaui3Element(_automationBase.GetDesktop());
             }
         }
 

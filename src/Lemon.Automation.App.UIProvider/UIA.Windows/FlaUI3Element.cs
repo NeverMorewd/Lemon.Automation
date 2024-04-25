@@ -5,10 +5,10 @@ using System.IO;
 
 namespace Lemon.Automation.Framework.AutomationCore.Models
 {
-    public class FlaUI3Element : IUIAElement
+    public class Flaui3Element : IUIAElement
     {
         private readonly AutomationElement _flauiElement;
-        public FlaUI3Element(AutomationElement flauiElement, string? additionText = null)
+        public Flaui3Element(AutomationElement flauiElement, string? additionText = null)
         {
             _flauiElement = flauiElement;
             IsVisible = false;
@@ -124,20 +124,20 @@ namespace Lemon.Automation.Framework.AutomationCore.Models
 
         public IEnumerable<IUIAElement> FindAllChildren()
         {
-            return _flauiElement.FindAllChildren().Select(x => new FlaUI3Element(x));
+            return _flauiElement.FindAllChildren().Select(x => new Flaui3Element(x));
         }
 
-        public static byte[] Serialize(FlaUI3Element target)
+        public static byte[] Serialize(Flaui3Element target)
         {
             using var stream = new MemoryStream();
             Serializer.Serialize(stream, target);
             return stream.ToArray();
         }
 
-        public static FlaUI3Element? Deserialize(byte[] buffer)
+        public static Flaui3Element? Deserialize(byte[] buffer)
         {
             using var stream = new MemoryStream(buffer);
-            return Serializer.Deserialize<FlaUI3Element>(stream);
+            return Serializer.Deserialize<Flaui3Element>(stream);
         }
     }
 }

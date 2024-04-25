@@ -11,6 +11,18 @@ namespace Lemon.Automation.App.UIProvider.UIA.Chrome
 
         public bool Examine(ITrackEvidence evidence)
         {
+            if (evidence.ProcessName == "chrome")
+            {
+                if (evidence.ClassName == "Chrome_RenderWidgetHostHWND")
+                {
+                    return true;
+                }
+                if (evidence.ClassName == "Chrome_WidgetWin_1")
+                {
+                    // todo check connection
+                    return true;
+                }
+            }
             return false;
         }
     }

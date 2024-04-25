@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lemon.Automation.Framework.AutomationCore.Caches
+namespace Lemon.Automation.Framework.Models
 {
-    internal class WindowsElementCache
+    public enum ElementType
     {
+        Windows,
+        Chrome,
     }
 }

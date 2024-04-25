@@ -13,6 +13,10 @@ namespace Lemon.Automation.Domains
         {
             get;
         }
+        public string? ClassName
+        {
+            get;
+        }
         public string? RootWindowClassName
         {
             get;

@@ -10,12 +10,12 @@ using R3;
 
 namespace Lemon.Automation.GrpcWorkShop.GrpcServices
 {
-    public class UIAutomationGrpcService : UIAutomationService.UIAutomationServiceBase, IGrpcService
+    public class UIAutomationTrackGrpcService : UIAutomationTrackService.UIAutomationTrackServiceBase, IGrpcService
     {
         private readonly IUIATrackService _trackService;
         private readonly ILogger _logger;
-        public UIAutomationGrpcService(IUIATrackService trackService, 
-            ILogger<UIAutomationGrpcService> logger)
+        public UIAutomationTrackGrpcService(IUIATrackService trackService, 
+            ILogger<UIAutomationTrackGrpcService> logger)
         {
             _trackService = trackService;
             _logger = logger;
@@ -30,31 +30,6 @@ namespace Lemon.Automation.GrpcWorkShop.GrpcServices
             ServerCallContext context)
         {
             return base.Track(request, context);
-        }
-
-        public async override Task<UIAutomationProxyResponse> UIAutomationProxy(UIAutomationProxyRequest request, ServerCallContext context)
-        {
-            return await base.UIAutomationProxy(request, context);
-        }
-        public async override Task<GetDesktopResponse> GetDesktop(GetDesktopRequest request, ServerCallContext context)
-        {
-            //_logger.LogDebug($"GetDesktop start");
-            //var desktopElement = _trackeService.GetDesktop();
-            //var uiElement = Transform(desktopElement);
-            return await Task.FromResult(new GetDesktopResponse 
-            {
-                Context = new ResponseContext
-                {
-                    Code = 0, 
-                }
-            });
-        }
-
-        public override Task<GetAllChildResponse> GetAllChild(GetAllChildRequest request, ServerCallContext context)
-        {
-            _logger.LogDebug($"GetAllChild start");
-
-            throw new Exception("IUIElement");
         }
 
         public override async Task Tracking(TrackRequest request,
@@ -151,14 +126,10 @@ namespace Lemon.Automation.GrpcWorkShop.GrpcServices
             _logger.LogDebug($"Tracking Over");
         }
 
-        public override Task<CaptureResponse> Capture(CaptureRequest request, ServerCallContext context)
-        {
-            return base.Capture(request, context);
-        }
 
         public void Bind(ServiceBinderBase serviceBinder)
         {
-            UIAutomationService.BindService(serviceBinder, this);
+            UIAutomationTrackService.BindService(serviceBinder, this);
         }
 
         private Element Transform(IUIAElement uiElement)

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lemon.Automation.App.UIProvider.UIA.Services
+namespace Lemon.Automation.App.UIProvider.UIA.Chrome
 {
     internal class ChromePlaywrightService
     {

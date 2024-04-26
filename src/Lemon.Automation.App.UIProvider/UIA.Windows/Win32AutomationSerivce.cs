@@ -1,14 +1,18 @@
-﻿using Lemon.Automation.Framework.Natives;
+﻿using Lemon.Automation.Domains;
+using Lemon.Automation.Framework.Natives;
 using Microsoft.Extensions.Logging;
 
-namespace Lemon.Automation.App.UIProvider.UIA.Services
+namespace Lemon.Automation.App.UIProvider.UIA.Windows
 {
     public class Win32AutomationService
     {
         private readonly ILogger _logger;
-        public Win32AutomationService(ILogger<Win32AutomationService> logger) 
+        private readonly IElementCacheService<Win32Element> _elementCacheService;
+        public Win32AutomationService(ILogger<Win32AutomationService> logger, 
+            IElementCacheService<Win32Element> win32ElementCache)
         {
             _logger = logger;
+            _elementCacheService = win32ElementCache;
         }
         public nint WindowFromPoint(Point point)
         {
@@ -18,7 +22,7 @@ namespace Lemon.Automation.App.UIProvider.UIA.Services
         {
             return WindowNativeInvoker.GetWindowRectangle(handle);
         }
-        public string GetWindowText(nint handle,int buffer = 2048)
+        public string GetWindowText(nint handle, int buffer = 2048)
         {
             return WindowNativeInvoker.GetWindowText(handle, buffer);
         }

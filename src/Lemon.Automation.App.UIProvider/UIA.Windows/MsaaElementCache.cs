@@ -1,8 +1,13 @@
 ﻿using Lemon.Automation.Domains;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Lemon.Automation.App.UIProvider.UIA.Windows
 {
-    public class Flaui3ElementCache : IElementCacheService<Flaui3Element>
+    public class MsaaElementCache : IElementCacheService<Flaui3Element>
     {
         public void AddorUpdate(string elementKey, Flaui3Element element)
         {

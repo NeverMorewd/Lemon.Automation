@@ -33,7 +33,7 @@ namespace Lemon.Automation.App.UITracker.ViewModels
                                 await uiMessageBox.ShowDialogAsync();
                             }
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             var uiMessageBox = new Wpf.Ui.Controls.MessageBox
                             {
@@ -71,6 +71,11 @@ namespace Lemon.Automation.App.UITracker.ViewModels
                     await uiMessageBox.ShowDialogAsync();
                 }
             });
+
+            TestCommand = new ReactiveCommand<Unit>(_ =>
+            {
+                //InfinityRecursion();
+            });
         }
 
         public ReactiveCommand<Unit> BrowseExeAndRunCommand
@@ -82,9 +87,24 @@ namespace Lemon.Automation.App.UITracker.ViewModels
             get;
         }
 
+        public ReactiveCommand<Unit> TestCommand
+        {
+            get;
+        }
+
         public override void Dispose()
         {
             Disposable.Combine(BrowseExeAndRunCommand).Dispose();
+        }
+
+        /// <summary>
+        /// stack overflow
+        /// https://learn.microsoft.com/en-us/dotnet/api/system.stackoverflowexception?view=net-8.0&redirectedfrom=MSDN
+        /// </summary>
+        /// <returns></returns>
+        public static string InfinityRecursion()
+        {
+            return InfinityRecursion();
         }
     }
 }

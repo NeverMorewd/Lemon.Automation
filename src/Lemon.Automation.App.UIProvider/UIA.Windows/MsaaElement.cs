@@ -1,10 +1,19 @@
 ﻿using Lemon.Automation.Domains;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Lemon.Automation.Framework.AutomationCore.Models
+namespace Lemon.Automation.App.UIProvider.UIA.Windows
 {
-    public class ChromeElement : IUIAElement
+    public class MsaaElement : IUIAElement
     {
+        public string CacheId => throw new NotImplementedException();
+
         public string? ClassName => throw new NotImplementedException();
+
+        public string? RootWindowClassName => throw new NotImplementedException();
 
         public int? ProcessId => throw new NotImplementedException();
 
@@ -28,11 +37,7 @@ namespace Lemon.Automation.Framework.AutomationCore.Models
 
         public string FrameworkType => throw new NotImplementedException();
 
-        public string CacheId => throw new NotImplementedException();
-
         public string ProcessName => throw new NotImplementedException();
-
-        public string? RootWindowClassName => throw new NotImplementedException();
 
         public string Id { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public string Tag { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

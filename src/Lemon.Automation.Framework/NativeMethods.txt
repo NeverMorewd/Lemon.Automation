@@ -9,6 +9,7 @@ GetWindowText
 GetClassName
 GetWindowRect
 AttachConsole
+FreeConsole
 GlobalAlloc
 GlobalLock
 GlobalUnlock

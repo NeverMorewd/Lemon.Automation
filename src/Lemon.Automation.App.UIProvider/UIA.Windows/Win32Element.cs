@@ -1,5 +1,5 @@
-﻿using Lemon.Automation.App.UIProvider.UIA.Services;
-using Lemon.Automation.Domains;
+﻿using Lemon.Automation.Domains;
+using ProtoBuf;
 
 namespace Lemon.Automation.App.UIProvider.UIA.Windows
 {
@@ -96,6 +96,15 @@ namespace Lemon.Automation.App.UIProvider.UIA.Windows
 
         public string ProcessName => throw new NotImplementedException();
 
+        public string? RootWindowClassName => throw new NotImplementedException();
+
+        [ProtoMember(1)]
+        public string Id { get; set; }
+        [ProtoMember(2)]
+        public string Tag { get; set; }
+        [ProtoMember(3)]
+        public JsonTextContent JsonContent { get; set; }
+
         public IEnumerable<IUIAElement> FindAllChildren()
         {
             //return _flauiElement.FindAllChildren().Select(x => new FlaUI3Element(x));
@@ -106,6 +115,16 @@ namespace Lemon.Automation.App.UIProvider.UIA.Windows
         {
             _win32AutomationSerivce ??= _win32AutomationSerivceGetter();
             return _win32AutomationSerivce;
+        }
+
+        public byte[] Serialize()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IProtobufSerializable? Deserialize(byte[] bytes)
+        {
+            throw new NotImplementedException();
         }
     }
 }

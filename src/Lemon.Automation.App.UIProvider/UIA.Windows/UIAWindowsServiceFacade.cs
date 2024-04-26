@@ -3,7 +3,6 @@ using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Input;
 using Lemon.Automation.App.UIProvider.UIA.Services;
 using Lemon.Automation.Domains;
-using Lemon.Automation.Framework.AutomationCore.Models;
 using Microsoft.Extensions.Logging;
 using R3;
 using System.Runtime.CompilerServices;
@@ -11,22 +10,25 @@ using System.Runtime.CompilerServices;
 
 namespace Lemon.Automation.App.UIProvider.UIA.Windows
 {
-    public class UIAWindowsServiceFacade : IUIATracker
+    public class UIAWindowsServiceFacade : IUIATracker, IUIAServiceFacade
     {
         private readonly AutomationBase _automationBase;
         private readonly Win32AutomationService _win32AutomationService;
         private readonly MSAAService _msaaService;
         private readonly ILogger _logger;
+        private readonly IElementCacheService<Flaui3Element> _flaui3ElementCache;
         public UIAWindowsServiceFacade(ILogger<UIAWindowsServiceFacade> logger,
             AutomationBase automationBase,
             Win32AutomationService win32AutomationService,
             MSAAService msaaService,
-            WindowsInputService inputService)
+            WindowsInputService inputService,
+            IElementCacheService<Flaui3Element> flaui3ElementCache)
         {
             _logger = logger;
             _automationBase = automationBase;
             _win32AutomationService = win32AutomationService;
             _msaaService = msaaService;
+            _flaui3ElementCache = flaui3ElementCache;
         }
         public Observable<IUIAElement> ObserveElementsFromCurrentPoint(
             TimeSpan interval,

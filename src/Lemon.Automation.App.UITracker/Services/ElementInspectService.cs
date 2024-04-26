@@ -22,13 +22,13 @@ namespace Lemon.Automation.App.UITracker.Services
 
         public async Task<Element> GetDesktop()
         {
-            var ret = await _automationGrpcClientProvider.UIAutomationGrpcServiceClient.GetDesktopAsync(request: new GetDesktopRequest());
+            var ret = await _automationGrpcClientProvider.UIAutomationOperationClient.GetDesktopAsync(request: new GetDesktopRequest());
             return ret.Element;
         }
 
         public async Task<IEnumerable<Element>> GetAllChildren(Element element)
         {
-            var ret = await _automationGrpcClientProvider.UIAutomationGrpcServiceClient.GetAllChildAsync(request: new GetAllChildRequest 
+            var ret = await _automationGrpcClientProvider.UIAutomationOperationClient.GetAllChildAsync(request: new GetAllChildRequest 
             {
                 Element = element,
             });

@@ -16,27 +16,41 @@ namespace Lemon.Automation.App
     internal class Program
     {
         [STAThread]
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             PartialNativeInvoker.AttachConsole();
             GlobalHandle();
-
-            Parser.Default
-                  .ParseArguments<CommandOptions>(args)
-                  .WithParsed(options =>
-                  {
-                      Console.WriteLine(options);
-                      RunWithArgs(options);
-                  })
-                  .WithNotParsed(errors => 
-                  {
-                      foreach (var error in errors)
+            int exitCode = 0;
+            try
+            {
+                Parser.Default
+                      .ParseArguments<CommandOptions>(args)
+                      .WithParsed(options =>
                       {
-                          Console.WriteLine($"CommandParam parse failed:{error.Tag},{error.StopsProcessing}");
-                      }
-                  });
+                          Console.WriteLine(options);
+                          RunWithArgs(options);
+                      })
+                      .WithNotParsed(errors =>
+                      {
+                          foreach (var error in errors)
+                          {
+                              Console.WriteLine($"CommandParam parse failed:{error.Tag},{error.StopsProcessing}");
+                          }
+                      });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine (ex);
+                exitCode = - 1;
+            }
+            finally
+            {
+                Console.WriteLine($"exit code: {exitCode}");
+                PartialNativeInvoker.FreeConsole();
+            }
+            return exitCode;
 
-            
+
         }
 
         static void RunWithArgs(CommandOptions options)
@@ -48,6 +62,7 @@ namespace Lemon.Automation.App
                     string connectionKey = $"{Guid.NewGuid()}-{Environment.ProcessId}";
                     RunApps(options.Apps, connectionKey);
                 }
+                PartialNativeInvoker.FreeConsole();
                 Environment.Exit(0);
             }
             else

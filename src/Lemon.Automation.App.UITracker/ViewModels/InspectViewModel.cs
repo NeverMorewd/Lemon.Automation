@@ -32,11 +32,11 @@ namespace Lemon.Automation.App.UITracker.ViewModels
             //        _elements.Clear();
             //        _elements.AddRange(BuildDummyData(new Random().Next(9,100)));
             //    });
-            Task.Run(async() => 
-            {
-                var desktop = await _elementInspectService.GetDesktop();
-                var allchildren = await _elementInspectService.GetAllChildren(desktop);
-            });
+            //Task.Run(async() => 
+            //{
+            //    var desktop = await _elementInspectService.GetDesktop();
+            //    var allchildren = await _elementInspectService.GetAllChildren(desktop);
+            //});
 
             ElementsView = _elements.CreateView(x => x).ToNotifyCollectionChanged();
             BindingOperations.EnableCollectionSynchronization(ElementsView, new object());

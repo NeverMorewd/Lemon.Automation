@@ -1,9 +1,10 @@
 ﻿using FlaUI.Core.AutomationElements;
 using Lemon.Automation.Domains;
+using Newtonsoft.Json;
 using ProtoBuf;
 using System.IO;
 
-namespace Lemon.Automation.Framework.AutomationCore.Models
+namespace Lemon.Automation.App.UIProvider.UIA.Windows
 {
     public class Flaui3Element : IUIAElement
     {
@@ -122,22 +123,38 @@ namespace Lemon.Automation.Framework.AutomationCore.Models
 
         public string ProcessName => throw new NotImplementedException();
 
+        public string? RootWindowClassName => throw new NotImplementedException();
+
+        [ProtoMember(1)]
+        public string Id { get; set; }
+        [ProtoMember(2)]
+        public string Tag { get; set; }
+        [ProtoMember(3)]
+        public JsonTextContent JsonContent { get; set; }
+
         public IEnumerable<IUIAElement> FindAllChildren()
         {
             return _flauiElement.FindAllChildren().Select(x => new Flaui3Element(x));
         }
 
-        public static byte[] Serialize(Flaui3Element target)
+        public byte[] Serialize()
         {
+            Id = $"{nameof(Flaui3Element)}-{GetHashCode()}";
+            Tag = $"{Id}-{Name}";
+            JsonContent = new JsonTextContent
+            {
+                TypeString = typeof(Flaui3Element).ToString(),
+                JsonText = JsonConvert.SerializeObject(this)
+            };
             using var stream = new MemoryStream();
-            Serializer.Serialize(stream, target);
+            Serializer.Serialize(stream, (IProtobufSerializable)this);
             return stream.ToArray();
         }
 
-        public static Flaui3Element? Deserialize(byte[] buffer)
+        public IProtobufSerializable? Deserialize(byte[] buffer)
         {
             using var stream = new MemoryStream(buffer);
-            return Serializer.Deserialize<Flaui3Element>(stream);
+            return Serializer.Deserialize<IProtobufSerializable>(stream);
         }
     }
 }

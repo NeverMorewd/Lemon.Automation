@@ -370,7 +370,8 @@
         "dependencies": {
           "CommandLineParser": "[2.9.1, )",
           "Microsoft.Extensions.Hosting.Abstractions": "[8.0.0, )",
-          "R3": "[1.1.11, )"
+          "R3": "[1.1.11, )",
+          "protobuf-net.Core": "[3.2.30, )"
         }
       },
       "lemon.automation.framework": {

@@ -101,13 +101,16 @@ message GetAllChildResponse
 	repeated Element element = 2;
 }
 
-service UIAutomationService
+service UIAutomationTrackService
 {
 	// TrackOnce
 	rpc Track(TrackRequest) returns (TrackResponse);
     // Tracking
 	rpc Tracking(TrackRequest) returns (stream TrackResponse);
-	// Retrieval
+}
+
+service UIAutomationOperationService
+{
 	rpc Retrieval(RetrievalRequest) returns (RetrievalResponse);
 	// Capture
 	rpc Capture(CaptureRequest) returns (CaptureResponse);

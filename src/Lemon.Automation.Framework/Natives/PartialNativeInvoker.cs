@@ -63,6 +63,11 @@ namespace Lemon.Automation.Framework.Natives
         {
             PInvoke.AttachConsole(PInvoke.ATTACH_PARENT_PROCESS);
         }
+
+        public static void FreeConsole()
+        {
+            PInvoke.FreeConsole();
+        }
     }
 
     public struct PointWrapper

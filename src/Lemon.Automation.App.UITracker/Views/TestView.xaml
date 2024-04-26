@@ -23,6 +23,7 @@
                 Command="{Binding BrowseExeAndRunCommand}"
                 Content="BrowseExeAndRun"
                 Icon="{ui:SymbolIcon Home24}" />
+            <Button Content="Test"  Command="{Binding TestCommand}"/>
         </StackPanel>
 
     </Grid>

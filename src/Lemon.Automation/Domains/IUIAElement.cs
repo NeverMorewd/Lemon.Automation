@@ -2,13 +2,21 @@
 
 namespace Lemon.Automation.Domains
 {
-    public interface IUIAElement
+    public interface IUIAElement : IProtobufSerializable
     {
+        public string? Name
+        {
+            get;
+        }
         public string CacheId
         {
             get;
         }
         public string? ClassName
+        {
+            get;
+        }
+        public string? RootWindowClassName
         {
             get;
         }
@@ -25,10 +33,6 @@ namespace Lemon.Automation.Domains
             get;
         }
         public bool IsVisible
-        {
-            get;
-        }
-        public string? Name
         {
             get;
         }

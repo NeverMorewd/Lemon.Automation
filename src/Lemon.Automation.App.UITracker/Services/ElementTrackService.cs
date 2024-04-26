@@ -2,7 +2,6 @@
 using Lemon.Automation.GrpcProvider.GrpcClients;
 using Lemon.Automation.Protos;
 using Microsoft.Extensions.Logging;
-using System.Drawing;
 
 namespace Lemon.Automation.App.UITracker.Services
 {
@@ -36,7 +35,7 @@ namespace Lemon.Automation.App.UITracker.Services
                 TrackType = trackType,
                 EnableDeep = false,
             };
-            var trackStreaming = _automationGrpcClientProvider.UIAutomationGrpcServiceClient.Tracking(trackRequest, cancellationToken: _cancellationSource.Token);
+            var trackStreaming = _automationGrpcClientProvider.UIAutomationTrackClient.Tracking(trackRequest, cancellationToken: _cancellationSource.Token);
             try
             {
                 while (await trackStreaming.ResponseStream.MoveNext(_cancellationSource.Token))

@@ -5,6 +5,7 @@ using Lemon.Automation.App.UIProvider.UIA.Chrome;
 using Lemon.Automation.App.UIProvider.UIA.Services;
 using Lemon.Automation.App.UIProvider.UIA.Windows;
 using Lemon.Automation.Domains;
+using Lemon.Automation.Framework.AutomationCore.Models;
 using Lemon.Automation.Globals;
 using Lemon.Automation.GrpcWorkShop;
 using Lemon.Automation.GrpcWorkShop.GrpcDomains;
@@ -49,14 +50,20 @@ namespace Lemon.Automation.App.UIProvider
                 .AddSingleton<AutomationBase, UIA3Automation>()
                 .AddSingleton<Win32AutomationService>()
                 .AddSingleton<WindowsInputService>()
+                .AddSingleton(typeof(IElementCacheService<Win32Element>),typeof(Win32ElementCache))
+                .AddSingleton(typeof(IElementCacheService<Flaui3Element>), typeof(Flaui3ElementCache))
                 .AddKeyedSingleton<IUIATracker, UIAWindowsServiceFacade>(nameof(IUIATracker))
                 .AddKeyedSingleton<IUIATracker, UIAChromeServiceFacade>(nameof(IUIATracker))
+                .AddKeyedSingleton<IUIAServiceFacade, UIAWindowsServiceFacade>(nameof(IUIAServiceFacade))
+                .AddKeyedSingleton<IUIAServiceFacade, UIAChromeServiceFacade>(nameof(IUIAServiceFacade))
                 .AddSingleton<MSAAService>()
                 .AddSingleton<IUIATrackService, UIATrackService>()
-                .AddKeyedSingleton<IGrpcService, UIAutomationGrpcService>(nameof(IGrpcService))
+                .AddKeyedSingleton<IGrpcService, UIAutomationTrackGrpcService>(nameof(IGrpcService))
+                .AddKeyedSingleton<IGrpcService, UIAutomationOperationGrpcService>(nameof(IGrpcService))
                 .AddKeyedSingleton<IGrpcService, BeepGrpcService>(nameof(IGrpcService))
                 .AddSingleton(sp => sp.GetKeyedServices<IGrpcService>(nameof(IGrpcService)))
                 .AddSingleton(sp => sp.GetKeyedServices<IUIATracker>(nameof(IUIATracker)))
+                .AddSingleton(sp => sp.GetKeyedServices<IUIAServiceFacade>(nameof(IUIAServiceFacade)))
                 .AddSingleton<IAppHostedService, HostedService>();
 
 

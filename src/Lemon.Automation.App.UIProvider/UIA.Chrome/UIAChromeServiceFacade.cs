@@ -2,7 +2,7 @@
 
 namespace Lemon.Automation.App.UIProvider.UIA.Chrome
 {
-    internal class UIAChromeServiceFacade : IUIATracker
+    internal class UIAChromeServiceFacade : IUIATracker, IUIAServiceFacade
     {
         public IUIAElement ElementFromPoint(int aX, int Y, bool enableDeep)
         {
@@ -24,6 +24,16 @@ namespace Lemon.Automation.App.UIProvider.UIA.Chrome
                 }
             }
             return false;
+        }
+
+        public IEnumerable<IUIAElement> GetAllChildren(IUIAElement uiElement)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IUIAElement GetDesktop()
+        {
+            throw new NotImplementedException();
         }
     }
 }

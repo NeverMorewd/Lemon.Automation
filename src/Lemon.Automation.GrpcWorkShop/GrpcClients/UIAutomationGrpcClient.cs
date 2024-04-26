@@ -2,6 +2,7 @@
 using Lemon.Automation.Domains;
 using Lemon.Automation.Protos;
 using Microsoft.Extensions.Logging;
+using static Lemon.Automation.Protos.UIAutomationOperationService;
 
 namespace Lemon.Automation.GrpcProvider.GrpcClients
 {
@@ -9,7 +10,8 @@ namespace Lemon.Automation.GrpcProvider.GrpcClients
     {
         private readonly NamedPipeChannel _channel;
         private readonly NamedPipeChannelOptions _channelOptions;
-        private readonly UIAutomationService.UIAutomationServiceClient automationServiceClient;
+        private readonly UIAutomationTrackService.UIAutomationTrackServiceClient automationTrackServiceClient;
+        private readonly UIAutomationOperationServiceClient automationOperationServiceClient;
         private readonly ILogger _logger;
         public UIAutomationGrpcClientProvider(IConnection connection, 
             ILogger<UIAutomationGrpcClientProvider> logger)
@@ -20,18 +22,27 @@ namespace Lemon.Automation.GrpcProvider.GrpcClients
                 ConnectionTimeout = connection.ConnectTimeout.GetValueOrDefault(),
             };
             _channel = new NamedPipeChannel(".", connection.ConnectionKey, _channelOptions);
-            automationServiceClient = new UIAutomationService.UIAutomationServiceClient(_channel);
-
+            automationTrackServiceClient = new UIAutomationTrackService.UIAutomationTrackServiceClient(_channel);
+            automationOperationServiceClient = new UIAutomationOperationServiceClient(_channel);
             _logger.LogDebug($"automationServiceClient:{connection.ConnectionKey}");
         }
 
-        public UIAutomationService.UIAutomationServiceClient UIAutomationGrpcServiceClient 
+        public UIAutomationTrackService.UIAutomationTrackServiceClient UIAutomationTrackClient 
         { 
             get
             {
-                return automationServiceClient; 
+                return automationTrackServiceClient; 
             } 
         }
+
+        public UIAutomationOperationServiceClient UIAutomationOperationClient
+        {
+            get 
+            { 
+                return automationOperationServiceClient; 
+            }
+        }
+
 
 
     }

@@ -55,7 +55,7 @@ namespace Lemon.Automation.App.UIProvider
                 .AddKeyedSingleton<IUIATracker, UIAWindowsServiceFacade>(nameof(IUIATracker))
                 .AddKeyedSingleton<IUIATracker, UIAChromeServiceFacade>(nameof(IUIATracker))
                 .AddKeyedSingleton<IUIAServiceFacade, UIAWindowsServiceFacade>(nameof(IUIAServiceFacade))
-                .AddKeyedSingleton<IUIAServiceFacade, UIAChromeServiceFacade>(nameof(IUIAServiceFacade))
+                //.AddKeyedSingleton<IUIAServiceFacade, UIAChromeServiceFacade>(nameof(IUIAServiceFacade))
                 .AddSingleton<MSAAService>()
                 .AddSingleton<IUIATrackService, UIATrackService>()
                 .AddKeyedSingleton<IGrpcService, UIAutomationTrackGrpcService>(nameof(IGrpcService))

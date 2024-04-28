@@ -42,8 +42,9 @@ namespace Lemon.Automation.App.UIProvider.UIA.Windows
         }
         public IUIAElement GetDesktop()
         {
-            var desktopElement = _automationBase.GetDesktop();
-            return new Flaui3Element(desktopElement);
+            var desktopElement = new Flaui3Element(_automationBase.GetDesktop());
+            desktopElement.Id = _flaui3ElementCache.AddorUpdate(desktopElement);
+            return desktopElement;
         }
         private async IAsyncEnumerable<IUIAElement> ElementsFromCurrentPoint([EnumeratorCancellation] CancellationToken cancellationToken, TimeSpan interval, bool enableDeep)
         {
@@ -287,7 +288,12 @@ namespace Lemon.Automation.App.UIProvider.UIA.Windows
 
         public IEnumerable<IUIAElement> GetAllChildren(IUIAElement uiElement)
         {
-            return uiElement.FindAllChildren();
+            if (uiElement.Id.StartsWith(nameof(Flaui3Element)))
+            {
+                var element = _flaui3ElementCache.Get(uiElement.Id);
+                return element.FindAllChildren();
+            }
+            throw new NotImplementedException();
         }
 
         static Type IndicateType(IUIAElement source) => source switch
@@ -345,6 +351,17 @@ namespace Lemon.Automation.App.UIProvider.UIA.Windows
         {
             // todo
             return true;
+        }
+
+        public IEnumerable<IUIAElement> GetAllChildren(string id)
+        {
+            var element = _flaui3ElementCache.Get(id);
+            return element.FlauiElement.FindAllChildren().Select(c => 
+            {
+                var flaui3Element = new Flaui3Element(c);
+                flaui3Element.Id = _flaui3ElementCache.AddorUpdate(flaui3Element);
+                return flaui3Element;
+            });
         }
     }
 }

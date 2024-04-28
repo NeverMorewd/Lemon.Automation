@@ -4,6 +4,8 @@ using R3;
 using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Media;
+using Button = System.Windows.Controls.Button;
 
 namespace Lemon.Automation.App.UITracker.Views
 {
@@ -23,6 +25,14 @@ namespace Lemon.Automation.App.UITracker.Views
                 {
                     Console.WriteLine($"point=({p.X},{p.Y})");
                 });
+        }
+
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (sender is Button button)
+            {
+                button.Background = new SolidColorBrush(Colors.Red);
+            }
         }
     }
 }

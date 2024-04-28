@@ -3,7 +3,7 @@ using Lemon.Automation.Domains;
 using Lemon.Automation.GrpcWorkShop.GrpcDomains;
 using Lemon.Automation.Protos;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
+using System.Windows;
 
 namespace Lemon.Automation.GrpcWorkShop.GrpcServices
 {
@@ -20,14 +20,59 @@ namespace Lemon.Automation.GrpcWorkShop.GrpcServices
             _winServiceFacade = _serviceFacades.First();
         }
 
-        public override Task<GetDesktopResponse> GetDesktop(GetDesktopRequest request, ServerCallContext context)
+        public async override Task<GetDesktopResponse> GetDesktop(GetDesktopRequest request, ServerCallContext context)
         {
-            return base.GetDesktop(request, context);
+            try
+            {
+                _logger.LogDebug("GetDesktop");
+                var uiElement = _winServiceFacade.GetDesktop();
+                GetDesktopResponse response = new()
+                {
+                    Element = new Element
+                    {
+                        Id = uiElement.Id,
+                        Name = uiElement.Name,
+                        Left = uiElement.RegionRectangle.Left,
+                        Top = uiElement.RegionRectangle.Top,
+                        Height = uiElement.RegionRectangle.Height,
+                        With = uiElement.RegionRectangle.Width,
+                    }
+                };
+                return await Task.FromResult(response);
+            }
+            catch (Exception ex) 
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
         }
 
-        public override Task<GetAllChildResponse> GetAllChild(GetAllChildRequest request, ServerCallContext context)
+        public async override Task<GetAllChildResponse> GetAllChild(GetAllChildRequest request, ServerCallContext context)
         {
-            return base.GetAllChild(request, context);
+            try
+            {
+                _logger.LogDebug("GetAllChild");
+                var id = request.Element.Id;
+                var children = _winServiceFacade.GetAllChildren(id);
+                var elements = children.Select(uiElement => new Element
+                {
+                    Id = uiElement.Id,
+                    Name = uiElement.Name,
+                    Left = uiElement.RegionRectangle.Left,
+                    Top = uiElement.RegionRectangle.Top,
+                    Height = uiElement.RegionRectangle.Height,
+                    With = uiElement.RegionRectangle.Width,
+                });
+
+                GetAllChildResponse response = new();
+                response.Element.AddRange(elements);
+                return await Task.FromResult(response);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
         }
 
         public void Bind(ServiceBinderBase serviceBinder)

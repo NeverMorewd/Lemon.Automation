@@ -6,5 +6,6 @@ namespace Lemon.Automation.Domains
     {
         IUIAElement GetDesktop();
         IEnumerable<IUIAElement> GetAllChildren(IUIAElement uiElement);
+        IEnumerable<IUIAElement> GetAllChildren(string id);
     }
 }

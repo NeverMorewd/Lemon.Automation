@@ -31,6 +31,11 @@ namespace Lemon.Automation.App.UIProvider.UIA.Chrome
             throw new NotImplementedException();
         }
 
+        public IEnumerable<IUIAElement> GetAllChildren(string id)
+        {
+            throw new NotImplementedException();
+        }
+
         public IUIAElement GetDesktop()
         {
             throw new NotImplementedException();

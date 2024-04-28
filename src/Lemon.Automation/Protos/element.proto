@@ -8,19 +8,18 @@ import "google/protobuf/struct.proto";
 
 message Element
 {
-	string name = 1;
+	string id = 1;
+	string name = 2;
 	int32 left = 4;
 	int32 top = 5;
 	int32 height = 6;
 	int32 with = 7;
-	int32 element_handle = 8;
+	int32 handle = 8;
 	int32 process_id = 9;
 	string window_title = 10;
 	string window_handle = 11;
 	ElementTypeEnum element_type = 12;
-	bool enable_native = 13;
-	google.protobuf.Struct native_info = 14;
-	google.protobuf.Struct selector = 15; 
+    string selector = 13;
 	bytes native_uia_object = 16;
 	string native_uia_type = 17;
 }

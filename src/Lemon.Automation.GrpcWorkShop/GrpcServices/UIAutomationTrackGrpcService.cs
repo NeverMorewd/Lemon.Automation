@@ -147,7 +147,7 @@ namespace Lemon.Automation.GrpcWorkShop.GrpcServices
             }
             if (uiElement.ElementHandle.HasValue)
             {
-                element.ElementHandle = uiElement.ElementHandle.Value;
+                element.Handle = uiElement.ElementHandle.Value;
             }
             if (string.IsNullOrEmpty(uiElement.Name))
             {

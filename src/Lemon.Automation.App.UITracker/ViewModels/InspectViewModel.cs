@@ -45,6 +45,11 @@ namespace Lemon.Automation.App.UITracker.ViewModels
             {
                var desktop = await  _elementInspectService.GetDesktop();
                var allchildren =await  _elementInspectService.GetAllChildren(desktop);
+                foreach (var child in allchildren) 
+                {
+                    _elements.Add(new ElementProxyModel(child.Id,child.Name,child.ElementType.ToString(),null));
+                }
+               
             });
 
             LoadChildrenCommand = new ReactiveCommand<RoutedEventArgs>(param => 

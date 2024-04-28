@@ -1,7 +1,9 @@
-﻿using Lemon.Automation.App.UITracker.Models;
+﻿using FlaUI.Core.AutomationElements;
+using Lemon.Automation.App.UITracker.Models;
 using Lemon.Automation.App.UITracker.Services;
 using Lemon.Automation.Framework.Rx;
 using Lemon.Automation.GrpcProvider.GrpcClients;
+using Lemon.Automation.Protos;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
@@ -37,29 +39,38 @@ namespace Lemon.Automation.App.UITracker.ViewModels
             //    var desktop = await _elementInspectService.GetDesktop();
             //    var allchildren = await _elementInspectService.GetAllChildren(desktop);
             //});
-
+            CurrentElement = new BindableReactiveProperty<ElementProxyModel>();
             ElementsView = _elements.CreateView(x => x).ToNotifyCollectionChanged();
             BindingOperations.EnableCollectionSynchronization(ElementsView, new object());
 
-            LoadedCommand = new ReactiveCommand<RoutedEventArgs>(async _ => 
+            LoadedCommand = new ReactiveCommand<RoutedEventArgs>(_ => 
             {
-               var desktop = await  _elementInspectService.GetDesktop();
-               var allchildren =await  _elementInspectService.GetAllChildren(desktop);
-                foreach (var child in allchildren) 
+                Task.Run(async() => 
                 {
-                    _elements.Add(new ElementProxyModel(child.Id,child.Name,child.ElementType.ToString(),null));
-                }
+                    var desktop = await _elementInspectService.GetDesktop();
+                    var allchildren = await _elementInspectService.GetAllChildren(desktop);
+                    foreach (var child in allchildren)
+                    {
+                        _elements.Add(new ElementProxyModel(child.Id, child.Name, child.ElementType.ToString(), null));
+                    }
+                });
+
                
             });
 
-            LoadChildrenCommand = new ReactiveCommand<RoutedEventArgs>(param => 
+            LoadChildrenCommand = new ReactiveCommand<RoutedEventArgs>(async obj => 
             {
-
+                var element = CurrentElement.Value;
+                var children = await _elementInspectService.GetAllChildren(new Protos.Element { Id = element.AutomationId });
+                foreach (var child in children)
+                {
+                    element.AddChild(new ElementProxyModel(child.Id, child.Name, child.ElementType.ToString(), null));
+                }
             });
 
-            LoadElementDetailCommand = new ReactiveCommand<RoutedPropertyChangedEventArgs<object>>(param => 
+            LoadElementDetailCommand = new ReactiveCommand<ElementProxyModel>(param => 
             {
-                
+                CurrentElement.Value = param;
             });
         }
 
@@ -77,11 +88,14 @@ namespace Lemon.Automation.App.UITracker.ViewModels
         {
             get;
         }
-        public ReactiveCommand<RoutedPropertyChangedEventArgs<object>> LoadElementDetailCommand
+        public ReactiveCommand<ElementProxyModel> LoadElementDetailCommand
         {
             get;
         }
-
+        public BindableReactiveProperty<ElementProxyModel> CurrentElement
+        {
+            get;
+        }
         private IEnumerable<ElementProxyModel> BuildDummyData(int count)
         {
             return Enumerable.Range(1, count).Select(i => new ElementProxyModel($"id-{i}",

@@ -16,28 +16,25 @@
             <behaviors:InvokeCommandAction Command="{Binding LoadedCommand}" PassEventArgsToCommand="True"/>
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!--  for design mode  -->
+                <ResourceDictionary Source="pack://application:,,,/Wpf.Ui;component/Resources/Wpf.Ui.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
-        <TreeView ItemsSource="{Binding ElementsView}">
-            <!--<TreeView.ItemContainerStyle>
-                <Style TargetType="{x:Type TreeViewItem}">
-                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-                    <Setter Property="FontWeight" Value="Normal" />
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="FontWeight" Value="Bold" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </TreeView.ItemContainerStyle>-->
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding ChildrenView}" DataType="{x:Type models:ElementProxyModel}">
-                    <StackPanel Orientation="Horizontal">
-                        <!--<Image Width="16" Height="16" Margin="0,0,5,0">
+        <ScrollViewer HorizontalScrollBarVisibility="Auto">
+            <TreeView x:Name="Tree" ItemsSource="{Binding ElementsView}" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding ChildrenView}" DataType="{x:Type models:ElementProxyModel}">
+                        <StackPanel Orientation="Horizontal">
+                            <!--<Image Width="16" Height="16" Margin="0,0,5,0">
                             <Image.Style>
                                 <Style TargetType="{x:Type Image}">
                                     <Style.Triggers>
@@ -46,27 +43,36 @@
                                 </Style>
                             </Image.Style>
                         </Image>-->
-                        <TextBlock>
-                            <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0} &quot;{1}&quot; &quot;{2}&quot;">
-                                    <Binding Path="AutomationId" />
-                                    <Binding Path="Name" />
-                                    <Binding Path="ControlType" />
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
-                    </StackPanel>
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-            <behaviors:Interaction.Triggers>
-                <behaviors:EventTrigger EventName="SelectedItemChanged">
-                    <behaviors:InvokeCommandAction Command="{Binding LoadElementDetailCommand}" PassEventArgsToCommand="True"/>
-                </behaviors:EventTrigger>
-            </behaviors:Interaction.Triggers>
-            <behaviors:Interaction.Behaviors>
-                <core:EventToCommandBehavior RoutedEvent="TreeViewItem.Expanded" WithCommand="{Binding LoadChildrenCommand}" />
-            </behaviors:Interaction.Behaviors>
+                            <TextBlock>
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0} &quot;{1}&quot; &quot;{2}&quot;">
+                                        <Binding Path="AutomationId" />
+                                        <Binding Path="Name" />
+                                        <Binding Path="ControlType" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
 
-        </TreeView>
+                <!--<TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource DefaultTreeViewItemStyle}">
+                        <Setter Property="IsSelected" Value="{Binding IsSelected,RelativeSource={RelativeSource AncestorType={x:Type Page}}}" />
+                    </Style>
+                </TreeView.ItemContainerStyle>-->
+                <behaviors:Interaction.Triggers>
+                    <behaviors:EventTrigger EventName="SelectedItemChanged">
+                        <behaviors:InvokeCommandAction Command="{Binding LoadElementDetailCommand}" CommandParameter="{Binding SelectedItem,ElementName=Tree}"/>
+                    </behaviors:EventTrigger>
+                    <!--<behaviors:EventTrigger EventName="TreeViewItem.Expanded">
+                        <behaviors:InvokeCommandAction Command="{Binding LoadChildrenCommand}" CommandParameter="{Binding SelectedItem,ElementName=Tree}"/>
+                    </behaviors:EventTrigger>-->
+                </behaviors:Interaction.Triggers>
+                <behaviors:Interaction.Behaviors>
+                    <core:EventToCommandBehavior RoutedEvent="TreeViewItem.Expanded" WithCommand="{Binding LoadChildrenCommand}" />
+                </behaviors:Interaction.Behaviors>
+            </TreeView>
+        </ScrollViewer>
     </Grid>
 </Page>

@@ -76,7 +76,7 @@ namespace Lemon.Automation.App.UIProvider.UIA.Windows
         {
             get;
             private set;
-        }
+        } = string.Empty;
         public Rectangle RegionRectangle
         {
             get;

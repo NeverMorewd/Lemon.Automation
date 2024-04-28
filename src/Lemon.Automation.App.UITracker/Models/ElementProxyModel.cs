@@ -6,7 +6,7 @@ namespace Lemon.Automation.App.UITracker.Models
 {
     public class ElementProxyModel : ObservableObject
     {
-        private readonly ObservableList<ElementProxyModel>? _children;
+        private readonly ObservableList<ElementProxyModel> _children;
         public ElementProxyModel(string automationId, 
             string name, 
             string controlType, 
@@ -18,9 +18,13 @@ namespace Lemon.Automation.App.UITracker.Models
             if (children != null)
             {
                 _children = new ObservableList<ElementProxyModel>(children);
-                ChildrenView = _children.CreateView(x => x).ToNotifyCollectionChanged();
-                BindingOperations.EnableCollectionSynchronization(ChildrenView, new object());
             }
+            else
+            {
+                _children = [];
+            }
+            ChildrenView = _children.CreateView(x => x).ToNotifyCollectionChanged();
+            BindingOperations.EnableCollectionSynchronization(ChildrenView, new object());
         }
         public string AutomationId
         {
@@ -38,6 +42,15 @@ namespace Lemon.Automation.App.UITracker.Models
         { 
             get; 
             set; 
+        }
+
+        public void AddChildren(IEnumerable<ElementProxyModel> children)
+        {
+            _children.AddRange(children);
+        }
+        public void AddChild(ElementProxyModel child)
+        {
+            _children.Add(child);
         }
     }
 }

@@ -5,21 +5,23 @@ option csharp_namespace = "Lemon.Automation.Protos";
 import "element_type.proto";
 import "google/protobuf/any.proto";
 import "google/protobuf/struct.proto";
+//https://github.com/protocolbuffers/protobuf/issues/9352
+import "google/protobuf/wrappers.proto";
 
 message Element
 {
-	string id = 1;
-	string name = 2;
+	google.protobuf.StringValue id = 1;
+	google.protobuf.StringValue name = 2;
 	int32 left = 4;
 	int32 top = 5;
 	int32 height = 6;
 	int32 with = 7;
 	int32 handle = 8;
 	int32 process_id = 9;
-	string window_title = 10;
-	string window_handle = 11;
+	google.protobuf.StringValue window_title = 10;
+	google.protobuf.StringValue window_handle = 11;
 	ElementTypeEnum element_type = 12;
-    string selector = 13;
+    google.protobuf.StringValue selector = 13;
 	bytes native_uia_object = 16;
-	string native_uia_type = 17;
+	google.protobuf.StringValue native_uia_type = 17;
 }

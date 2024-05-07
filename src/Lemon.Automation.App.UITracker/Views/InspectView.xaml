@@ -30,7 +30,7 @@
             <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
         <ScrollViewer HorizontalScrollBarVisibility="Auto">
-            <TreeView x:Name="Tree" ItemsSource="{Binding ElementsView}" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            <TreeView x:Name="Tree" ItemsSource="{Binding ElementsView}" ItemContainerStyle="{StaticResource {x:Type TreeViewItem}}" ScrollViewer.HorizontalScrollBarVisibility="Auto">
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding ChildrenView}" DataType="{x:Type models:ElementProxyModel}">
                         <StackPanel Orientation="Horizontal">

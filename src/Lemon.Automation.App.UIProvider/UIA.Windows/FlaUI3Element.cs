@@ -6,6 +6,7 @@ using System.IO;
 
 namespace Lemon.Automation.App.UIProvider.UIA.Windows
 {
+    [ProtoContract]
     public class Flaui3Element : IUIAElement
     {
         private readonly AutomationElement _flauiElement;
@@ -108,6 +109,11 @@ namespace Lemon.Automation.App.UIProvider.UIA.Windows
                 //todo
                 return nint.Zero.ToInt32();
             }
+        }
+        public string? Text
+        {
+            get;
+            private set;
         }
         public string? AdditionText
         {

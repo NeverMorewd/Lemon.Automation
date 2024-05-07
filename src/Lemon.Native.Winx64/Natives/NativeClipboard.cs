@@ -11,7 +11,7 @@ namespace Lemon.Native.Winx64.Natives
     /// https://learn.microsoft.com/en-us/windows/win32/api/ole2/nf-ole2-olesetclipboard
     /// https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setclipboarddata
     /// </summary>
-    public static class Clipboard
+    public static class NativeClipboard
     {
         public static void SetText(string value)
         {

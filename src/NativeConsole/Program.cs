@@ -7,7 +7,7 @@ internal class Program
     static void Main(string[] args)
     {
         Console.WriteLine($"start param:{string.Join(' ',args)}");
-        Clipboard.ClipboardIdle();
+        NativeClipboard.ClipboardIdle();
         if (args.Length > 0 ) 
         {
             try
@@ -15,13 +15,13 @@ internal class Program
                 switch (args[0].ToLower())
                 {
                     case "gettext":
-                        var text = Clipboard.GetText();
+                        var text = NativeClipboard.GetText();
                         Console.WriteLine(text);
                         break;
                     case "settext":
                         if (args.Length > 1)
                         {
-                            Clipboard.SetText(args[1]);
+                            NativeClipboard.SetText(args[1]);
                             Console.WriteLine(0);
                         }
                         else
@@ -30,7 +30,7 @@ internal class Program
                         }
                         break;
                     case "clear":
-                        if (Clipboard.TryClear())
+                        if (NativeClipboard.TryClear())
                         {
                             Console.WriteLine(0);
                         }

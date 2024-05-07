@@ -105,6 +105,8 @@ namespace Lemon.Automation.App.UIProvider.UIA.Windows
         [ProtoMember(3)]
         public JsonTextContent JsonContent { get; set; }
 
+        public string? Text => throw new NotImplementedException();
+
         public IEnumerable<IUIAElement> FindAllChildren()
         {
             //return _flauiElement.FindAllChildren().Select(x => new FlaUI3Element(x));

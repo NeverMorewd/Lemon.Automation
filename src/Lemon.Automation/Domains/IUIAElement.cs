@@ -66,6 +66,10 @@ namespace Lemon.Automation.Domains
         {
             get;
         }
+        public string? Text
+        {
+            get;
+        }
         public IEnumerable<IUIAElement> FindAllChildren();
     }
 }

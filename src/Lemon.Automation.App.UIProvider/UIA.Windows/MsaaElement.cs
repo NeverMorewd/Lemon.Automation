@@ -43,6 +43,8 @@ namespace Lemon.Automation.App.UIProvider.UIA.Windows
         public string Tag { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public JsonTextContent JsonContent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
+        public string? Text => throw new NotImplementedException();
+
         public IProtobufSerializable? Deserialize(byte[] bytes)
         {
             throw new NotImplementedException();

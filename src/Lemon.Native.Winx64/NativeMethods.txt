@@ -15,23 +15,26 @@ SendMessage
 SendInput
 mouse_event
 
-ZeroMmory
-CreateProcess
-GetWindowThreadProcessId
-OpenProcess
-WriteProcessMemory
-getlasterror
-CloseHandle
-SuspendThread
-ResumeThread
 termilateprocess
 GetModuleFileName
 GetCurrentDirectory
 GetCurrentProcessId
 GetCurrentProcess
+CreateProcess
+GetWindowThreadProcessId
+OpenProcess
+EnumProcesses
+QueryFullProcessImageName
+
+ZeroMmory
+WriteProcessMemory
+getlasterror
+CloseHandle
+SuspendThread
+ResumeThread
 GetCommandLine
 GetStartupInfo
-EnumProcesses
+
 CreateToolhelp32Snapshot
 CreateThread
 WaitForSingleObject
@@ -57,6 +60,13 @@ WindowFromPoint
 FindWindowA
 FindWindowExA
 SetWindowPos
+GetDesktopWindow
+IsWindowVisible
+GetWindow
+GetAncestor
+GetWindowRect
+ChildWindowFromPointEx
+EnumChildWindows
 
 GetVersionEx
 GetSystemInfo
@@ -94,6 +104,12 @@ OpenFileMapping
 HeapCreate
 HeapAlloc
 HeapFree
+
+DwmGetWindowAttribute
+
+GetDeviceCaps
+ScreenToClient
+ClientToScreen
 
 
 

@@ -51,21 +51,21 @@ namespace Lemon.Native.Winx64
         public static bool TrySetClipboardText(nint textHandle)
         {
             var text = textHandle.ToString();
-            return Clipboard.TrySetText(text);
+            return NativeClipboard.TrySetText(text);
         }
 
         [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)], EntryPoint = nameof(TryGetClipboardText))]
         [return: MarshalAs(UnmanagedType.LPStr)]
         public static nint TryGetClipboardText()
         {
-            return Clipboard.TryGetText();
+            return NativeClipboard.TryGetText();
         }
 
         [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)], EntryPoint = nameof(TryClearClipboardText))]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static bool TryClearClipboardText()
         {
-            return Clipboard.TryClear();
+            return NativeClipboard.TryClear();
         }
     }
     public enum EnumReasonForCall : uint

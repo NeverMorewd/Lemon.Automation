@@ -5,9 +5,9 @@ using System.Diagnostics;
 
 namespace Lemon.Automation.App.UITracker.ViewModels
 {
-    public class TestViewMode : RxViewModel
+    public class TestViewModel : RxViewModel
     {
-        public TestViewMode()
+        public TestViewModel()
         {
             BrowseExeAndRunCommand = new ReactiveCommand<Unit>(async _ =>
             {
@@ -23,6 +23,8 @@ namespace Lemon.Automation.App.UITracker.ViewModels
                         try
                         {
                             var process = Process.Start(filePath);
+                            process.EnableRaisingEvents = true;
+                            process.Exited += Process_Exited;
                             if (process != null)
                             {
                                 var uiMessageBox = new Wpf.Ui.Controls.MessageBox
@@ -75,7 +77,20 @@ namespace Lemon.Automation.App.UITracker.ViewModels
             TestCommand = new ReactiveCommand<Unit>(_ =>
             {
                 //InfinityRecursion();
+                var process = Process.GetProcessesByName("II.RPA.Core.Server").First();
+                process.EnableRaisingEvents = true;
+                process.Exited += (s,e)=> { Console.WriteLine($"II.RPA.Core.Server exited"); };
             });
+        }
+
+        private void Process_Exited1(object? sender, EventArgs e)
+        {
+            Console.WriteLine($"II.RPA.Core.Server exited");
+        }
+
+        private void Process_Exited(object? sender, EventArgs e)
+        {
+            Console.WriteLine($"{e}");
         }
 
         public ReactiveCommand<Unit> BrowseExeAndRunCommand

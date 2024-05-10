@@ -1,4 +1,7 @@
-﻿AttachConsole
+﻿HWND_NOTOPMOST
+HWND_NOTOPMOST
+
+AttachConsole
 ATTACH_PARENT_PROCESS
 GlobalAlloc
 GlobalLock
@@ -67,6 +70,15 @@ GetAncestor
 GetWindowRect
 ChildWindowFromPointEx
 EnumChildWindows
+GetWindowText
+IsWindowVisible
+GetWindowTextLength
+GetActiveWindow
+GetForegroundWindow
+GetWindowPlacement
+SetWindowPlacement
+SetForegroundWindow
+SetActiveWindow
 
 GetVersionEx
 GetSystemInfo
@@ -110,6 +122,10 @@ DwmGetWindowAttribute
 GetDeviceCaps
 ScreenToClient
 ClientToScreen
+
+GetCurrentThreadId
+AttachThreadInput
+SetFocus
 
 
 

@@ -17,7 +17,7 @@ namespace Lemon.Automation.App.UITracker.Views
         public TestView()
         {
             InitializeComponent();
-            DataContext = App.Current.Services.GetService<TestViewMode>();
+            DataContext = App.Current.Services.GetService<TestViewModel>();
 
             Observable.EveryValueChanged(this, _ => System.Windows.Forms.Cursor.Position)
                 .ThrottleFirstFrame(60)

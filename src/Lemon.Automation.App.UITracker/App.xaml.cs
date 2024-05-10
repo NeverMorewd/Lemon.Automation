@@ -37,7 +37,7 @@ namespace Lemon.Automation.App.UITracker
             _serviceCollection.AddSingleton<UIAutomationGrpcClientProvider>()
                               .AddSingleton<ElementHighlightService>()
                               .AddSingleton<ElementInspectService>()
-                              .AddSingleton<TestViewMode>()
+                              .AddSingleton<TestViewModel>()
                               .AddSingleton<TrackViewModel>()
                               .AddSingleton<InspectViewModel>()
                               .AddSingleton<HomeViewModel>()

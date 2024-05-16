@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "description": "just for test",
   "background": {
-    "service_worker": "src/service_worker.js"
+    "service_worker": "iirpa/service_worker.js"
   },
   "options_ui": {
     "page": "src/options.html",
@@ -14,7 +14,7 @@
     {
       "all_frames": true,
       "js": [
-        "src/content.js"
+        "iirpa/content.js"
       ],
       "match_about_blank": true,
       "matches": [
@@ -23,11 +23,11 @@
         "ftp://*/*",
         "file://*/*"
       ],
-      "run_at": "document_start" // document_start,document_end,document_idle
+      "run_at": "document_start"
     }
   ],
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'"
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; font-src 'self' https://fonts.gstatic.com/ https://res-1.cdn.office.net/;"
   },
   "permissions": [
     "storage",
@@ -41,7 +41,8 @@
     "clipboardRead",
     "clipboardWrite",
     "scripting",
-    "contextMenus"
+    "contextMenus",
+    "activeTab"
   ],
   "host_permissions": [
     "\u003Call_urls>"

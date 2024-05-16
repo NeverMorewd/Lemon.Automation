@@ -1,0 +1,7 @@
+﻿{
+  "name": "lemon.automation.nativehost",
+  "description": "Chrome Native Messaging API Example Host",
+  "path": "C:\\Users\\wangd\\AppData\\Local\\IIRPA\\RPAChromeExtension\\II.RPA.NativeMessagingHost.exe",
+  "type": "stdio",
+  "allowed_origins": [ "chrome-extension://ajophjbbjjlnkdekeboahmmflmihjnoj/", "chrome-extension://nfiffhdmjkohbbolbamdboplicimjnpm/"]
+}

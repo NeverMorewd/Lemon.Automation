@@ -15,7 +15,7 @@ function getByte(src) {
  * @param {number} byte zijie
  */
 function showInfo(el, byte) {
-    var html = `${el.naturalWidth}*${el.naturalHeight}\n:${el.width}*${el.height}\n:${byte}`;
+    var html = `naturalregion:${el.naturalWidth}*${el.naturalHeight}\n region:${el.width}*${el.height}\n size:${byte}`;
     el.title = html
 }
 

@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsInput", "WindowsInpu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeConsole", "NativeConsole\NativeConsole.csproj", "{26CEEF8B-4D5B-4A18-9383-636304A48C23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lemon.Automation.BrowserNativeHost", "Lemon.Automation.BrowserNativeHost\Lemon.Automation.BrowserNativeHost.csproj", "{E7746F56-25BB-4EB6-B35A-A09855E29B69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lemon.Automation.BrowserNativeHost", "Lemon.Automation.BrowserNativeHost\Lemon.Automation.BrowserNativeHost.csproj", "{E7746F56-25BB-4EB6-B35A-A09855E29B69}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

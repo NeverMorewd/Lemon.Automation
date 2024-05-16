@@ -1,6 +1,7 @@
 ﻿using Lemon.Automation.BrowserNativeHost.Contracts;
 using Lemon.Automation.BrowserNativeHost.Services;
 using System.Buffers;
+using System.IO;
 using System.Text.Json;
 
 namespace Lemon.Automation.BrowserNativeHost

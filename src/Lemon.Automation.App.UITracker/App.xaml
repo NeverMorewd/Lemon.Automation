@@ -9,6 +9,7 @@
                 <ui:ThemesDictionary Theme="Light" />
                 <ui:ControlsDictionary />
                 <ResourceDictionary Source="pack://application:,,,/Lemon.Automation.Framework;component/Styles/TreeViewStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Lemon.Automation.Framework;component/Themes/generic.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

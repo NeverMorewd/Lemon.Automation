@@ -1,7 +1,11 @@
 ﻿using Lemon.Automation.Framework.Rx;
 using Lemon.Automation.Framework.Toolkits;
+using Lemon.Native.Winx64.Natives;
 using R3;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection.Metadata;
+using NativeWindow = Lemon.Native.Winx64.Natives.NativeWindow;
 
 namespace Lemon.Automation.App.UITracker.ViewModels
 {
@@ -80,6 +84,38 @@ namespace Lemon.Automation.App.UITracker.ViewModels
                 var process = Process.GetProcessesByName("II.RPA.Core.Server").First();
                 process.EnableRaisingEvents = true;
                 process.Exited += (s,e)=> { Console.WriteLine($"II.RPA.Core.Server exited"); };
+
+                var handles = NativeWindow.EnumWindowsSafe((handle) => true);
+                var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "handles.txt");
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+                File.Create(filePath).Dispose();
+                foreach (var handle in handles)
+                {
+                    try
+                    {
+                        var className = NativeWindow.GetWindowClassName(handle);
+                        var processId = NativeWindow.GetWindowProcessId(handle);
+                        var title = NativeWindow.GetWindowTitle(handle);
+                        var isVisible = NativeWindow.IsWindowVisible(handle);
+                        var placement = NativeWindow.GetWindowPlacement(handle);
+                        var rect = NativeWindow.GetWindowRect(handle);
+                        //NativeWindow.GetRootWindow(handle);
+                       var windowline = $"{handle}:{className}; {processId}; {title}; {isVisible}; {placement}; {rect}";
+                        File.AppendAllLines(filePath, [windowline]);
+
+                    }
+                    catch (Exception ex) 
+                    {
+                        Console.WriteLine(ex.Message);
+                        continue;
+                    }
+                }
+
+
+                
             });
         }
 

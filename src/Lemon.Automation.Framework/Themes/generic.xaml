@@ -3,4 +3,6 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="../Styles/TreeViewStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
+
+    <SolidColorBrush x:Key="GreenBrush" Color="Green"/>
 </ResourceDictionary>

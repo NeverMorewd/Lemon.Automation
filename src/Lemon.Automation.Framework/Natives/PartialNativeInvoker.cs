@@ -45,12 +45,14 @@ namespace Lemon.Automation.Framework.Natives
 
         public static void AddWindowLong(IntPtr windowHandle, int styleLong, int newLong)
         {
-            PInvoke.SetWindowLong(new HWND(windowHandle), Windows.Win32.UI.WindowsAndMessaging.WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, styleLong | newLong); 
+            PInvoke.SetWindowLong(new HWND(windowHandle), Windows.Win32.UI.WindowsAndMessaging.WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, 
+                styleLong | newLong); 
         }
 
         public static void RemoveWindowLong(IntPtr windowHandle, int styleLong, int newLong)
         {
-            PInvoke.SetWindowLong(new HWND(windowHandle), Windows.Win32.UI.WindowsAndMessaging.WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, styleLong & ~newLong);
+            PInvoke.SetWindowLong(new HWND(windowHandle), Windows.Win32.UI.WindowsAndMessaging.WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, 
+                styleLong & ~newLong);
         }
 
         public static int GetWindowLong(IntPtr windowHandle)

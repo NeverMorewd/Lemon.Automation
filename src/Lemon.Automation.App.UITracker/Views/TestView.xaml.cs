@@ -20,7 +20,7 @@ namespace Lemon.Automation.App.UITracker.Views
             DataContext = App.Current.Services.GetService<TestViewModel>();
 
             Observable.EveryValueChanged(this, _ => System.Windows.Forms.Cursor.Position)
-                .ThrottleFirstFrame(60)
+                .Debounce(TimeSpan.FromMilliseconds(1000))
                 .Subscribe(p => 
                 {
                     Console.WriteLine($"point=({p.X},{p.Y})");

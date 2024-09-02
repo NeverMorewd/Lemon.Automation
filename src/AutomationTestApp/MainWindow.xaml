@@ -56,6 +56,19 @@
                         </DataGrid>
                     </DockPanel>
                 </TabItem>
+                <TabItem Header="WpfDataGrid">
+                    <DockPanel>
+                        <TreeView ItemsSource="{Binding Items, Mode=TwoWay}">
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding .}"/>
+                                    </StackPanel>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
+                    </DockPanel>
+                </TabItem>
             </TabControl>
         </Grid>
     </Grid>

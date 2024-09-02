@@ -25,7 +25,7 @@
                 Icon="{ui:SymbolIcon Home24}" />
             <Button Content="Test"  Command="{Binding TestCommand}"/>
         </StackPanel>
-        <Button Content="test" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="Button_Click" Margin="0,0,40,60"/>
+        <Button Content="test" HorizontalAlignment="Right" Background="{StaticResource GreenBrush}" VerticalAlignment="Bottom" Click="Button_Click" Margin="0,0,40,60"/>
 
     </Grid>
 </Page>

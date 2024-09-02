@@ -11,5 +11,5 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
 
-    <Grid />
+    <Grid ButtonBase.Click=""/>
 </lemonrx:RxPage>

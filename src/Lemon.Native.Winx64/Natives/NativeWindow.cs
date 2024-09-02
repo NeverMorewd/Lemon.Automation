@@ -1,8 +1,5 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel;
 using System.Drawing;
-using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using Windows.Win32;
 using Windows.Win32.Foundation;
@@ -357,6 +354,10 @@ namespace Lemon.Native.Winx64.Natives
             }
         }
 
+        /// <summary>
+        /// active a window
+        /// </summary>
+        /// <param name="targetWindow"></param>
         public static void SetForegroundWindow(nint targetWindow)
         {
             unsafe

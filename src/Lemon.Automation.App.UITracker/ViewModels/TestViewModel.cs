@@ -1,11 +1,8 @@
 ﻿using Lemon.Automation.Framework.Rx;
 using Lemon.Automation.Framework.Toolkits;
-using Lemon.Native.Winx64.Natives;
 using R3;
 using System.Diagnostics;
-using System.IO;
-using System.Reflection.Metadata;
-using NativeWindow = Lemon.Native.Winx64.Natives.NativeWindow;
+using System.Runtime.InteropServices;
 
 namespace Lemon.Automation.App.UITracker.ViewModels
 {
@@ -80,42 +77,51 @@ namespace Lemon.Automation.App.UITracker.ViewModels
 
             TestCommand = new ReactiveCommand<Unit>(_ =>
             {
+                unsafe
+                {
+                    RectOld rectOld = new()
+                    {
+                        RightOld = 100
+                    };
+                    var newRect = Play(&rectOld);
+                    Console.WriteLine(newRect);
+                }
                 //InfinityRecursion();
-                var process = Process.GetProcessesByName("II.RPA.Core.Server").First();
-                process.EnableRaisingEvents = true;
-                process.Exited += (s,e)=> { Console.WriteLine($"II.RPA.Core.Server exited"); };
+                //var process = Process.GetProcessesByName("II.RPA.Core.Server").First();
+                //process.EnableRaisingEvents = true;
+                //process.Exited += (s,e)=> { Console.WriteLine($"II.RPA.Core.Server exited"); };
 
-                var handles = NativeWindow.EnumWindowsSafe((handle) => true);
-                var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "handles.txt");
-                if (File.Exists(filePath))
-                {
-                    File.Delete(filePath);
-                }
-                File.Create(filePath).Dispose();
-                foreach (var handle in handles)
-                {
-                    try
-                    {
-                        var className = NativeWindow.GetWindowClassName(handle);
-                        var processId = NativeWindow.GetWindowProcessId(handle);
-                        var title = NativeWindow.GetWindowTitle(handle);
-                        var isVisible = NativeWindow.IsWindowVisible(handle);
-                        var placement = NativeWindow.GetWindowPlacement(handle);
-                        var rect = NativeWindow.GetWindowRect(handle);
-                        //NativeWindow.GetRootWindow(handle);
-                       var windowline = $"{handle}:{className}; {processId}; {title}; {isVisible}; {placement}; {rect}";
-                        File.AppendAllLines(filePath, [windowline]);
+                //var handles = NativeWindow.EnumWindowsSafe((handle) => true);
+                //var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "handles.txt");
+                //if (File.Exists(filePath))
+                //{
+                //    File.Delete(filePath);
+                //}
+                //File.Create(filePath).Dispose();
+                //foreach (var handle in handles)
+                //{
+                //    try
+                //    {
+                //        var className = NativeWindow.GetWindowClassName(handle);
+                //        var processId = NativeWindow.GetWindowProcessId(handle);
+                //        var title = NativeWindow.GetWindowTitle(handle);
+                //        var isVisible = NativeWindow.IsWindowVisible(handle);
+                //        var placement = NativeWindow.GetWindowPlacement(handle);
+                //        var rect = NativeWindow.GetWindowRect(handle);
+                //        //NativeWindow.GetRootWindow(handle);
+                //       var windowline = $"{handle}:{className}; {processId}; {title}; {isVisible}; {placement}; {rect}";
+                //        File.AppendAllLines(filePath, [windowline]);
 
-                    }
-                    catch (Exception ex) 
-                    {
-                        Console.WriteLine(ex.Message);
-                        continue;
-                    }
-                }
+                //    }
+                //    catch (Exception ex) 
+                //    {
+                //        Console.WriteLine(ex.Message);
+                //        continue;
+                //    }
+                //}
 
 
-                
+
             });
         }
 
@@ -156,6 +162,36 @@ namespace Lemon.Automation.App.UITracker.ViewModels
         public static string InfinityRecursion()
         {
             return InfinityRecursion();
+        }
+
+        private unsafe static RectNew Play(RectOld* old)
+        {
+            var rectPoint = (RectNew*)old;
+            var rect = *rectPoint;
+            return rect;
+
+        }
+    }
+
+    public struct RectOld
+    {
+        public int RightOld
+        {
+            get;
+            set;
+        }
+
+    }
+    public struct RectNew
+    {
+        public int Right
+        {
+            get;
+            set;
+        }
+        public override string ToString()
+        {
+            return $"{nameof(Right)}:{Right}";
         }
     }
 }

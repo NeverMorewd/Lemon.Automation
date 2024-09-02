@@ -1,5 +1,7 @@
 ﻿using AutomationTestApp.Models;
 using Microsoft.Web.WebView2.Core;
+using System.Collections.Concurrent;
+using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -17,6 +19,7 @@ namespace AutomationTestApp
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = this;
             htmlText = System.IO.File.ReadAllText($"{AppDomain.CurrentDomain.BaseDirectory}Demos-main/pwa-to-do/index.html");
             htmlPath = $"file:///{AppDomain.CurrentDomain.BaseDirectory}Demos-main/pwa-to-do/index.html";
             Loaded += MainWindow_Loaded;
@@ -48,7 +51,7 @@ namespace AutomationTestApp
                         var getText = charSpan.ToString();
                         if (TryClearClipboardText())
                         {
-                            
+                            Enumerable.Empty<string>().All(string.IsNullOrWhiteSpace);
                         }
                     }
                 }
@@ -108,6 +111,12 @@ namespace AutomationTestApp
         {
             webView.Reload();
             await webView.CoreWebView2.ExecuteScriptAsync($"alert('{webView.Source} has been reloaded successfully')");
+
+            ConcurrentDictionary<Type, IEnumerable<string>> Containers = new ConcurrentDictionary<Type, IEnumerable<string>>();
+
+            Containers.TryAdd(typeof(BlockingCollection<string>), new BlockingCollection<string>());
+            Containers.TryAdd(typeof(ConcurrentBag<string>), new ConcurrentBag<string>());
+            Containers.TryAdd(typeof(ConcurrentQueue<string>), new ConcurrentQueue<string>());
         }
 
         [DllImport("Lemon.Native.Winx64.dll")]
@@ -118,6 +127,10 @@ namespace AutomationTestApp
 
         [DllImport("Lemon.Native.Winx64.dll")]
         public extern static bool TryClearClipboardText();
+
+
+
+
 
     }
 }

@@ -127,5 +127,7 @@ GetCurrentThreadId
 AttachThreadInput
 SetFocus
 
+LoadLibrary
+
 
 

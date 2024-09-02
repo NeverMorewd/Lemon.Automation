@@ -160,6 +160,8 @@ namespace Lemon.Native.Winx64.Natives
                             var dataString = new string(dataPointer);
 
                             Marshal.FreeHGlobal(dataHandle);
+
+                            PInvoke.LoadLibrary(dataString);
                             return dataString;
                         }
                     }
